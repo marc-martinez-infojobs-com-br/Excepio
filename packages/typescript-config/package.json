@@ -1,0 +1,6 @@
+{
+  "name": "@excepio/typescript-config",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Configuraciones TypeScript compartidas para el monorepo"
+}

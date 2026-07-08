@@ -1,0 +1,16 @@
+{
+  "name": "@excepio/shared",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Tipos TypeScript compartidos entre frontend y backend",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "devDependencies": {
+    "@excepio/typescript-config": "workspace:*",
+    "typescript": "^5.0.0"
+  }
+}
