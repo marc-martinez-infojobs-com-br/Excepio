@@ -3,8 +3,9 @@
 Este archivo contiene instrucciones operativas para agentes de IA que trabajan en el proyecto.
 
 > **Documentación relacionada:**
-> - Arquitectura y stack: `ARCHITECTURE.md`
-> - Comandos y desarrollo: `CONTRIBUTING.md`
+> - Arquitectura y stack: `docs/ARCHITECTURE.md`
+> - Comandos y desarrollo: `docs/CONTRIBUTING.md`
+> - Modelo de datos: `docs/DATABASE.md`
 
 ## Modo de Trabajo
 
@@ -70,7 +71,8 @@ Todos los tipos de request/response viven en `packages/shared/` e importados por
 
 | Necesitas... | Consulta |
 |--------------|----------|
-| Stack y arquitectura | `ARCHITECTURE.md` |
-| Comandos y variables de entorno | `CONTRIBUTING.md` |
+| Stack y arquitectura | `docs/ARCHITECTURE.md` |
+| Comandos y variables de entorno | `docs/CONTRIBUTING.md` |
+| Modelo de datos | `docs/DATABASE.md` |
 | Esquema de BD | `apps/api/prisma/schema.prisma` |
 | Config monorepo | `pnpm-workspace.yaml` |

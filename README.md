@@ -132,6 +132,7 @@ NEXT_PUBLIC_API_URL="http://localhost:3000/api"
 
 ## Documentación
 
-- [Arquitectura](./ARCHITECTURE.md)
-- [Guía de contribución](./CONTRIBUTING.md)
+- [Arquitectura](./docs/ARCHITECTURE.md)
+- [Guía de contribución](./docs/CONTRIBUTING.md)
+- [Modelo de datos](./docs/DATABASE.md)
 - [Guía para agentes IA](./AGENTS.md)
