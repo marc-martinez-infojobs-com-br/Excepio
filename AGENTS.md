@@ -4,7 +4,8 @@ Este archivo contiene instrucciones operativas para agentes de IA que trabajan e
 
 > **Documentación relacionada:**
 > - Arquitectura y stack: `docs/ARCHITECTURE.md`
-> - Comandos y desarrollo: `docs/CONTRIBUTING.md`
+> - Scripts y comandos: `docs/SCRIPTS.md`
+> - Guía de contribución: `docs/CONTRIBUTING.md`
 > - Modelo de datos: `docs/DATABASE.md`
 
 ## Modo de Trabajo
@@ -47,7 +48,7 @@ La instancia de Axios debe:
 
 Debe configurar:
 - Middleware CORS con `process.env.CORS_ORIGIN`
-- Swagger/OpenAPI en `/api/docs`
+- Swagger/OpenAPI en `/api/swagger`
 
 ### Tipos Compartidos
 
@@ -72,7 +73,8 @@ Todos los tipos de request/response viven en `packages/shared/` e importados por
 | Necesitas... | Consulta |
 |--------------|----------|
 | Stack y arquitectura | `docs/ARCHITECTURE.md` |
-| Comandos y variables de entorno | `docs/CONTRIBUTING.md` |
+| Scripts y comandos | `docs/SCRIPTS.md` |
+| Guía de contribución | `docs/CONTRIBUTING.md` |
 | Modelo de datos | `docs/DATABASE.md` |
 | Esquema de BD | `apps/api/prisma/schema.prisma` |
 | Config monorepo | `pnpm-workspace.yaml` |

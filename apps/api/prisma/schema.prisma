@@ -7,5 +7,66 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// Tablas de Diccionario
+// ============================================
+
+model Status {
+  id   Int    @id
+  name String @unique
+
+  // Relaciones
+  levels   Level[]
+  projects Project[]
+}
+
+model Level {
+  id       Int    @id
+  name     String @unique
+  order    Int
+  statusId Int
+
+  // Relaciones
+  status     Status      @relation(fields: [statusId], references: [id])
+  exceptions Exception[]
+}
+
+// ============================================
+// Tablas Principales
+// ============================================
+
+model Project {
+  id        String   @id @default(uuid())
+  name      String
+  apiKey    String   @unique
+  statusId  Int
+  createdAt DateTime @default(now())
+
+  // Relaciones
+  status     Status      @relation(fields: [statusId], references: [id])
+  exceptions Exception[]
+}
+
+model Exception {
+  id         String   @id @default(uuid())
+  projectId  String
+  levelId    Int
+  message    String
+  stackTrace String?  @db.Text
+  userId     String?
+  url        String?
+  userAgent  String?
+  appVersion String?
+  metadata   Json?    @db.JsonB
+  createdAt  DateTime @default(now())
+
+  // Relaciones
+  project Project @relation(fields: [projectId], references: [id])
+  level   Level   @relation(fields: [levelId], references: [id])
+
+  // Indices para optimizar consultas
+  @@index([createdAt])
+  @@index([projectId, createdAt])
 }

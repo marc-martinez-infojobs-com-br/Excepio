@@ -12,5 +12,8 @@
   "devDependencies": {
     "@excepio/typescript-config": "workspace:*",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
   }
 }

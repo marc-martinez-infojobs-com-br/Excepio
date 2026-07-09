@@ -1,7 +1,10 @@
 /**
- * @proyecto/shared
+ * @excepio/shared
  * Tipos compartidos entre frontend y backend
  */
+
+// Zod (re-export para conveniencia)
+export { z } from 'zod';
 
 // Health check response
 export interface HealthCheckResponse {
@@ -15,3 +18,9 @@ export interface ApiErrorResponse {
   message: string;
   error?: string;
 }
+
+// DTOs
+export * from './status.dto';
+export * from './level.dto';
+export * from './project.dto';
+export * from './exception.dto';
