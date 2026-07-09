@@ -12,6 +12,8 @@ out/
 .env
 .env.local
 .env.*.local
+apps/*/.env
+apps/*/.env.local
 
 # Prisma
 prisma/*.db

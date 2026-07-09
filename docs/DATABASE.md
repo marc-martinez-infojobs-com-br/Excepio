@@ -5,15 +5,15 @@ Este documento define la estructura de datos del sistema de registro de excepcio
 ## Diagrama de Tablas
 
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│     Level       │     │    Platform     │     │    Project      │
-├─────────────────┤     ├─────────────────┤     ├─────────────────┤
-│ id (int, PK)    │     │ id (int, PK)    │     │ id (UUID, PK)   │
-│ name            │     │ name            │     │ name            │
-│ order           │     │ statusId (FK)   │     │ apiKey (unique) │
-│ statusId (FK)   │     └─────────────────┘     │ statusId (FK)   │
-└─────────────────┘                             │ createdAt       │
-                                                └─────────────────┘
+┌─────────────────┐     ┌─────────────────┐
+│     Level       │     │    Project      │
+├─────────────────┤     ├─────────────────┤
+│ id (int, PK)    │     │ id (UUID, PK)   │
+│ name            │     │ name            │
+│ order           │     │ apiKey (unique) │
+│ statusId (FK)   │     │ statusId (FK)   │
+└─────────────────┘     │ createdAt       │
+                        └─────────────────┘
 
               ┌─────────────┐
               │   Status    │
@@ -28,7 +28,6 @@ Este documento define la estructura de datos del sistema de registro de excepcio
          │ id (UUID, PK auto)                             │
          │ projectId (FK → Project)                       │
          │ levelId (FK → Level)                           │
-         │ platformId (FK → Platform)                     │
          │ message (string)                               │
          │ stackTrace (text, opcional)                    │
          │ userId (string, opcional)                      │
@@ -44,7 +43,7 @@ Este documento define la estructura de datos del sistema de registro de excepcio
 
 ### Status
 
-Tabla compartida para borrado lógico en Level, Platform y Project.
+Tabla compartida para borrado lógico en Level y Project.
 
 | id | name |
 |----|------|
@@ -65,23 +64,11 @@ Niveles de severidad de las excepciones.
 | 4 | ERROR | 4 | 2 |
 | 5 | FATAL | 5 | 2 |
 
-### Platform
-
-Plataformas desde donde se registran las excepciones.
-
-| id | name | statusId |
-|----|------|----------|
-| 1 | WEB | 2 |
-| 2 | WM | 2 |
-| 3 | ANDROID | 2 |
-| 4 | IOS | 2 |
-| 5 | API | 2 |
-
 ## Tablas Principales
 
 ### Project
 
-Proyectos/aplicaciones que envían excepciones.
+Proyectos/aplicaciones que envían excepciones. Cada proyecto representa una aplicación o plataforma específica (ej. "Web", "Android", "iOS").
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
@@ -100,7 +87,6 @@ Registro de excepciones.
 | id | UUID | Clave primaria autogenerada |
 | projectId | UUID (FK) | Proyecto que reporta la excepción |
 | levelId | int (FK) | Nivel de severidad |
-| platformId | int (FK) | Plataforma de origen |
 | message | string | Mensaje de la excepción |
 | stackTrace | text (opcional) | Stack trace completo |
 | userId | string (opcional) | Identificador del usuario afectado |
@@ -112,6 +98,19 @@ Registro de excepciones.
 
 ## Notas
 
-- **Borrado lógico**: Level, Platform y Project usan `statusId` para borrado lógico. Esto evita romper las FK en Exception.
+- **Borrado lógico**: Level y Project usan `statusId` para borrado lógico. Esto evita romper las FK en Exception.
 - **Exception no se borra**: Las excepciones nunca se eliminan, por lo que no tienen `statusId`.
 - **Usuarios**: La tabla de usuarios para acceso web se definirá más adelante.
+
+
+## Conexión a la Base de Datos
+
+Para conectarte con un cliente como TablePlus, DBeaver, etc:
+
+| Campo | Valor |
+|-------|-------|
+| Host | `localhost` |
+| Puerto | `5432` |
+| Usuario | `postgres` |
+| Password | `gzQFyXv95B2@Xe` |
+| Base de datos | `excepio` |
