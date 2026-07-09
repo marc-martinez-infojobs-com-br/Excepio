@@ -17,7 +17,7 @@ Sistema de **Registro y Consumo de Excepciones** implementado como monorepo. El 
 | Backend | NestJS (o Fastify + TypeScript) |
 | Base de datos | PostgreSQL |
 | ORM | Prisma (con soporte JSONB) |
-| Documentación API | OpenAPI/Swagger en `/api/docs` |
+| Documentación API | OpenAPI/Swagger en `/api/swagger` |
 | Testing | Vitest + Testing Library + Playwright (E2E) |
 
 ## Estrategia de Testing
@@ -69,7 +69,7 @@ Sistema de **Registro y Consumo de Excepciones** implementado como monorepo. El 
 
 ### Backend
 
-- Swagger/OpenAPI interactivo en `/api/docs`
+- Swagger/OpenAPI interactivo en `/api/swagger`
 - Middleware CORS habilitado y configurable por variable de entorno
 - Payloads de errores almacenados en campos JSONB de PostgreSQL
 

@@ -48,7 +48,7 @@ La instancia de Axios debe:
 
 Debe configurar:
 - Middleware CORS con `process.env.CORS_ORIGIN`
-- Swagger/OpenAPI en `/api/docs`
+- Swagger/OpenAPI en `/api/swagger`
 
 ### Tipos Compartidos
 

@@ -55,7 +55,7 @@ pnpm dev
 Una vez iniciados:
 - Frontend: http://localhost:3001
 - API: http://localhost:3000/api
-- Swagger: http://localhost:3000/api/docs
+- Swagger: http://localhost:3000/api/swagger
 
 ## Estructura del Proyecto
 
