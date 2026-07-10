@@ -26,3 +26,8 @@ export const StatusSchema = z.object({
 });
 
 export type StatusDto = z.infer<typeof StatusSchema>;
+
+// Response usa el mismo schema (consistencia con Level)
+export const StatusResponseSchema = StatusSchema;
+
+export type StatusResponseDto = z.infer<typeof StatusResponseSchema>;
