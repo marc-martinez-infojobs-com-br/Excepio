@@ -7,6 +7,19 @@ export enum StatusName {
   DELETED = 'DELETED',
 }
 
+/**
+ * IDs de Status según DATABASE.md
+ * Tabla compartida para borrado lógico en Level y Project.
+ */
+export const STATUS_ID = {
+  PENDING: 1,
+  ACTIVE: 2,
+  EXPIRED: 3,
+  DELETED: 4,
+} as const;
+
+export type StatusId = (typeof STATUS_ID)[keyof typeof STATUS_ID];
+
 export const StatusSchema = z.object({
   id: z.number().int(),
   name: z.string(),
