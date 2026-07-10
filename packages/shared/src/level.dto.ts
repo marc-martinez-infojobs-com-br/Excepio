@@ -8,6 +8,7 @@ export enum LevelName {
   FATAL = 'FATAL',
 }
 
+// Schema para Level
 export const LevelSchema = z.object({
   id: z.number().int(),
   name: z.string(),
@@ -16,3 +17,8 @@ export const LevelSchema = z.object({
 });
 
 export type LevelDto = z.infer<typeof LevelSchema>;
+
+// Response usa el mismo schema (sin status anidado)
+export const LevelResponseSchema = LevelSchema;
+
+export type LevelResponseDto = z.infer<typeof LevelResponseSchema>;
