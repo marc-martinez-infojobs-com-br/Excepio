@@ -29,6 +29,16 @@ describe('Database Seed', () => {
         'DELETED',
       ]);
     });
+
+    it('should have correct status IDs', async () => {
+      const statuses = await prisma.status.findMany({ orderBy: { id: 'asc' } });
+      expect(statuses.map((s) => ({ id: s.id, name: s.name }))).toEqual([
+        { id: 1, name: 'PENDING' },
+        { id: 2, name: 'ACTIVE' },
+        { id: 3, name: 'EXPIRED' },
+        { id: 4, name: 'DELETED' },
+      ]);
+    });
   });
 
   describe('Level', () => {
