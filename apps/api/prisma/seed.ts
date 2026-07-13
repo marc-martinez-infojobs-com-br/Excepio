@@ -1,8 +1,9 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import dotenv from 'dotenv';
 import crypto from 'crypto';
+import * as bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -83,6 +84,28 @@ async function main() {
     }
   }
   console.log(`✓ ${projects.length} Project records`);
+
+  // Usuario administrador inicial
+  const adminEmail = 'admin@excepio.com';
+  const existingAdmin = await prisma.user.findUnique({
+    where: { email: adminEmail },
+  });
+
+  if (!existingAdmin) {
+    const hashedPassword = await bcrypt.hash('Admin123!', 10);
+    await prisma.user.create({
+      data: {
+        email: adminEmail,
+        password: hashedPassword,
+        name: 'Admin Excepio',
+        role: UserRole.ADMINISTRADOR,
+        statusId: 2, // ACTIVE
+      },
+    });
+    console.log('✓ Admin user created (admin@excepio.com / Admin123!)');
+  } else {
+    console.log('✓ Admin user already exists');
+  }
 
   console.log('Database seeded successfully!');
 }
