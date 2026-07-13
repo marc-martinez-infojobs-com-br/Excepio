@@ -3,8 +3,8 @@ import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import type { LevelResponseDto } from '@excepio/shared';
 import { LevelService } from './level.service';
 
-@ApiTags('Level')
-@Controller('level')
+@ApiTags('Levels')
+@Controller('levels')
 export class LevelController {
   constructor(private readonly levelService: LevelService) {}
 
