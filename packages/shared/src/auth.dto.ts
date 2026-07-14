@@ -2,13 +2,39 @@ import { z } from 'zod';
 import { UserResponseSchema, UserRole } from './user.dto';
 
 /**
+ * Validación de contraseña segura
+ * Requisitos:
+ * - Mínimo 8 caracteres
+ * - Al menos 1 mayúscula
+ * - Al menos 1 minúscula
+ * - Al menos 1 número
+ * - Al menos 1 carácter especial
+ */
+const passwordSchema = z
+  .string()
+  .min(8, 'La contraseña no cumple los requisitos de seguridad')
+  .regex(/[A-Z]/, 'La contraseña no cumple los requisitos de seguridad')
+  .regex(/[a-z]/, 'La contraseña no cumple los requisitos de seguridad')
+  .regex(/[0-9]/, 'La contraseña no cumple los requisitos de seguridad')
+  .regex(
+    /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
+    'La contraseña no cumple los requisitos de seguridad'
+  );
+
+/**
  * Schema para registro de usuario
  */
-export const RegisterSchema = z.object({
-  email: z.string().email('Email inválido'),
-  password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
-  name: z.string().min(1, 'El nombre es requerido'),
-});
+export const RegisterSchema = z
+  .object({
+    email: z.string().email('Email inválido'),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+    name: z.string().min(1, 'El nombre es requerido'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Las contraseñas no coinciden',
+    path: ['confirmPassword'],
+  });
 
 export type RegisterDto = z.infer<typeof RegisterSchema>;
 
