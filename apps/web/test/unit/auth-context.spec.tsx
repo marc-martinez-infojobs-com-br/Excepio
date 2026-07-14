@@ -179,7 +179,9 @@ describe('AuthContext', () => {
       try {
         await result.current.login({ email: 'test@test.com', password: 'wrong' });
       } catch (error) {
-        expect(error).toBe(mockError);
+        // Ahora el auth-context lanza un error genérico por seguridad
+        expect(error).toBeInstanceOf(Error);
+        expect((error as Error).message).toBe('Error al iniciar sesión. Inténtalo de nuevo más tarde.');
       }
     });
 

@@ -22,19 +22,28 @@ const passwordSchema = z
   );
 
 /**
- * Schema para registro de usuario
+ * Schema base para registro de usuario (sin validación de refine)
+ * Usar este schema con react-hook-form ya que @hookform/resolvers 
+ * tiene problemas con .refine() en Zod v4
  */
-export const RegisterSchema = z
-  .object({
-    email: z.string().email('Email inválido'),
-    password: passwordSchema,
-    confirmPassword: z.string(),
-    name: z.string().min(1, 'El nombre es requerido'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
+export const RegisterBaseSchema = z.object({
+  email: z.string().email('Email inválido'),
+  password: passwordSchema,
+  confirmPassword: z.string(),
+  name: z.string().min(1, 'El nombre es requerido'),
+});
+
+/**
+ * Schema completo para registro de usuario (con validación de contraseñas)
+ * Usar para validación completa en el backend o validación manual
+ */
+export const RegisterSchema = RegisterBaseSchema.refine(
+  (data) => data.password === data.confirmPassword,
+  {
     message: 'Las contraseñas no coinciden',
     path: ['confirmPassword'],
-  });
+  }
+);
 
 export type RegisterDto = z.infer<typeof RegisterSchema>;
 

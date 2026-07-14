@@ -27,8 +27,8 @@ describe('LoginForm', () => {
   it('debería renderizar el formulario correctamente', () => {
     render(<LoginForm />);
 
-    expect(screen.getByLabelText(/email/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/contraseña/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/admin@excepio.com/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /iniciar sesión/i })).toBeInTheDocument();
   });
 
@@ -53,8 +53,8 @@ describe('LoginForm', () => {
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const emailInput = screen.getByPlaceholderText(/admin@excepio.com/i);
+    const passwordInput = screen.getByPlaceholderText('••••••••');
     const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
 
     await user.type(emailInput, 'test@test.com');
@@ -71,15 +71,15 @@ describe('LoginForm', () => {
 
   it('debería deshabilitar el formulario mientras está cargando', async () => {
     const user = userEvent.setup();
-    let resolveLogin: any;
+    let resolveLogin: () => void;
     mockLogin.mockImplementation(() => new Promise((resolve) => {
       resolveLogin = resolve;
     }));
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByLabelText(/email/i) as HTMLInputElement;
-    const passwordInput = screen.getByLabelText(/contraseña/i) as HTMLInputElement;
+    const emailInput = screen.getByPlaceholderText(/admin@excepio.com/i) as HTMLInputElement;
+    const passwordInput = screen.getByPlaceholderText('••••••••') as HTMLInputElement;
     const submitButton = screen.getByRole('button', { name: /iniciar sesión/i }) as HTMLButtonElement;
 
     await user.type(emailInput, 'test@test.com');
@@ -92,7 +92,7 @@ describe('LoginForm', () => {
     });
 
     // Resolver el login
-    resolveLogin();
+    resolveLogin!();
   });
 
   it('debería mostrar error cuando el login falla', async () => {
@@ -102,8 +102,8 @@ describe('LoginForm', () => {
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/contraseña/i);
+    const emailInput = screen.getByPlaceholderText(/admin@excepio.com/i);
+    const passwordInput = screen.getByPlaceholderText('••••••••');
     const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
 
     await user.type(emailInput, 'test@test.com');

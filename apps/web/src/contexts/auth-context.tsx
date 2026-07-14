@@ -52,7 +52,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (data: RegisterDto) => {
-    await apiClient.post('/auth/register', data);
+    // Eliminar confirmPassword antes de enviar al backend
+    const { confirmPassword, ...registerData } = data;
+    await apiClient.post('/auth/register', registerData);
     // Después de registrar, hacer login automático
     await login({ email: data.email, password: data.password });
   };
