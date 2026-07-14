@@ -6,21 +6,30 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import Link from 'next/link';
 
 export default function LoginPage() {
   return (
-    <div className="container flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle>Iniciar Sesión</CardTitle>
-          <CardDescription>
-            Ingresa tus credenciales para acceder a Excepio
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <LoginForm />
-        </CardContent>
-      </Card>
-    </div>
+    <Card className="w-full border border-border/50 shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-semibold">Bienvenido</CardTitle>
+        <CardDescription>
+          Accede a tu panel de monitoreo
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <LoginForm />
+        
+        {/* Secondary Sign In */}
+        <div className="mt-8 pt-6 border-t border-border text-center">
+          <p className="text-sm text-muted-foreground">
+            ¿No tienes una cuenta?{' '}
+            <Link href="/register" className="text-primary font-semibold hover:underline">
+              Crear cuenta
+            </Link>
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

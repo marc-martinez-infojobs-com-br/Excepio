@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { isAxiosError } from 'axios';
 import { apiClient } from '@/lib/api-client';
 import { authStorage } from '@/lib/auth-storage';
 import type { UserResponseDto, LoginDto, RegisterDto, LoginResponseDto } from '@excepio/shared';
@@ -32,14 +33,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (credentials: LoginDto) => {
-    const response = await apiClient.post<LoginResponseDto>('/auth/login', credentials);
-    const { access_token, user: userData } = response.data;
-    
-    authStorage.setToken(access_token);
-    authStorage.setUser(userData);
-    setUser(userData);
-    
-    router.push('/dashboard');
+    try {
+      const response = await apiClient.post<LoginResponseDto>('/auth/login', credentials);
+      const { access_token, user: userData } = response.data;
+      
+      authStorage.setToken(access_token);
+      authStorage.setUser(userData);
+      setUser(userData);
+      
+      router.push('/dashboard');
+    } catch (error) {
+      // Mensaje genérico para no revelar si el email existe o no
+      if (isAxiosError(error) && error.response?.status === 401) {
+        throw new Error('Credenciales incorrectas. Verifica tu email y contraseña.');
+      }
+      throw new Error('Error al iniciar sesión. Inténtalo de nuevo más tarde.');
+    }
   };
 
   const register = async (data: RegisterDto) => {
