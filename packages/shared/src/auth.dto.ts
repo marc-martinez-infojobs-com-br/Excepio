@@ -48,6 +48,18 @@ export const RegisterSchema = RegisterBaseSchema.refine(
 export type RegisterDto = z.infer<typeof RegisterSchema>;
 
 /**
+ * Schema para registro en el backend (sin confirmPassword)
+ * El frontend valida que las contraseñas coincidan antes de enviar
+ */
+export const RegisterBackendSchema = z.object({
+  email: z.string().email('Email inválido'),
+  password: passwordSchema,
+  name: z.string().min(1, 'El nombre es requerido'),
+});
+
+export type RegisterBackendDto = z.infer<typeof RegisterBackendSchema>;
+
+/**
  * Schema para login
  */
 export const LoginSchema = z.object({
