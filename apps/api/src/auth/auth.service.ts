@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import type { RegisterDto, LoginDto, LoginResponseDto, UserResponseDto, JwtPayload } from '@excepio/shared';
+import type { RegisterBackendDto, LoginDto, LoginResponseDto, UserResponseDto, JwtPayload } from '@excepio/shared';
 import { UserService } from '../user';
 import { USER_REPOSITORY, type UserRepository } from '../user/repository';
 import * as bcrypt from 'bcrypt';
@@ -23,7 +23,7 @@ export class AuthService {
    * @param registerDto - Datos del usuario a registrar
    * @returns Token JWT y datos del usuario
    */
-  async register(registerDto: RegisterDto): Promise<LoginResponseDto> {
+  async register(registerDto: RegisterBackendDto): Promise<LoginResponseDto> {
     // Crear el usuario (UserService ya valida email duplicado)
     const user = await this.userService.create({
       ...registerDto,

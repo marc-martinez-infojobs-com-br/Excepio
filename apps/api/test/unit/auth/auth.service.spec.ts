@@ -4,7 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '../../../src/auth/auth.service';
 import { UserService } from '../../../src/user/user.service';
 import { UserMemoryRepository } from '../../../src/user/repository';
-import { UserResponseDto, UserRole, RegisterDto, LoginDto, LoginResponseDto } from '@excepio/shared';
+import { UserResponseDto, UserRole, RegisterBackendDto, LoginDto, LoginResponseDto } from '@excepio/shared';
 import * as bcrypt from 'bcrypt';
 
 // Mock bcrypt y JwtService
@@ -37,7 +37,7 @@ describe('AuthService', () => {
   });
 
   describe('register', () => {
-    const registerDto: RegisterDto = {
+    const registerDto: RegisterBackendDto = {
       email: 'newuser@example.com',
       password: 'Password123!',
       name: 'New User',

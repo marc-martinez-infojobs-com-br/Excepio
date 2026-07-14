@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { AuthController } from '../../../src/auth/auth.controller';
 import { AuthService } from '../../../src/auth/auth.service';
-import { RegisterDto, LoginDto, LoginResponseDto, UserRole } from '@excepio/shared';
+import { RegisterBackendDto, LoginDto, LoginResponseDto, UserRole } from '@excepio/shared';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -33,7 +33,7 @@ describe('AuthController', () => {
   describe('register', () => {
     it('Given_ValidRegistrationData_When_Register_Then_ReturnsTokenAndUser', async () => {
       // Arrange
-      const registerDto: RegisterDto = {
+      const registerDto: RegisterBackendDto = {
         email: 'newuser@example.com',
         password: 'Password123!',
         name: 'New User',
