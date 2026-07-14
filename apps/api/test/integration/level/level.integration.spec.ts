@@ -37,7 +37,7 @@ class TestLevelService {
   }
 }
 
-@Controller('level')
+@Controller('levels')
 class TestLevelController {
   constructor(@Inject(TEST_LEVEL_SERVICE) private readonly levelService: TestLevelService) {}
 
@@ -82,11 +82,11 @@ describe('Level CRUD (integration)', () => {
     }
   });
 
-  describe('GET /api/level', () => {
+  describe('GET /api/levels', () => {
     it('Given_LevelsExistInDatabase_When_GetAllLevels_Then_ReturnsActiveLevelsArray', async () => {
       // Act
       const response = await request(app.getHttpServer())
-        .get('/api/level')
+        .get('/api/levels')
         .expect(200);
 
       // Assert
@@ -107,7 +107,7 @@ describe('Level CRUD (integration)', () => {
     it('Given_LevelsExistInDatabase_When_GetAllLevels_Then_ReturnsOnlyActiveLevels', async () => {
       // Act
       const response = await request(app.getHttpServer())
-        .get('/api/level')
+        .get('/api/levels')
         .expect(200);
 
       // Assert: ningún level debe tener statusId = 4 (DELETED)
@@ -118,7 +118,7 @@ describe('Level CRUD (integration)', () => {
     it('Given_LevelsExistInDatabase_When_GetAllLevels_Then_ReturnsKnownLevels', async () => {
       // Act
       const response = await request(app.getHttpServer())
-        .get('/api/level')
+        .get('/api/levels')
         .expect(200);
 
       // Assert: debemos tener los niveles del seed
@@ -133,14 +133,14 @@ describe('Level CRUD (integration)', () => {
     });
   });
 
-  describe('GET /api/level/:id', () => {
+  describe('GET /api/levels/:id', () => {
     it('Given_ExistingLevelId_When_GetLevelById_Then_ReturnsLevel', async () => {
       // Arrange: ID 1 debería ser DEBUG según el seed
       const levelId = 1;
 
       // Act
       const response = await request(app.getHttpServer())
-        .get(`/api/level/${levelId}`)
+        .get(`/api/levels/${levelId}`)
         .expect(200);
 
       // Assert
@@ -157,7 +157,7 @@ describe('Level CRUD (integration)', () => {
 
       // Act
       const response = await request(app.getHttpServer())
-        .get(`/api/level/${nonExistingId}`)
+        .get(`/api/levels/${nonExistingId}`)
         .expect(404);
 
       // Assert
@@ -171,7 +171,7 @@ describe('Level CRUD (integration)', () => {
 
       // Act & Assert
       await request(app.getHttpServer())
-        .get(`/api/level/${invalidId}`)
+        .get(`/api/levels/${invalidId}`)
         .expect(400);
     });
   });

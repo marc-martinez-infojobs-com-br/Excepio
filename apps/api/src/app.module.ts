@@ -4,6 +4,8 @@ import { HealthController } from './health.controller';
 import { PrismaModule } from './prisma';
 import { LevelModule } from './level';
 import { StatusModule } from './status';
+import { UserModule } from './user';
+import { AuthModule } from './auth';
 import { validate } from './config/env.validation';
 
 @Module({
@@ -16,6 +18,8 @@ import { validate } from './config/env.validation';
     PrismaModule,
     LevelModule,
     StatusModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [HealthController],
 })

@@ -10,6 +10,15 @@ datasource db {
 }
 
 // ============================================
+// Enums
+// ============================================
+
+enum UserRole {
+  ADMINISTRADOR
+  USUARIO
+}
+
+// ============================================
 // Tablas de Diccionario
 // ============================================
 
@@ -20,6 +29,7 @@ model Status {
   // Relaciones
   levels   Level[]
   projects Project[]
+  users    User[]
 }
 
 model Level {
@@ -69,4 +79,22 @@ model Exception {
   // Indices para optimizar consultas
   @@index([createdAt])
   @@index([projectId, createdAt])
+}
+
+model User {
+  id          String    @id @default(uuid())
+  email       String    @unique
+  password    String
+  name        String
+  role        UserRole  @default(USUARIO)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  statusId    Int
+
+  // Relaciones
+  status Status @relation(fields: [statusId], references: [id])
+
+  // Indices
+  @@index([email])
 }

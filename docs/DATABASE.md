@@ -37,13 +37,27 @@ Este documento define la estructura de datos del sistema de registro de excepcio
          │ metadata (JSON, opcional)                      │
          │ createdAt (datetime)                           │
          └────────────────────────────────────────────────┘
+
+         ┌────────────────────────────────────────────────┐
+         │                     User                       │
+         ├────────────────────────────────────────────────┤
+         │ id (UUID, PK auto)                             │
+         │ email (string, unique)                         │
+         │ password (string, bcrypt hash)                 │
+         │ name (string)                                  │
+         │ role (enum: ADMINISTRADOR, USUARIO)            │
+         │ lastLoginAt (datetime, opcional)               │
+         │ createdAt (datetime)                           │
+         │ updatedAt (datetime)                           │
+         │ statusId (FK → Status)                         │
+         └────────────────────────────────────────────────┘
 ```
 
 ## Tablas de Diccionario
 
 ### Status
 
-Tabla compartida para borrado lógico en Level y Project.
+Tabla compartida para borrado lógico en Level, Project y User.
 
 | id | name |
 |----|------|
@@ -63,6 +77,15 @@ Niveles de severidad de las excepciones.
 | 3 | WARNING | 3 | 2 |
 | 4 | ERROR | 4 | 2 |
 | 5 | FATAL | 5 | 2 |
+
+### UserRole (Enum)
+
+Roles de usuario para el sistema de autenticación web.
+
+| Valor | Descripción |
+|-------|-------------|
+| ADMINISTRADOR | Acceso completo: CRUD de usuarios, gestión de proyectos, visualización de todas las excepciones |
+| USUARIO | Acceso de solo lectura a excepciones y proyectos |
 
 ## Tablas Principales
 
@@ -96,11 +119,37 @@ Registro de excepciones.
 | metadata | JSON (opcional) | Datos adicionales flexibles |
 | createdAt | datetime | Fecha de inserción |
 
+### User
+
+Usuarios del sistema que acceden a la plataforma web para gestionar y visualizar excepciones.
+
+**Importante:** Los usuarios se autentican mediante JWT (email + password). Esto es independiente del sistema de API Key que usan los Projects para reportar excepciones.
+
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | UUID | Clave primaria autogenerada |
+| email | string (unique) | Email del usuario (identificador único) |
+| password | string | Contraseña hasheada con bcrypt (min 8 caracteres) |
+| name | string | Nombre completo del usuario |
+| role | UserRole (enum) | Rol: ADMINISTRADOR o USUARIO |
+| lastLoginAt | datetime (opcional) | Fecha del último login exitoso |
+| createdAt | datetime | Fecha de creación |
+| updatedAt | datetime | Fecha de última actualización |
+| statusId | int (FK) | Estado del usuario (activado/desactivado) |
+
+**Usuario inicial en seed:**
+- Email: `admin@excepio.com`
+- Password: `Admin123!`
+- Role: ADMINISTRADOR
+
 ## Notas
 
-- **Borrado lógico**: Level y Project usan `statusId` para borrado lógico. Esto evita romper las FK en Exception.
+- **Borrado lógico**: Level, Project y User usan `statusId` para borrado lógico. Esto evita romper las FK en Exception.
 - **Exception no se borra**: Las excepciones nunca se eliminan, por lo que no tienen `statusId`.
-- **Usuarios**: La tabla de usuarios para acceso web se definirá más adelante.
+- **Dos sistemas de autenticación**:
+  - **JWT (User)**: Para usuarios humanos que acceden a la plataforma web (email + password)
+  - **API Key (Project)**: Para aplicaciones que reportan excepciones
+- **Sin relación User-Project**: Actualmente cualquier usuario autenticado puede ver excepciones de todos los proyectos.
 
 
 ## Conexión a la Base de Datos

@@ -22,6 +22,13 @@ export class EnvironmentVariables {
   @IsString()
   @IsNotEmpty()
   CORS_ORIGIN: string;
+
+  @IsString()
+  @IsNotEmpty()
+  JWT_SECRET: string;
+
+  @IsString()
+  JWT_EXPIRES_IN: string = '24h';
 }
 
 export function validate(config: Record<string, unknown>) {
