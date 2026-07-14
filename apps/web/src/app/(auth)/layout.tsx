@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
-import { Shield } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
+import { ThemeLogo } from '@/components/theme/theme-logo';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -13,11 +13,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       <main className="flex-1 flex flex-col items-center justify-center w-full max-w-[440px] mx-auto px-4">
         {/* Logo and Branding Section */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-1 mb-2">
-            <div className="bg-primary p-1 rounded-lg flex items-center justify-center">
-              <Shield className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <h1 className="text-2xl font-bold text-primary tracking-tight">Excepio</h1>
+          <div className="flex items-center justify-center gap-3 mb-2">
+            <ThemeLogo width={56} height={56} />
+            <h1 className="text-4xl font-bold text-primary tracking-tight">Excepio</h1>
           </div>
           <p className="text-[11px] uppercase text-muted-foreground tracking-widest opacity-80 font-semibold">
             Sistema de Excepciones v1.0

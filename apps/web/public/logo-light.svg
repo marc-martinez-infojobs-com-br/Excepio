@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Contenedor cuadrado redondeado (Azul Profundo) -->
+  <rect x="32" y="32" width="448" height="448" rx="96" fill="#3b82f6" />
+  
+  <!-- Escudo central (Blanco) -->
+  <g transform="translate(128, 112)">
+    <!-- Silueta del escudo -->
+    <path d="M 128 0 
+             L 236 36 
+             C 236 150, 190 220, 128 272 
+             C 66 220, 20 150, 20 36 
+             Z" 
+          fill="none" stroke="#ffffff" stroke-width="24" stroke-linejoin="round" />
+          
+    <!-- Cuadrantes interiores -->
+    <g>
+      <clipPath id="clip-light">
+        <path d="M 128 12 
+                 L 224 44 
+                 C 224 142, 182 208, 128 256 
+                 C 74 208, 32 142, 32 44 
+                 Z" />
+      </clipPath>
+      
+      <g clip-path="url(#clip-light)">
+        <!-- Top Left: Azul (como el fondo) -->
+        <rect x="0" y="0" width="128" height="136" fill="#3b82f6" />
+        <!-- Top Right: Blanco -->
+        <rect x="128" y="0" width="128" height="136" fill="#ffffff" />
+        <!-- Bottom Left: Blanco -->
+        <rect x="0" y="136" width="128" height="136" fill="#ffffff" />
+        <!-- Bottom Right: Azul (como el fondo) -->
+        <rect x="128" y="136" width="128" height="136" fill="#3b82f6" />
+      </g>
+    </g>
+  </g>
+</svg>
