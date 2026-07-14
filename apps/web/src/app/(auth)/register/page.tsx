@@ -1,0 +1,35 @@
+import { RegisterForm } from '@/components/auth/register-form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import Link from 'next/link';
+
+export default function RegisterPage() {
+  return (
+    <Card className="w-full border border-border/50 shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-semibold">Crear cuenta</CardTitle>
+        <CardDescription>
+          Crea tu cuenta en Excepio
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <RegisterForm />
+        
+        {/* Link a Login */}
+        <div className="mt-8 pt-6 border-t border-border text-center">
+          <p className="text-sm text-muted-foreground">
+            ¿Ya tienes una cuenta?{' '}
+            <Link href="/login" className="text-primary font-semibold hover:underline">
+              Inicia sesión
+            </Link>
+          </p>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

@@ -109,10 +109,10 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
   const percentage = (score / 5) * 100;
 
   return (
-    <div className="space-y-3 mt-2">
+    <div className="space-y-2 mt-2">
       {/* Barra de progreso */}
       <div className="space-y-1">
-        <div className="flex justify-between items-center text-xs">
+        <div className="flex justify-between items-center text-[10px]">
           <span className="text-muted-foreground">Fortaleza:</span>
           <span className={`font-medium ${getLevelColorClass()}`}>{level}</span>
         </div>
@@ -121,7 +121,7 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
           aria-valuenow={score}
           aria-valuemin={0}
           aria-valuemax={5}
-          className="h-1.5 w-full bg-muted rounded-full overflow-hidden"
+          className="h-1 w-full bg-muted rounded-full overflow-hidden"
         >
           <div
             className={`h-full transition-all duration-300 ${getColorClass()}`}
@@ -130,21 +130,23 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
         </div>
       </div>
 
-      {/* Lista de requisitos */}
-      <ul className="space-y-1">
+      {/* Lista de requisitos - más compacta */}
+      <ul className="grid grid-cols-2 gap-x-2 gap-y-0.5">
         {requirements.map((req) => (
           <li
             key={req.key}
-            className={`flex items-center gap-2 text-xs ${
+            className={`flex items-center gap-1 text-[10px] ${
+              req.key === 'special' ? 'col-span-2' : ''
+            } ${
               req.met ? 'text-green-600' : 'text-muted-foreground'
             }`}
           >
             {req.met ? (
-              <Check className="h-3.5 w-3.5" data-testid="check-icon" />
+              <Check className="h-3 w-3 flex-shrink-0" data-testid="check-icon" />
             ) : (
-              <X className="h-3.5 w-3.5" data-testid="x-icon" />
+              <X className="h-3 w-3 flex-shrink-0" data-testid="x-icon" />
             )}
-            <span>{req.text}</span>
+            <span className="truncate">{req.text}</span>
           </li>
         ))}
       </ul>
