@@ -7,6 +7,7 @@ import { StatusModule } from './status';
 import { UserModule } from './user';
 import { AuthModule } from './auth';
 import { ProjectModule } from './project';
+import { ExceptionModule } from './exception';
 import { validate } from './config/env.validation';
 
 @Module({
@@ -17,11 +18,12 @@ import { validate } from './config/env.validation';
       envFilePath: '.env',
     }),
     PrismaModule,
+    AuthModule,
+    UserModule,
     LevelModule,
     StatusModule,
-    UserModule,
-    AuthModule,
     ProjectModule,
+    ExceptionModule,
   ],
   controllers: [HealthController],
 })

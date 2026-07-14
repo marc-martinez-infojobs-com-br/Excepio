@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ExceptionSchema = z.object({
   id: z.string().uuid(),
-  projectId: z.string().uuid(),
+  projectId: z.number().int(),
   levelId: z.number().int(),
   message: z.string(),
   stackTrace: z.string().nullable().optional(),
@@ -28,6 +28,30 @@ export const CreateExceptionSchema = z.object({
 });
 
 export type CreateExceptionDto = z.infer<typeof CreateExceptionSchema>;
+
+export const ExceptionFilterSchema = z.object({
+  // Filtros exactos
+  projectId: z.number().int().optional(),
+  levelId: z.number().int().optional(),
+  userId: z.string().optional(),
+  
+  // Rango de fechas
+  startDate: z.string().datetime().optional(),
+  endDate: z.string().datetime().optional(),
+  
+  // Búsqueda por campo específico (ILIKE %valor%)
+  messageSearch: z.string().optional(),
+  urlSearch: z.string().optional(),
+  userAgentSearch: z.string().optional(),
+  appVersionSearch: z.string().optional(),
+  metadataSearch: z.string().optional(),
+  
+  // Paginación
+  page: z.number().int().min(1).optional(),
+  limit: z.number().int().min(1).max(100).optional(),
+});
+
+export type ExceptionFilterDto = z.infer<typeof ExceptionFilterSchema>;
 
 export const ExceptionListResponseSchema = z.object({
   data: z.array(ExceptionSchema),
