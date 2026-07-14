@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { authStorage } from '@/lib/auth-storage';
 
-// Mock de sessionStorage
-const sessionStorageMock = (() => {
+// Mock de localStorage
+const localStorageMock = (() => {
   let store: Record<string, string> = {};
 
   return {
@@ -19,15 +19,15 @@ const sessionStorageMock = (() => {
   };
 })();
 
-// Reemplazar sessionStorage global
-Object.defineProperty(window, 'sessionStorage', {
-  value: sessionStorageMock,
+// Reemplazar localStorage global
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
   writable: true,
 });
 
 describe('authStorage', () => {
   beforeEach(() => {
-    sessionStorageMock.clear();
+    localStorageMock.clear();
   });
 
   it('debería guardar y recuperar el token', () => {
@@ -95,7 +95,7 @@ describe('authStorage', () => {
 
 describe('authStorage - Token expiration', () => {
   beforeEach(() => {
-    sessionStorageMock.clear();
+    localStorageMock.clear();
   });
 
   it('debería detectar token expirado', () => {
