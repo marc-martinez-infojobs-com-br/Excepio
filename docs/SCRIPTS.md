@@ -5,9 +5,10 @@ Este documento contiene todos los scripts disponibles en el proyecto.
 ## Base de Datos (Docker)
 
 ```bash
-pnpm db:up      # Levantar PostgreSQL
-pnpm db:down    # Detener PostgreSQL
-pnpm db:reset   # Reset completo (borra todos los datos)
+pnpm db:up         # Levantar PostgreSQL
+pnpm db:down       # Detener PostgreSQL
+pnpm db:reset      # Reset Docker (borra contenedor + volúmenes, BD vacía)
+pnpm db:regenerate # Borrar BD + aplicar migraciones + seed (BD lista para usar)
 ```
 
 ## Desarrollo
@@ -47,8 +48,15 @@ pnpm --filter @excepio/web test:coverage    # Tests con cobertura
 ## Prisma (Base de datos)
 
 ```bash
-pnpm --filter @excepio/api exec prisma migrate dev    # Ejecutar migraciones
-pnpm --filter @excepio/api exec prisma db seed        # Ejecutar seed
-pnpm --filter @excepio/api exec prisma generate       # Generar cliente
+# Migraciones y generación
+pnpm --filter @excepio/api exec prisma migrate dev    # Aplicar migraciones pendientes
+pnpm --filter @excepio/api exec prisma generate       # Regenerar cliente Prisma
 pnpm --filter @excepio/api exec prisma studio         # Abrir Prisma Studio (GUI)
+
+# Seed
+pnpm --filter @excepio/api exec prisma db seed        # Ejecutar seed
+
+# Reset y recreación
+pnpm --filter @excepio/api exec prisma migrate reset --force  # Borrar BD + migraciones + seed
+pnpm --filter @excepio/api exec prisma db push --force-reset  # Solo borrar BD (sin seed)
 ```
