@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
-import { ProjectRepository, PROJECT_REPOSITORY } from '../../project/repository';
+import type { ProjectRepository } from '../../project/repository';
+import { PROJECT_REPOSITORY } from '../../project/repository';
 
 /**
  * Guard de autenticación por API Key.
