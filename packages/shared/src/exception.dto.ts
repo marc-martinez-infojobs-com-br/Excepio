@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ExceptionSchema = z.object({
   id: z.string().uuid(),
-  projectId: z.string().uuid(),
+  projectId: z.number().int(),
   levelId: z.number().int(),
   message: z.string(),
   stackTrace: z.string().nullable().optional(),
