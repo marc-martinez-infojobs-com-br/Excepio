@@ -40,4 +40,6 @@ export interface JwtPayload {
   sub: string; // user id
   email: string;
   role: UserRole;
+  iat?: number; // issued at (timestamp)
+  exp?: number; // expiration (timestamp)
 }
