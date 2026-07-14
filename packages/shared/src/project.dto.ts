@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const ProjectSchema = z.object({
-  id: z.string().uuid(),
+  id: z.number().int().positive(),
   name: z.string(),
   apiKey: z.string(),
   statusId: z.number().int(),
@@ -11,6 +11,7 @@ export const ProjectSchema = z.object({
 export type ProjectDto = z.infer<typeof ProjectSchema>;
 
 export const CreateProjectSchema = z.object({
+  id: z.number().int().positive(),
   name: z.string().min(1).max(100),
 });
 

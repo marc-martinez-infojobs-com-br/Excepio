@@ -8,7 +8,7 @@ Este documento define la estructura de datos del sistema de registro de excepcio
 ┌─────────────────┐     ┌─────────────────┐
 │     Level       │     │    Project      │
 ├─────────────────┤     ├─────────────────┤
-│ id (int, PK)    │     │ id (UUID, PK)   │
+│ id (int, PK)    │     │ id (int, PK)    │
 │ name            │     │ name            │
 │ order           │     │ apiKey (unique) │
 │ statusId (FK)   │     │ statusId (FK)   │
@@ -95,11 +95,15 @@ Proyectos/aplicaciones que envían excepciones. Cada proyecto representa una apl
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
-| id | UUID | Clave primaria autogenerada |
+| id | int | Clave primaria asignada por el administrador |
 | name | string | Nombre del proyecto |
-| apiKey | string (unique) | API key para autenticar peticiones |
+| apiKey | string (unique) | API key autogenerada para autenticar peticiones |
 | statusId | int (FK) | Estado del registro |
 | createdAt | datetime | Fecha de creación |
+
+**Notas:**
+- El `id` es numérico y asignado manualmente por el administrador al crear el proyecto
+- El `apiKey` se genera automáticamente y solo puede regenerarse mediante endpoint específico
 
 ### Exception
 
@@ -108,7 +112,7 @@ Registro de excepciones.
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID | Clave primaria autogenerada |
-| projectId | UUID (FK) | Proyecto que reporta la excepción |
+| projectId | int (FK) | Proyecto que reporta la excepción |
 | levelId | int (FK) | Nivel de severidad |
 | message | string | Mensaje de la excepción |
 | stackTrace | text (opcional) | Stack trace completo |

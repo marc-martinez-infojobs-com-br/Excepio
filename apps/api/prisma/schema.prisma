@@ -48,7 +48,7 @@ model Level {
 // ============================================
 
 model Project {
-  id        String   @id @default(uuid())
+  id        Int      @id
   name      String
   apiKey    String   @unique
   statusId  Int
@@ -61,7 +61,7 @@ model Project {
 
 model Exception {
   id         String   @id @default(uuid())
-  projectId  String
+  projectId  Int
   levelId    Int
   message    String
   stackTrace String?  @db.Text

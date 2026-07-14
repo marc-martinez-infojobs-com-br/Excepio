@@ -61,21 +61,22 @@ async function main() {
 
   // Projects de ejemplo (para desarrollo)
   const projects = [
-    { name: 'Web', statusId: 2 },
-    { name: 'WM', statusId: 2 },
-    { name: 'Android', statusId: 2 },
-    { name: 'iOS', statusId: 2 },
-    { name: 'API', statusId: 2 },
+    { id: 1, name: 'Web', statusId: 2 },
+    { id: 2, name: 'WM', statusId: 2 },
+    { id: 3, name: 'Android', statusId: 2 },
+    { id: 4, name: 'iOS', statusId: 2 },
+    { id: 5, name: 'API', statusId: 2 },
   ];
 
   for (const project of projects) {
-    const existing = await prisma.project.findFirst({
-      where: { name: project.name },
+    const existing = await prisma.project.findUnique({
+      where: { id: project.id },
     });
 
     if (!existing) {
       await prisma.project.create({
         data: {
+          id: project.id,
           name: project.name,
           apiKey: generateApiKey(),
           statusId: project.statusId,
