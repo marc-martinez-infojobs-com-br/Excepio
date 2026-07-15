@@ -6,35 +6,27 @@ import { ExceptionRow } from '@/components/exceptions/exception-row';
 import { ExceptionFilters } from '@/components/exceptions/exception-filters';
 import { ExceptionPagination } from '@/components/exceptions/exception-pagination';
 import { useExceptions } from '@/hooks/use-exceptions';
+import { useLevels } from '@/hooks/use-levels';
+import { useProjects } from '@/hooks/use-projects';
 import type { ExceptionFilterDto } from '@excepio/shared';
-
-// TODO: Estos datos vendrán de hooks useProjects y useLevels en Fase 7
-const projects = [
-  { id: 1, name: 'Web' },
-  { id: 2, name: 'WM' },
-  { id: 3, name: 'Android' },
-  { id: 4, name: 'iOS' },
-  { id: 5, name: 'API' },
-];
-
-const levels = [
-  { id: 1, name: 'DEBUG' },
-  { id: 2, name: 'INFO' },
-  { id: 3, name: 'WARNING' },
-  { id: 4, name: 'ERROR' },
-  { id: 5, name: 'FATAL' },
-];
 
 export default function ExceptionsPage() {
   const [filters, setFilters] = useState<ExceptionFilterDto>({});
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
 
+  const { data: levelsData } = useLevels();
+  const { data: projectsData } = useProjects();
+
   const { data, isLoading, error } = useExceptions({
     ...filters,
     page,
     limit,
   });
+
+  // Mapear los datos a la estructura esperada por los componentes
+  const levels = levelsData?.map((l) => ({ id: l.id, name: l.name })) ?? [];
+  const projects = projectsData?.map((p) => ({ id: p.id, name: p.name })) ?? [];
 
   const handleFilterChange = (newFilters: ExceptionFilterDto) => {
     setFilters(newFilters);
