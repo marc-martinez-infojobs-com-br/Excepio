@@ -1,0 +1,145 @@
+{
+  "common": {
+    "buttons": {
+      "cancel": "Cancel·lar",
+      "apply": "Aplicar"
+    },
+    "loading": "Carregant...",
+    "error": "Error",
+    "unknownError": "Error desconegut"
+  },
+  "auth": {
+    "login": {
+      "title": "Benvingut",
+      "subtitle": "Accedeix al teu panell de monitoratge",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
+      "forgotPassword": "Has oblidat la contrasenya?",
+      "submit": "Iniciar Sessió",
+      "submitting": "Iniciant sessió...",
+      "error": "Error en iniciar sessió",
+      "noAccount": "No tens un compte?",
+      "createAccount": "Crear compte"
+    },
+    "register": {
+      "title": "Crear compte",
+      "subtitle": "Crea el teu compte a Excepio",
+      "name": "Nom",
+      "namePlaceholder": "El teu nom",
+      "email": "Correu electrònic",
+      "emailPlaceholder": "tu@email.com",
+      "password": "Contrasenya",
+      "confirmPassword": "Confirmar Contrasenya",
+      "submit": "Crear Compte",
+      "submitting": "Creant compte...",
+      "error": "Error en crear compte",
+      "passwordMismatch": "Les contrasenyes no coincideixen",
+      "hasAccount": "Ja tens un compte?",
+      "signIn": "Inicia sessió"
+    },
+    "passwordStrength": {
+      "label": "Fortalesa:",
+      "weak": "Feble",
+      "medium": "Mitjana",
+      "strong": "Forta",
+      "veryStrong": "Molt Forta",
+      "requirements": {
+        "minLength": "Mínim 8 caràcters",
+        "uppercase": "Almenys 1 majúscula",
+        "lowercase": "Almenys 1 minúscula",
+        "number": "Almenys 1 número",
+        "special": "Almenys 1 caràcter especial"
+      }
+    },
+    "logout": "Tancar sessió"
+  },
+  "exceptions": {
+    "title": "Excepcions",
+    "issuesCount": "{count} issues",
+    "filters": {
+      "searchPlaceholder": "Cercar...",
+      "platformAll": "Plataforma: Totes",
+      "searchFields": {
+        "message": "Missatge",
+        "stackTrace": "Stack Trace",
+        "userId": "User ID",
+        "userAgent": "User Agent",
+        "appVersion": "App Version",
+        "url": "URL",
+        "metadata": "Metadata"
+      },
+      "datePresets": {
+        "last1h": "Última 1h",
+        "last24h": "Últimes 24h",
+        "last7d": "Últims 7d",
+        "last30d": "Últims 30d"
+      },
+      "specificDay": "Dia específic...",
+      "customRange": "Rang personalitzat..."
+    },
+    "table": {
+      "severity": "Severitat",
+      "issue": "Issue",
+      "platform": "Plataforma",
+      "lastSeen": "Última vegada"
+    },
+    "pagination": {
+      "showing": "Mostrant",
+      "of": "de",
+      "issues": "issues",
+      "perPage": "per pàgina",
+      "previous": "Anterior",
+      "next": "Següent",
+      "page": "Pàgina",
+      "pageOf": "Pàgina {page} de {total}"
+    },
+    "time": {
+      "justNow": "Ara",
+      "minutesAgo": "fa {count} min",
+      "hoursAgo": "fa {count} h",
+      "daysAgo": "fa {count} d"
+    },
+    "errors": {
+      "loading": "Error en carregar excepcions"
+    },
+    "empty": "No s'han trobat excepcions",
+    "unknownLevel": "DESCONEGUT",
+    "unknownProject": "Desconegut"
+  },
+  "dashboard": {
+    "title": "Benvingut a Excepio",
+    "loggedInAs": "Connectat com",
+    "role": "Rol:",
+    "cards": {
+      "exceptions": {
+        "title": "Excepcions",
+        "description": "Veure i gestionar totes les excepcions dels teus projectes",
+        "action": "Veure Excepcions"
+      }
+    }
+  },
+  "health": {
+    "connecting": "Connectant amb l'API...",
+    "connectionError": "Error de connexió:",
+    "connected": "API connectada - Estat:",
+    "lastCheck": "Última verificació:"
+  },
+  "layout": {
+    "appName": "Excepio",
+    "appVersion": "Sistema d'Excepcions v1.0",
+    "changeLanguage": "Canviar idioma",
+    "footer": {
+      "status": "Estat",
+      "support": "Suport",
+      "docs": "Docs"
+    }
+  },
+  "theme": {
+    "toggle": "Canviar tema",
+    "switchToLight": "Canviar a mode clar",
+    "switchToDark": "Canviar a mode fosc"
+  },
+  "metadata": {
+    "description": "Sistema de Registre d'Excepcions"
+  }
+}

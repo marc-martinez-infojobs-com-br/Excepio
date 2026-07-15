@@ -11,8 +11,12 @@ describe('i18n config', () => {
       expect(locales).toContain('en');
     });
 
-    it('should have exactly 2 supported locales', () => {
-      expect(locales).toHaveLength(2);
+    it('should include Catalan (ca)', () => {
+      expect(locales).toContain('ca');
+    });
+
+    it('should have exactly 3 supported locales', () => {
+      expect(locales).toHaveLength(3);
     });
   });
 
@@ -30,9 +34,11 @@ describe('i18n config', () => {
     it('should accept valid locale values', () => {
       const esLocale: Locale = 'es';
       const enLocale: Locale = 'en';
+      const caLocale: Locale = 'ca';
       
       expect(esLocale).toBe('es');
       expect(enLocale).toBe('en');
+      expect(caLocale).toBe('ca');
     });
   });
 });

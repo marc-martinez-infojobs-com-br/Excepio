@@ -36,18 +36,21 @@ describe('LanguageSelector', () => {
 
     await user.click(screen.getByRole('button'));
 
+    expect(screen.getByText('Català')).toBeInTheDocument();
     expect(screen.getByText('Español')).toBeInTheDocument();
     expect(screen.getByText('English')).toBeInTheDocument();
   });
 
-  it('should show flags for each language', async () => {
+  it('should render SVG flag icons for each language', async () => {
     const user = userEvent.setup();
     render(<LanguageSelector />);
 
     await user.click(screen.getByRole('button'));
 
-    expect(screen.getByText('🇪🇸')).toBeInTheDocument();
-    expect(screen.getByText('🇺🇸')).toBeInTheDocument();
+    // Verificar que hay SVGs renderizados (iconos de banderas)
+    const svgs = document.querySelectorAll('svg[aria-hidden="true"]');
+    // Debe haber al menos 3 SVGs de banderas + 1 del icono Globe
+    expect(svgs.length).toBeGreaterThanOrEqual(4);
   });
 
   it('should show checkmark for current locale', async () => {

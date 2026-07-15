@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import esMessages from '../../../messages/es.json';
 import enMessages from '../../../messages/en.json';
+import caMessages from '../../../messages/ca.json';
 
 /**
  * Recursively extracts all keys from a nested object
@@ -26,10 +27,12 @@ function extractKeys(obj: Record<string, unknown>, prefix = ''): string[] {
 describe('i18n messages', () => {
   const esKeys = extractKeys(esMessages);
   const enKeys = extractKeys(enMessages);
+  const caKeys = extractKeys(caMessages);
 
   describe('structure consistency', () => {
-    it('should have the same number of keys in both languages', () => {
+    it('should have the same number of keys in all languages', () => {
       expect(esKeys.length).toBe(enKeys.length);
+      expect(esKeys.length).toBe(caKeys.length);
     });
 
     it('should have all Spanish keys present in English', () => {
@@ -39,6 +42,16 @@ describe('i18n messages', () => {
 
     it('should have all English keys present in Spanish', () => {
       const missingInEs = enKeys.filter((key) => !esKeys.includes(key));
+      expect(missingInEs).toEqual([]);
+    });
+
+    it('should have all Spanish keys present in Catalan', () => {
+      const missingInCa = esKeys.filter((key) => !caKeys.includes(key));
+      expect(missingInCa).toEqual([]);
+    });
+
+    it('should have all Catalan keys present in Spanish', () => {
+      const missingInEs = caKeys.filter((key) => !esKeys.includes(key));
       expect(missingInEs).toEqual([]);
     });
   });
@@ -63,6 +76,16 @@ describe('i18n messages', () => {
       });
       expect(emptyKeys).toEqual([]);
     });
+
+    it('should not have empty string values in Catalan', () => {
+      const emptyKeys = caKeys.filter((key) => {
+        const value = key.split('.').reduce((obj: unknown, k) => {
+          return (obj as Record<string, unknown>)?.[k];
+        }, caMessages);
+        return value === '';
+      });
+      expect(emptyKeys).toEqual([]);
+    });
   });
 
   describe('required namespaces', () => {
@@ -79,6 +102,10 @@ describe('i18n messages', () => {
 
     it.each(requiredNamespaces)('should have "%s" namespace in English', (namespace) => {
       expect(enMessages).toHaveProperty(namespace);
+    });
+
+    it.each(requiredNamespaces)('should have "%s" namespace in Catalan', (namespace) => {
+      expect(caMessages).toHaveProperty(namespace);
     });
   });
 });
