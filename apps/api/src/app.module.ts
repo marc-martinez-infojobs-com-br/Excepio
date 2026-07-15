@@ -6,7 +6,7 @@ import { LevelModule } from './level';
 import { StatusModule } from './status';
 import { UserModule } from './user';
 import { AuthModule } from './auth';
-import { ProjectModule } from './project';
+import { PlatformModule } from './platform';
 import { ExceptionModule } from './exception';
 import { validate } from './config/env.validation';
 
@@ -22,7 +22,7 @@ import { validate } from './config/env.validation';
     UserModule,
     LevelModule,
     StatusModule,
-    ProjectModule,
+    PlatformModule,
     ExceptionModule,
   ],
   controllers: [HealthController],

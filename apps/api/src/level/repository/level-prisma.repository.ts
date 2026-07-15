@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LevelResponseDto, STATUS_ID } from '@excepio/shared';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@app/prisma/prisma.service';
 import { LevelRepository } from './level.repository.interface';
 
 /**

@@ -2,8 +2,8 @@ import { Injectable, Inject, NotFoundException, BadRequestException } from '@nes
 import type { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ExceptionListResponseDto } from '@excepio/shared';
 import type { ExceptionRepository } from './repository';
 import { EXCEPTION_REPOSITORY } from './repository';
-import type { ProjectRepository } from '../project/repository';
-import { PROJECT_REPOSITORY } from '../project/repository';
+import type { PlatformRepository } from '../platform/repository';
+import { PLATFORM_REPOSITORY } from '../platform/repository';
 
 /**
  * Servicio para gestionar excepciones.
@@ -13,18 +13,18 @@ export class ExceptionService {
   constructor(
     @Inject(EXCEPTION_REPOSITORY)
     private readonly exceptionRepository: ExceptionRepository,
-    @Inject(PROJECT_REPOSITORY)
-    private readonly projectRepository: ProjectRepository,
+    @Inject(PLATFORM_REPOSITORY)
+    private readonly platformRepository: PlatformRepository,
   ) {}
 
   /**
    * Crea una nueva excepción.
    * Valida que el levelId sea válido (1-5) y usa levelId=2 (INFO) si no es válido.
-   * @param projectId - ID del proyecto que reporta la excepción
+   * @param platformId - ID de la plataforma que reporta la excepción
    * @param data - Datos de la excepción
    * @returns La excepción creada
    */
-  async create(projectId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
     // Validar y normalizar levelId
     let levelId = data.levelId;
     if (levelId < 1 || levelId > 5) {
@@ -36,7 +36,7 @@ export class ExceptionService {
       levelId,
     };
 
-    return this.exceptionRepository.create(projectId, normalizedData);
+    return this.exceptionRepository.create(platformId, normalizedData);
   }
 
   /**

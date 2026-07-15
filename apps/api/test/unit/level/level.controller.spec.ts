@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { LevelController } from '../../../src/level/level.controller';
-import { LevelService } from '../../../src/level/level.service';
+import { LevelController } from '@level/level.controller';
+import { LevelService } from '@level/level.service';
 import { LevelResponseDto } from '@excepio/shared';
 
 describe('LevelController', () => {

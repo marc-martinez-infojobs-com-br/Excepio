@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MinLength, MaxLength, IsInt, Min } from 'class-validator';
 
-export class CreateProjectDto {
+export class CreatePlatformDto {
   @ApiProperty({
-    description: 'Identificador numérico único del proyecto',
+    description: 'Identificador numérico único de la plataforma',
     example: 1,
     minimum: 1,
   })
@@ -12,7 +12,7 @@ export class CreateProjectDto {
   id: number;
 
   @ApiProperty({
-    description: 'Nombre del proyecto',
+    description: 'Nombre de la plataforma',
     example: 'Mi Aplicación Web',
     minLength: 1,
     maxLength: 100,

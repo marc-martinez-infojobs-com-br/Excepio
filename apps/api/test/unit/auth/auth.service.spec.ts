@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { UnauthorizedException, ConflictException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthService } from '../../../src/auth/auth.service';
-import { UserService } from '../../../src/user/user.service';
-import { UserMemoryRepository } from '../../../src/user/repository';
+import { AuthService } from '@auth/auth.service';
+import { UserService } from '@user/user.service';
+import { UserMemoryRepository } from '@user/repository';
 import { UserResponseDto, UserRole, RegisterBackendDto, LoginDto, LoginResponseDto } from '@excepio/shared';
 import * as bcrypt from 'bcrypt';
 

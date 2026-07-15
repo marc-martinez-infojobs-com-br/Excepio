@@ -1,11 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import RegisterPage from '@/app/(auth)/register/page';
-import { useAuth } from '@/hooks/use-auth';
+import RegisterPage from '@app/(auth)/register/page';
+import { useAuth } from '@hooks/use-auth';
 
 // Mock del useAuth
-vi.mock('@/hooks/use-auth', () => ({
+vi.mock('@hooks/use-auth', () => ({
   useAuth: vi.fn(),
 }));
 

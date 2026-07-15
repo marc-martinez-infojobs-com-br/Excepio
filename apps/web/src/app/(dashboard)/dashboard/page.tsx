@@ -1,8 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
+import { useAuth } from '@hooks/use-auth';
+import { Button } from '@components/ui/button';
 import { AlertTriangle, ArrowRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 

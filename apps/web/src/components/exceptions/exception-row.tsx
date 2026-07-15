@@ -1,20 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TableCell, TableRow } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
+import { TableCell, TableRow } from '@components/ui/table';
+import { cn } from '@lib/utils';
 import { Monitor, Server, Cpu, Smartphone } from 'lucide-react';
 import type { ExceptionDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 
 /**
- * TODO: Mejoras pendientes para Projects
- * 1. Añadir campo 'icon' en la entidad Project (schema.prisma) para que el usuario
- *    pueda seleccionar un icono desde una galería fija cuando gestione proyectos
- * 2. Renombrar la entidad Project a Portal en todo el sistema (modelo, DTOs, API, frontend)
+ * TODO: Mejoras pendientes para Platforms
+ * 1. Añadir campo 'icon' en la entidad Platform (schema.prisma) para que el usuario
+ *    pueda seleccionar un icono desde una galería fija cuando gestione plataformas
  */
 
-interface Project {
+interface Platform {
   id: number;
   name: string;
 }
@@ -26,7 +25,7 @@ interface Level {
 
 interface ExceptionRowProps {
   exception: ExceptionDto;
-  projects: Project[];
+  platforms: Platform[];
   levels: Level[];
   onClick?: (id: string) => void;
 }
@@ -70,13 +69,13 @@ function getLevelDisplayName(levelId: number, levelName: string): string {
 }
 
 /**
- * Retorna el icono correspondiente al proyecto
- * TODO: Esto será dinámico cuando Project tenga el campo 'icon'
+ * Retorna el icono correspondiente a la plataforma
+ * TODO: Esto será dinámico cuando Platform tenga el campo 'icon'
  */
-function getProjectIcon(projectName: string) {
+function getPlatformIcon(platformName: string) {
   const iconClass = "h-5 w-5 text-muted-foreground";
   
-  switch (projectName.toLowerCase()) {
+  switch (platformName.toLowerCase()) {
     case 'web':
       return <Monitor className={iconClass} />;
     case 'wm':
@@ -152,12 +151,12 @@ function getStackTracePreview(stackTrace: string | null | undefined): string | n
   return firstLine.length > 80 ? `${firstLine.substring(0, 80)}...` : firstLine;
 }
 
-export function ExceptionRow({ exception, projects, levels, onClick }: ExceptionRowProps) {
+export function ExceptionRow({ exception, platforms, levels, onClick }: ExceptionRowProps) {
   const t = useTranslations('exceptions');
   const tTime = useTranslations('exceptions.time');
   const [relativeTime, setRelativeTime] = useState<string>('');
   const level = levels.find((l) => l.id === exception.levelId);
-  const project = projects.find((p) => p.id === exception.projectId);
+  const platform = platforms.find((p) => p.id === exception.platformId);
   const { absolute } = formatDate(exception.createdAt);
   const stackPreview = getStackTracePreview(exception.stackTrace);
 
@@ -203,10 +202,10 @@ export function ExceptionRow({ exception, projects, levels, onClick }: Exception
         </div>
       </TableCell>
 
-      {/* Project Icon */}
+      {/* Platform Icon */}
       <TableCell className="w-[80px] py-4">
-        <div className="flex justify-center" title={project?.name ?? t('unknownProject')}>
-          {getProjectIcon(project?.name ?? '')}
+        <div className="flex justify-center" title={platform?.name ?? t('unknownPlatform')}>
+          {getPlatformIcon(platform?.name ?? '')}
         </div>
       </TableCell>
 

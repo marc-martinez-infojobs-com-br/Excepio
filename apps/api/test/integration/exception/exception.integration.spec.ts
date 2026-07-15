@@ -3,11 +3,11 @@ import { NestFactory } from '@nestjs/core';
 import { Module, INestApplication, Controller, Get, Post, Param, Body, Query, Injectable, Inject, UseGuards } from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ProjectDto } from '@excepio/shared';
-import { ExceptionMemoryRepository, EXCEPTION_REPOSITORY } from '../../../src/exception/repository';
-import { ProjectMemoryRepository, PROJECT_REPOSITORY } from '../../../src/project/repository';
-import type { ExceptionRepository } from '../../../src/exception/repository';
-import type { ProjectRepository } from '../../../src/project/repository';
+import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, PlatformDto } from '@excepio/shared';
+import { ExceptionMemoryRepository, EXCEPTION_REPOSITORY } from '@exception/repository';
+import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '@platform/repository';
+import type { ExceptionRepository } from '@exception/repository';
+import type { PlatformRepository } from '@platform/repository';
 
 const TEST_EXCEPTION_SERVICE = Symbol('TEST_EXCEPTION_SERVICE');
 
@@ -16,17 +16,17 @@ const TEST_EXCEPTION_SERVICE = Symbol('TEST_EXCEPTION_SERVICE');
 class TestExceptionService {
   constructor(
     @Inject(EXCEPTION_REPOSITORY) private readonly exceptionRepo: ExceptionRepository,
-    @Inject(PROJECT_REPOSITORY) private readonly projectRepo: ProjectRepository,
+    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository,
   ) {}
 
-  async create(projectId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
     let levelId = data.levelId;
     if (levelId < 1 || levelId > 5) {
       levelId = 2; // INFO por defecto
     }
 
     const normalizedData: CreateExceptionDto = { ...data, levelId };
-    return this.exceptionRepo.create(projectId, normalizedData);
+    return this.exceptionRepo.create(platformId, normalizedData);
   }
 
   async findById(id: string): Promise<ExceptionDto> {
@@ -51,7 +51,7 @@ class TestExceptionService {
 // Mock guards para tests
 @Injectable()
 class MockApiKeyAuthGuard {
-  constructor(@Inject(PROJECT_REPOSITORY) private readonly projectRepo: ProjectRepository) {}
+  constructor(@Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository) {}
 
   async canActivate(context: any): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -69,7 +69,7 @@ class MockApiKeyAuthGuard {
       throw new UnauthorizedException('Invalid API Key');
     }
 
-    request.project = project;
+    request.platform = project;
     return true;
   }
 }
@@ -92,7 +92,7 @@ const CurrentProject = () => {
 class TestExceptionController {
   constructor(
     @Inject(TEST_EXCEPTION_SERVICE) private readonly service: TestExceptionService,
-    @Inject(PROJECT_REPOSITORY) private readonly projectRepo: ProjectRepository,
+    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository,
   ) {}
 
   @Post()
@@ -101,8 +101,8 @@ class TestExceptionController {
     // Simular extracción del proyecto del request
     const apiKey = req?.headers?.['x-api-key'];
     const project = apiKey ? await this.projectRepo.findByApiKey(apiKey) : null;
-    const projectId = project?.id || 1;
-    return this.service.create(projectId, dto);
+    const platformId = project?.id || 1;
+    return this.service.create(platformId, dto);
   }
 
   @Get()
@@ -111,7 +111,7 @@ class TestExceptionController {
     // Convertir query params a números
     const normalizedFilters: ExceptionFilterDto = {
       ...filters,
-      projectId: filters.projectId ? Number(filters.projectId) : undefined,
+      platformId: filters.platformId ? Number(filters.platformId) : undefined,
       levelId: filters.levelId ? Number(filters.levelId) : undefined,
       page: filters.page ? Number(filters.page) : undefined,
       limit: filters.limit ? Number(filters.limit) : undefined,
@@ -128,7 +128,7 @@ class TestExceptionController {
 
 // Instancias compartidas para seed/clear
 let sharedExceptionRepository: ExceptionMemoryRepository;
-let sharedProjectRepository: ProjectMemoryRepository;
+let sharedPlatformRepository: PlatformMemoryRepository;
 
 @Module({
   controllers: [TestExceptionController],
@@ -145,10 +145,10 @@ let sharedProjectRepository: ProjectMemoryRepository;
       },
     },
     {
-      provide: PROJECT_REPOSITORY,
+      provide: PLATFORM_REPOSITORY,
       useFactory: () => {
-        sharedProjectRepository = new ProjectMemoryRepository();
-        return sharedProjectRepository;
+        sharedPlatformRepository = new PlatformMemoryRepository();
+        return sharedPlatformRepository;
       },
     },
     MockApiKeyAuthGuard,
@@ -161,9 +161,9 @@ describe('Exception CRUD (integration)', () => {
   let app: INestApplication<App>;
 
   const validApiKey = 'exc_abc123def456';
-  const mockProject: ProjectDto = {
+  const mockPlatform: PlatformDto = {
     id: 1,
-    name: 'Test Project',
+    name: 'Test Platform',
     apiKey: validApiKey,
     statusId: 2,
     createdAt: new Date().toISOString(),
@@ -183,8 +183,8 @@ describe('Exception CRUD (integration)', () => {
 
   beforeEach(() => {
     sharedExceptionRepository.clear();
-    sharedProjectRepository.clear();
-    sharedProjectRepository.seed([mockProject]);
+    sharedPlatformRepository.clear();
+    sharedPlatformRepository.seed([mockPlatform]);
   });
 
   describe('POST /api/exceptions (API Key authentication)', () => {
@@ -211,7 +211,7 @@ describe('Exception CRUD (integration)', () => {
       // Assert
       const exception: ExceptionDto = response.body;
       expect(exception.id).toBeDefined();
-      expect(exception.projectId).toBe(1);
+      expect(exception.platformId).toBe(1);
       expect(exception.levelId).toBe(4);
       expect(exception.message).toBe(createDto.message);
       expect(exception.stackTrace).toBe(createDto.stackTrace);
@@ -301,7 +301,7 @@ describe('Exception CRUD (integration)', () => {
       // Seed con excepciones de prueba
       const exception1: ExceptionDto = {
         id: '111e4567-e89b-12d3-a456-426614174111',
-        projectId: 1,
+        platformId: 1,
         levelId: 4,
         message: 'Error 1',
         stackTrace: null,
@@ -315,7 +315,7 @@ describe('Exception CRUD (integration)', () => {
 
       const exception2: ExceptionDto = {
         id: '222e4567-e89b-12d3-a456-426614174222',
-        projectId: 2,
+        platformId: 2,
         levelId: 3,
         message: 'Warning 2',
         stackTrace: null,
@@ -329,7 +329,7 @@ describe('Exception CRUD (integration)', () => {
 
       const exception3: ExceptionDto = {
         id: '333e4567-e89b-12d3-a456-426614174333',
-        projectId: 1,
+        platformId: 1,
         levelId: 5,
         message: 'Fatal error 3',
         stackTrace: 'at fatal (app.js:1:1)',
@@ -361,12 +361,12 @@ describe('Exception CRUD (integration)', () => {
       // Act
       const response = await request(app.getHttpServer())
         .get('/api/exceptions')
-        .query({ projectId: 1 })
+        .query({ platformId: 1 })
         .expect(200);
 
       // Assert
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data.every((e: any) => e.projectId === 1)).toBe(true);
+      expect(response.body.data.every((e: any) => e.platformId === 1)).toBe(true);
     });
 
     it('Given_LevelIdFilter_When_GetExceptions_Then_ReturnsFilteredExceptions', async () => {
@@ -514,7 +514,7 @@ describe('Exception CRUD (integration)', () => {
       const response = await request(app.getHttpServer())
         .get('/api/exceptions')
         .query({
-          projectId: 1,
+          platformId: 1,
           userId: 'user_1',
           levelId: 5, // Solo Fatal (exception3)
         })
@@ -531,7 +531,7 @@ describe('Exception CRUD (integration)', () => {
       // Arrange
       const exception: ExceptionDto = {
         id: '123e4567-e89b-12d3-a456-426614174000',
-        projectId: 1,
+        platformId: 1,
         levelId: 4,
         message: 'Test error',
         stackTrace: null,

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { StatusController } from '../../../src/status/status.controller';
-import { StatusService } from '../../../src/status/status.service';
+import { StatusController } from '@status/status.controller';
+import { StatusService } from '@status/status.service';
 import { StatusResponseDto } from '@excepio/shared';
 
 describe('StatusController', () => {

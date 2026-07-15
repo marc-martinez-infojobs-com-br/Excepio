@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserResponseDto, CreateUserDto, UpdateUserDto } from '@excepio/shared';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@app/prisma/prisma.service';
 import { UserRepository } from './user.repository.interface';
 
 /**

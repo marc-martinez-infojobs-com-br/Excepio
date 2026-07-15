@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ExceptionRow } from '@/components/exceptions/exception-row';
-import { ExceptionCard } from '@/components/exceptions/exception-card';
-import { ExceptionFilters } from '@/components/exceptions/exception-filters';
-import { ExceptionPagination } from '@/components/exceptions/exception-pagination';
-import { useExceptions } from '@/hooks/use-exceptions';
-import { useLevels } from '@/hooks/use-levels';
-import { useProjects } from '@/hooks/use-projects';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import { ExceptionRow } from '@components/exceptions/exception-row';
+import { ExceptionCard } from '@components/exceptions/exception-card';
+import { ExceptionFilters } from '@components/exceptions/exception-filters';
+import { ExceptionPagination } from '@components/exceptions/exception-pagination';
+import { useExceptions } from '@hooks/use-exceptions';
+import { useLevels } from '@hooks/use-levels';
+import { usePlatforms } from '@hooks/use-platforms';
 import type { ExceptionFilterDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 
@@ -20,7 +20,7 @@ export default function ExceptionsPage() {
   const [limit, setLimit] = useState(25);
 
   const { data: levelsData } = useLevels();
-  const { data: projectsData } = useProjects();
+  const { data: platformsData } = usePlatforms();
 
   const { data, isLoading, error } = useExceptions({
     ...filters,
@@ -30,7 +30,7 @@ export default function ExceptionsPage() {
 
   // Mapear los datos a la estructura esperada por los componentes
   const levels = levelsData?.map((l) => ({ id: l.id, name: l.name })) ?? [];
-  const projects = projectsData?.map((p) => ({ id: p.id, name: p.name })) ?? [];
+  const platforms = platformsData?.map((p) => ({ id: p.id, name: p.name })) ?? [];
 
   const handleFilterChange = (newFilters: ExceptionFilterDto) => {
     setFilters(newFilters);
@@ -56,7 +56,7 @@ export default function ExceptionsPage() {
       {/* Filtros */}
       <ExceptionFilters
         filters={filters}
-        projects={projects}
+        platforms={platforms}
         levels={levels}
         onFilterChange={handleFilterChange}
       />
@@ -89,7 +89,7 @@ export default function ExceptionsPage() {
             <ExceptionCard
               key={exception.id}
               exception={exception}
-              projects={projects}
+              platforms={platforms}
               levels={levels}
               onClick={handleRowClick}
             />
@@ -142,7 +142,7 @@ export default function ExceptionsPage() {
                 <ExceptionRow
                   key={exception.id}
                   exception={exception}
-                  projects={projects}
+                  platforms={platforms}
                   levels={levels}
                   onClick={handleRowClick}
                 />

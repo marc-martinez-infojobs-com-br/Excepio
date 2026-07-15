@@ -16,8 +16,8 @@ describe('Prisma Schema', () => {
     expect(fields).toHaveProperty('statusId');
   });
 
-  it('should have Project model with correct fields', () => {
-    const fields = Prisma.ProjectScalarFieldEnum;
+  it('should have Platform model with correct fields', () => {
+    const fields = Prisma.PlatformScalarFieldEnum;
     expect(fields).toHaveProperty('id');
     expect(fields).toHaveProperty('name');
     expect(fields).toHaveProperty('apiKey');
@@ -28,7 +28,7 @@ describe('Prisma Schema', () => {
   it('should have Exception model with correct fields', () => {
     const fields = Prisma.ExceptionScalarFieldEnum;
     expect(fields).toHaveProperty('id');
-    expect(fields).toHaveProperty('projectId');
+    expect(fields).toHaveProperty('platformId');
     expect(fields).toHaveProperty('levelId');
     expect(fields).toHaveProperty('message');
     expect(fields).toHaveProperty('stackTrace');
@@ -40,12 +40,12 @@ describe('Prisma Schema', () => {
     expect(fields).toHaveProperty('createdAt');
   });
 
-  it('should NOT have Platform model', () => {
-    expect(Prisma).not.toHaveProperty('PlatformScalarFieldEnum');
+  it('should NOT have Project model', () => {
+    expect(Prisma).not.toHaveProperty('ProjectScalarFieldEnum');
   });
 
-  it('should NOT have platformId in Exception model', () => {
+  it('should NOT have projectId in Exception model', () => {
     const fields = Prisma.ExceptionScalarFieldEnum;
-    expect(fields).not.toHaveProperty('platformId');
+    expect(fields).not.toHaveProperty('projectId');
   });
 });

@@ -23,7 +23,7 @@ describe('i18n request config', () => {
     it('should return Spanish messages when locale cookie is es', async () => {
       mockCookieStore.get.mockReturnValue({ value: 'es' });
       
-      const { default: getConfig } = await import('@/i18n/request');
+      const { default: getConfig } = await import('@i18n/request');
       const config = await getConfig({ requestLocale: Promise.resolve('es') });
       
       expect(config.locale).toBe('es');
@@ -42,7 +42,7 @@ describe('i18n request config', () => {
         cookies: vi.fn(() => mockCookieStore),
       }));
       
-      const { default: getConfig } = await import('@/i18n/request');
+      const { default: getConfig } = await import('@i18n/request');
       const config = await getConfig({ requestLocale: Promise.resolve('en') });
       
       expect(config.locale).toBe('en');
@@ -60,7 +60,7 @@ describe('i18n request config', () => {
         cookies: vi.fn(() => mockCookieStore),
       }));
       
-      const { default: getConfig } = await import('@/i18n/request');
+      const { default: getConfig } = await import('@i18n/request');
       const config = await getConfig({ requestLocale: Promise.resolve(undefined) });
       
       expect(config.locale).toBe('es');
@@ -78,7 +78,7 @@ describe('i18n request config', () => {
         cookies: vi.fn(() => mockCookieStore),
       }));
       
-      const { default: getConfig } = await import('@/i18n/request');
+      const { default: getConfig } = await import('@i18n/request');
       const config = await getConfig({ requestLocale: Promise.resolve('fr') });
       
       expect(config.locale).toBe('es');

@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { ExceptionController } from './exception.controller';
 import { ExceptionService } from './exception.service';
 import { ExceptionPrismaRepository, EXCEPTION_REPOSITORY } from './repository';
-import { ProjectModule } from '../project/project.module';
+import { PlatformModule } from '../platform/platform.module';
 
 @Module({
-  imports: [ProjectModule], // Importamos ProjectModule para usar PROJECT_REPOSITORY
+  imports: [PlatformModule], // Importamos PlatformModule para usar PLATFORM_REPOSITORY
   controllers: [ExceptionController],
   providers: [
     ExceptionService,

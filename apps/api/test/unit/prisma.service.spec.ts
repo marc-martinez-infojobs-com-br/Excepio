@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll, beforeEach, afterEach } from 'vitest';
 import { ConfigService } from '@nestjs/config';
 import dotenv from 'dotenv';
-import { PrismaService } from '../../src/prisma/prisma.service';
+import { PrismaService } from '@app/prisma/prisma.service';
 
 // Cargar variables de entorno antes de que se ejecute cualquier test
 dotenv.config();
@@ -40,8 +40,8 @@ describe('PrismaService', () => {
     expect(service.level).toBeDefined();
   });
 
-  it('should have project model', () => {
-    expect(service.project).toBeDefined();
+  it('should have platform model', () => {
+    expect(service.platform).toBeDefined();
   });
 
   it('should have exception model', () => {

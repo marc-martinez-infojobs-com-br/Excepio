@@ -4,8 +4,8 @@ import { Module, INestApplication, Controller, Get, Param, ParseIntPipe, Injecta
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { LevelResponseDto, STATUS_ID } from '@excepio/shared';
-import { LevelMemoryRepository, LEVEL_REPOSITORY } from '../../../src/level/repository';
-import type { LevelRepository } from '../../../src/level/repository';
+import { LevelMemoryRepository, LEVEL_REPOSITORY } from '@level/repository';
+import type { LevelRepository } from '@level/repository';
 
 // Datos de seed que simulan la BD real
 const seedLevels: LevelResponseDto[] = [

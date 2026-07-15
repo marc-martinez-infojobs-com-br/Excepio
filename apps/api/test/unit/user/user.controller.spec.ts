@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { UserController } from '../../../src/user/user.controller';
-import { UserService } from '../../../src/user/user.service';
+import { UserController } from '@user/user.controller';
+import { UserService } from '@user/user.service';
 import { UserResponseDto, UserRole, CreateUserDto, UpdateUserDto } from '@excepio/shared';
 
 describe('UserController', () => {

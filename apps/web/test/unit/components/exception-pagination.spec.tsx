@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ExceptionPagination } from '@/components/exceptions/exception-pagination';
+import { ExceptionPagination } from '@components/exceptions/exception-pagination';
 
 describe('ExceptionPagination', () => {
   it('debería renderizar información de paginación', () => {

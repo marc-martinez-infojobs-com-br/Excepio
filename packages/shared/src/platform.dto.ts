@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const ProjectSchema = z.object({
+export const PlatformSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
   apiKey: z.string(),
@@ -8,18 +8,18 @@ export const ProjectSchema = z.object({
   createdAt: z.string().datetime(),
 });
 
-export type ProjectDto = z.infer<typeof ProjectSchema>;
+export type PlatformDto = z.infer<typeof PlatformSchema>;
 
-export const CreateProjectSchema = z.object({
+export const CreatePlatformSchema = z.object({
   id: z.number().int().positive(),
   name: z.string().min(1).max(100),
 });
 
-export type CreateProjectDto = z.infer<typeof CreateProjectSchema>;
+export type CreatePlatformDto = z.infer<typeof CreatePlatformSchema>;
 
-export const UpdateProjectSchema = z.object({
+export const UpdatePlatformSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   statusId: z.number().int().optional(),
 });
 
-export type UpdateProjectDto = z.infer<typeof UpdateProjectSchema>;
+export type UpdatePlatformDto = z.infer<typeof UpdatePlatformSchema>;

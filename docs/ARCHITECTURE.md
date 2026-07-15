@@ -20,6 +20,7 @@ Sistema de **Registro y Consumo de Excepciones** implementado como monorepo. El 
 | Documentación API | OpenAPI/Swagger en `/api/swagger` |
 | Testing | Vitest + Testing Library + Playwright (E2E) |
 | Autenticación | JWT (Passport.js) + bcrypt |
+| Internacionalización | next-intl (Català, Español, English) |
 
 ## Autenticación y Autorización
 
@@ -40,12 +41,12 @@ El sistema implementa dos mecanismos de autenticación independientes:
   - `GET /auth/profile` - Obtener perfil del usuario autenticado
 - **Protección:** Los endpoints de gestión (CRUD de usuarios, proyectos, etc.) están protegidos por `JwtAuthGuard`
 
-#### 2. API Key - Para Proyectos/Aplicaciones
+#### 2. API Key - Para Plataformas/Aplicaciones
 
 **Propósito:** Autenticar aplicaciones que reportan excepciones al sistema.
 
-- **Método:** API Key única por proyecto
-- **Campo:** `Project.apiKey` (generado automáticamente al crear un proyecto)
+- **Método:** API Key única por plataforma
+- **Campo:** `Platform.apiKey` (generado automáticamente al crear una plataforma)
 - **Endpoints protegidos:**
   - `POST /exceptions` - Reportar una excepción (futura implementación)
 - **Protección:** Los endpoints de ingesta usan un guard que valida el API Key
@@ -56,8 +57,8 @@ El sistema implementa control de acceso basado en roles (RBAC):
 
 | Rol | Permisos |
 |-----|----------|
-| **ADMINISTRADOR** | CRUD completo de usuarios, proyectos y excepciones. Acceso total al sistema. |
-| **USUARIO** | Solo lectura de excepciones y proyectos. No puede gestionar usuarios. |
+| **ADMINISTRADOR** | CRUD completo de usuarios, plataformas y excepciones. Acceso total al sistema. |
+| **USUARIO** | Solo lectura de excepciones y plataformas. No puede gestionar usuarios. |
 
 **Implementación:**
 - Enum `UserRole` en Prisma y DTOs compartidos
@@ -81,7 +82,7 @@ El sistema implementa control de acceso basado en roles (RBAC):
 - Las contraseñas nunca se almacenan en texto plano (bcrypt con salt)
 - Los tokens JWT expiran según configuración (ej. 24h)
 - Los usuarios pueden ser desactivados mediante `statusId` (borrado lógico)
-- Sin relación User-Project por ahora (cualquier usuario autenticado puede ver todo)
+- Sin relación User-Platform por ahora (cualquier usuario autenticado puede ver todo)
 
 ## Estrategia de Testing
 
@@ -121,6 +122,61 @@ El sistema implementa control de acceso basado en roles (RBAC):
 └── CONTRIBUTING.md               # Comandos y guía de desarrollo
 ```
 
+## Path Aliases (Imports Absolutos)
+
+El proyecto utiliza path aliases para evitar imports relativos (`../../`).
+
+### Backend API (`apps/api`)
+
+| Alias | Resuelve a | Uso |
+|-------|------------|-----|
+| `@app/*` | `src/*` | Imports generales desde src |
+| `@platform/*` | `src/platform/*` | Módulo de plataformas |
+| `@exception/*` | `src/exception/*` | Módulo de excepciones |
+| `@auth/*` | `src/auth/*` | Autenticación y guards |
+| `@user/*` | `src/user/*` | Módulo de usuarios |
+| `@level/*` | `src/level/*` | Módulo de niveles |
+| `@status/*` | `src/status/*` | Módulo de estados |
+| `@config/*` | `src/config/*` | Configuración |
+| `@app/prisma/*` | `src/prisma/*` | Cliente Prisma |
+| `@test/*` | `test/*` | Utilidades de testing |
+
+**Ejemplo:**
+```typescript
+// ❌ Antes (imports relativos)
+import { PrismaService } from '../../../prisma/prisma.service';
+
+// ✅ Ahora (path aliases)
+import { PrismaService } from '@app/prisma/prisma.service';
+```
+
+### Frontend Web (`apps/web`)
+
+| Alias | Resuelve a | Uso |
+|-------|------------|-----|
+| `@app/*` | `src/app/*` | Páginas y layouts (App Router) |
+| `@components/*` | `src/components/*` | Componentes React |
+| `@contexts/*` | `src/contexts/*` | Contextos React |
+| `@hooks/*` | `src/hooks/*` | Custom hooks |
+| `@i18n/*` | `src/i18n/*` | Configuración de i18n |
+| `@lib/*` | `src/lib/*` | Utilidades y cliente API |
+| `@providers/*` | `src/providers/*` | Providers React |
+| `@test/*` | `test/*` | Utilidades de testing |
+| `@messages/*` | `messages/*` | Archivos de traducciones |
+
+**Ejemplo:**
+```typescript
+// ❌ Antes (imports relativos o genérico @/*)
+import { useAuth } from '@/hooks/use-auth';
+import { apiClient } from '@/lib/api-client';
+
+// ✅ Ahora (path aliases específicos)
+import { useAuth } from '@hooks/use-auth';
+import { apiClient } from '@lib/api-client';
+```
+
+**Nota:** El alias genérico `@/*` fue reemplazado por aliases específicos para mejor claridad y mantenibilidad.
+
 ## Requisitos Técnicos
 
 ### Frontend
@@ -137,8 +193,66 @@ El sistema implementa control de acceso basado en roles (RBAC):
 - Payloads de errores almacenados en campos JSONB de PostgreSQL
 - Autenticación JWT con Passport.js para usuarios web
 - Guards para protección de endpoints (JwtAuthGuard, RolesGuard)
-- API Keys para autenticación de proyectos que reportan excepciones
+- API Keys para autenticación de plataformas que reportan excepciones
 
 ### Tipos Compartidos
 
 El paquete `@excepio/shared` contiene todos los tipos TypeScript de la API (DTOs, interfaces de request/response). Ambas apps lo importan para garantizar consistencia de tipos.
+
+## Internacionalización (i18n)
+
+El frontend soporta múltiples idiomas usando `next-intl`.
+
+### Idiomas Soportados
+
+| Código | Idioma | Icono |
+|--------|--------|-------|
+| `ca` | Català | Bola amarilla con barras rojas |
+| `es` | Español | Bola roja-amarilla-roja |
+| `en` | English | Bola con estrellas y barras |
+
+### Estructura de Archivos
+
+```
+apps/web/
+├── src/i18n/
+│   ├── config.ts          # Configuración de locales
+│   └── request.ts         # getRequestConfig para next-intl
+├── messages/
+│   ├── ca.json            # Traducciones en catalán
+│   ├── es.json            # Traducciones en español
+│   └── en.json            # Traducciones en inglés
+└── src/components/
+    └── language-selector.tsx  # Selector de idioma
+```
+
+### Detección de Idioma
+
+El idioma se detecta en el siguiente orden de prioridad:
+1. Cookie `NEXT_LOCALE` (establecida por el selector de idioma)
+2. Header `Accept-Language` del navegador
+3. Idioma por defecto: `es` (Español)
+
+### Uso en Componentes
+
+```tsx
+'use client';
+import { useTranslations } from 'next-intl';
+
+export function MyComponent() {
+  const t = useTranslations('namespace');
+  return <p>{t('key')}</p>;
+}
+```
+
+### Namespaces de Traducción
+
+| Namespace | Descripción |
+|-----------|-------------|
+| `common` | Botones y textos comunes |
+| `auth` | Login, registro, contraseñas |
+| `exceptions` | Listado y filtros de excepciones |
+| `dashboard` | Panel principal |
+| `health` | Estado de conexión API |
+| `layout` | Cabecera, footer, navegación |
+| `theme` | Toggle de tema claro/oscuro |

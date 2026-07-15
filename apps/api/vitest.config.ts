@@ -18,7 +18,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@app': path.resolve(__dirname, './src'),
+      '@platform': path.resolve(__dirname, './src/platform'),
+      '@exception': path.resolve(__dirname, './src/exception'),
+      '@auth': path.resolve(__dirname, './src/auth'),
+      '@user': path.resolve(__dirname, './src/user'),
+      '@level': path.resolve(__dirname, './src/level'),
+      '@status': path.resolve(__dirname, './src/status'),
+      '@config': path.resolve(__dirname, './src/config'),
+      '@test': path.resolve(__dirname, './test'),
     },
   },
 });

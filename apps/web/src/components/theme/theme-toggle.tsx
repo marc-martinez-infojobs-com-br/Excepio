@@ -5,7 +5,7 @@ import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { useTranslations } from "next-intl"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@components/ui/button"
 
 export function ThemeToggle() {
   const t = useTranslations('theme')

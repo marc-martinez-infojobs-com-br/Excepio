@@ -1,11 +1,11 @@
-import { RegisterForm } from '@/components/auth/register-form';
+import { RegisterForm } from '@components/auth/register-form';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@components/ui/card';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 

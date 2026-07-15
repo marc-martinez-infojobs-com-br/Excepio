@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { PasswordStrength, checkPasswordStrength } from '@/components/auth/password-strength';
+import { PasswordStrength, checkPasswordStrength } from '@components/auth/password-strength';
 import { NextIntlClientProvider } from 'next-intl';
 
 // Desactivar el mock global de next-intl para este archivo

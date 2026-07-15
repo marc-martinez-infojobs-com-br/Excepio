@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { StatusService } from '../../../src/status/status.service';
-import { StatusMemoryRepository } from '../../../src/status/repository';
+import { StatusService } from '@status/status.service';
+import { StatusMemoryRepository } from '@status/repository';
 import { StatusResponseDto } from '@excepio/shared';
 
 describe('StatusService', () => {

@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const ExceptionSchema = z.object({
   id: z.string().uuid(),
-  projectId: z.number().int(),
+  platformId: z.number().int(),
   levelId: z.number().int(),
   message: z.string(),
   stackTrace: z.string().nullable().optional(),
@@ -31,7 +31,7 @@ export type CreateExceptionDto = z.infer<typeof CreateExceptionSchema>;
 
 export const ExceptionFilterSchema = z.object({
   // Filtros exactos
-  projectId: z.number().int().optional(),
+  platformId: z.number().int().optional(),
   levelId: z.number().int().optional(),
   userId: z.string().optional(),
   

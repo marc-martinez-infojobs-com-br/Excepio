@@ -1,10 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { HealthStatus } from '@/components/health-status';
+import { HealthStatus } from '@components/health-status';
 
 // Mock del cliente API
-vi.mock('@/lib/api-client', () => ({
+vi.mock('@lib/api-client', () => ({
   apiClient: {
     get: vi.fn(),
   },

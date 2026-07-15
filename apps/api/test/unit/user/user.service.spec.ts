@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
-import { UserService } from '../../../src/user/user.service';
-import { UserMemoryRepository } from '../../../src/user/repository';
+import { UserService } from '@user/user.service';
+import { UserMemoryRepository } from '@user/repository';
 import { UserResponseDto, UserRole, CreateUserDto, UpdateUserDto } from '@excepio/shared';
 import * as bcrypt from 'bcrypt';
 

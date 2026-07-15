@@ -104,7 +104,7 @@
     },
     "empty": "No s'han trobat excepcions",
     "unknownLevel": "DESCONEGUT",
-    "unknownProject": "Desconegut"
+    "unknownPlatform": "Desconeguda"
   },
   "dashboard": {
     "title": "Benvingut a Excepio",
@@ -113,7 +113,7 @@
     "cards": {
       "exceptions": {
         "title": "Excepcions",
-        "description": "Veure i gestionar totes les excepcions dels teus projectes",
+        "description": "Veure i gestionar totes les excepcions de les teves plataformes",
         "action": "Veure Excepcions"
       }
     }

@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ExceptionController } from '../../../src/exception/exception.controller';
-import { ExceptionService } from '../../../src/exception/exception.service';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ProjectDto } from '@excepio/shared';
+import { ExceptionController } from '@exception/exception.controller';
+import { ExceptionService } from '@exception/exception.service';
+import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, PlatformDto } from '@excepio/shared';
 
 describe('ExceptionController', () => {
   let controller: ExceptionController;
   let service: ExceptionService;
 
-  const mockProject: ProjectDto = {
+  const mockPlatform: PlatformDto = {
     id: 1,
-    name: 'Test Project',
+    name: 'Test Platform',
     apiKey: 'exc_abc123def456',
     statusId: 2,
     createdAt: new Date().toISOString(),
@@ -17,7 +17,7 @@ describe('ExceptionController', () => {
 
   const mockException: ExceptionDto = {
     id: '123e4567-e89b-12d3-a456-426614174000',
-    projectId: 1,
+    platformId: 1,
     levelId: 4,
     message: 'Test error message',
     stackTrace: 'at test (test.js:1:1)',
@@ -55,10 +55,10 @@ describe('ExceptionController', () => {
       vi.mocked(service.create).mockResolvedValue(mockException);
 
       // Act
-      const result = await controller.create(mockProject, createDto);
+      const result = await controller.create(mockPlatform, createDto);
 
       // Assert
-      expect(service.create).toHaveBeenCalledWith(mockProject.id, createDto);
+      expect(service.create).toHaveBeenCalledWith(mockPlatform.id, createDto);
       expect(result).toEqual(mockException);
     });
 
@@ -82,10 +82,10 @@ describe('ExceptionController', () => {
       vi.mocked(service.create).mockResolvedValue(minimalException);
 
       // Act
-      const result = await controller.create(mockProject, minimalDto);
+      const result = await controller.create(mockPlatform, minimalDto);
 
       // Assert
-      expect(service.create).toHaveBeenCalledWith(mockProject.id, minimalDto);
+      expect(service.create).toHaveBeenCalledWith(mockPlatform.id, minimalDto);
       expect(result).toEqual(minimalException);
     });
   });
@@ -112,7 +112,7 @@ describe('ExceptionController', () => {
 
     it('Given_ProjectIdFilter_When_FindAll_Then_ReturnsFilteredExceptions', async () => {
       // Arrange
-      const filters: ExceptionFilterDto = { projectId: 1 };
+      const filters: ExceptionFilterDto = { platformId: 1 };
       const response = {
         data: [mockException],
         total: 1,
@@ -132,7 +132,7 @@ describe('ExceptionController', () => {
     it('Given_MultipleFilters_When_FindAll_Then_PassesAllFiltersToService', async () => {
       // Arrange
       const filters: ExceptionFilterDto = {
-        projectId: 1,
+        platformId: 1,
         levelId: 4,
         userId: 'user_123',
         messageSearch: 'error',

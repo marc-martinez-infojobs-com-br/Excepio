@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
-import { ThemeLogo } from '@/components/theme/theme-logo';
-import { LanguageSelector } from '@/components/language-selector';
+import { ThemeToggle } from '@components/theme/theme-toggle';
+import { ThemeLogo } from '@components/theme/theme-logo';
+import { LanguageSelector } from '@components/language-selector';
 import { useTranslations } from 'next-intl';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {

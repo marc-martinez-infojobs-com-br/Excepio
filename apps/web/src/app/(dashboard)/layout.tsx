@@ -1,12 +1,12 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/theme/theme-toggle';
-import { ThemeLogo } from '@/components/theme/theme-logo';
-import { ThemeAvatar } from '@/components/theme/theme-avatar';
-import { LanguageSelector } from '@/components/language-selector';
+import { useAuth } from '@hooks/use-auth';
+import { Button } from '@components/ui/button';
+import { ThemeToggle } from '@components/theme/theme-toggle';
+import { ThemeLogo } from '@components/theme/theme-logo';
+import { ThemeAvatar } from '@components/theme/theme-avatar';
+import { LanguageSelector } from '@components/language-selector';
 import { LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 

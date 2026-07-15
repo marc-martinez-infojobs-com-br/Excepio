@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { authStorage } from '@/lib/auth-storage';
+import { authStorage } from '@lib/auth-storage';
 
 // Mock de localStorage
 const localStorageMock = (() => {

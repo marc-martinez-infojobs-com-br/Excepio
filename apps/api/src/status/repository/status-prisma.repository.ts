@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { StatusResponseDto } from '@excepio/shared';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@app/prisma/prisma.service';
 import { StatusRepository } from './status.repository.interface';
 
 /**

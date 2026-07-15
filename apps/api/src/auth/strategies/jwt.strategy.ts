@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import type { JwtPayload, UserResponseDto } from '@excepio/shared';
-import { UserService } from '../../user/user.service';
+import { UserService } from '@user/user.service';
 
 /**
  * Estrategia JWT para Passport.

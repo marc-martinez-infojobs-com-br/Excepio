@@ -3,8 +3,8 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
-import { apiClient } from '@/lib/api-client';
-import { authStorage } from '@/lib/auth-storage';
+import { apiClient } from '@lib/api-client';
+import { authStorage } from '@lib/auth-storage';
 import type { UserResponseDto, LoginDto, RegisterDto, LoginResponseDto } from '@excepio/shared';
 
 interface AuthContextType {

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { cn } from '@lib/utils';
 import { Monitor, Server, Cpu, Smartphone } from 'lucide-react';
 import type { ExceptionDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 
-interface Project {
+interface Platform {
   id: number;
   name: string;
 }
@@ -18,7 +18,7 @@ interface Level {
 
 interface ExceptionCardProps {
   exception: ExceptionDto;
-  projects: Project[];
+  platforms: Platform[];
   levels: Level[];
   onClick?: (id: string) => void;
 }
@@ -52,12 +52,12 @@ function getLevelDisplayName(levelId: number, levelName: string): string {
 }
 
 /**
- * Retorna el icono correspondiente al proyecto
+ * Retorna el icono correspondiente a la plataforma
  */
-function getProjectIcon(projectName: string) {
+function getPlatformIcon(platformName: string) {
   const iconClass = "h-4 w-4";
   
-  switch (projectName.toLowerCase()) {
+  switch (platformName.toLowerCase()) {
     case 'web':
       return <Monitor className={iconClass} />;
     case 'wm':
@@ -117,12 +117,12 @@ function getStackTracePreview(stackTrace: string | null | undefined, maxLines: n
   return lines.map(line => line.trim()).join('\n');
 }
 
-export function ExceptionCard({ exception, projects, levels, onClick }: ExceptionCardProps) {
+export function ExceptionCard({ exception, platforms, levels, onClick }: ExceptionCardProps) {
   const t = useTranslations('exceptions');
   const tTime = useTranslations('exceptions.time');
   const [relativeTime, setRelativeTime] = useState<string>('');
   const level = levels.find((l) => l.id === exception.levelId);
-  const project = projects.find((p) => p.id === exception.projectId);
+  const platform = platforms.find((p) => p.id === exception.platformId);
   const stackPreview = getStackTracePreview(exception.stackTrace);
 
   useEffect(() => {
@@ -156,9 +156,9 @@ export function ExceptionCard({ exception, projects, levels, onClick }: Exceptio
           {getLevelDisplayName(exception.levelId, level?.name ?? t('unknownLevel'))}
         </span>
         <div className="flex items-center gap-2 text-muted-foreground text-xs">
-          <span className="flex items-center gap-1" title={project?.name ?? t('unknownProject')}>
-            {getProjectIcon(project?.name ?? '')}
-            <span className="sr-only md:not-sr-only">{project?.name}</span>
+          <span className="flex items-center gap-1" title={platform?.name ?? t('unknownPlatform')}>
+            {getPlatformIcon(platform?.name ?? '')}
+            <span className="sr-only md:not-sr-only">{platform?.name}</span>
           </span>
           <span>•</span>
           <span>{relativeTime || '...'}</span>

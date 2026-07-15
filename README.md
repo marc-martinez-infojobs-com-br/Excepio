@@ -11,6 +11,7 @@ Monorepo con frontend (Next.js) y backend (NestJS) desplegados en servidores ind
 | Frontend | Next.js (App Router) + TypeScript + TanStack Query + Tailwind |
 | Backend | NestJS + Prisma + PostgreSQL |
 | Testing | Vitest + Testing Library + Playwright (E2E) |
+| i18n | next-intl (Català, Español, English) |
 | Monorepo | pnpm workspaces |
 
 ## Requisitos
@@ -96,3 +97,15 @@ NEXT_PUBLIC_API_URL="http://localhost:3000/api"
 - [Guía de contribución](./docs/CONTRIBUTING.md)
 - [Modelo de datos](./docs/DATABASE.md)
 - [Guía para agentes IA](./AGENTS.md)
+
+## Idiomas Soportados
+
+La interfaz web está disponible en tres idiomas:
+
+| Idioma | Código |
+|--------|--------|
+| Català | `ca` |
+| Español | `es` (por defecto) |
+| English | `en` |
+
+El idioma se puede cambiar usando el selector de idioma en la cabecera de la aplicación.

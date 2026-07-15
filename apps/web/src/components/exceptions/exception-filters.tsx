@@ -4,30 +4,30 @@ import { useState } from 'react';
 import { Calendar as CalendarIcon, Search, X } from 'lucide-react';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import { DateRange } from 'react-day-picker';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@components/ui/select';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@components/ui/popover';
 import {
   Dialog,
   DialogContent,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Calendar } from '@/components/ui/calendar';
-import { cn } from '@/lib/utils';
+} from '@components/ui/dialog';
+import { Input } from '@components/ui/input';
+import { Calendar } from '@components/ui/calendar';
+import { cn } from '@lib/utils';
 import type { ExceptionFilterDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 
-interface Project {
+interface Platform {
   id: number;
   name: string;
 }
@@ -39,7 +39,7 @@ interface Level {
 
 interface ExceptionFiltersProps {
   filters: ExceptionFilterDto;
-  projects: Project[];
+  platforms: Platform[];
   levels: Level[];
   onFilterChange: (filters: ExceptionFilterDto) => void;
 }
@@ -100,7 +100,7 @@ const SEARCH_FIELD_FILTERS: Record<typeof SEARCH_FIELD_KEYS[number], string> = {
 
 export function ExceptionFilters({
   filters,
-  projects,
+  platforms,
   levels,
   onFilterChange,
 }: ExceptionFiltersProps) {
@@ -119,9 +119,9 @@ export function ExceptionFilters({
 
   const today = new Date();
 
-  const handleProjectChange = (value: string) => {
-    const projectId = value === 'all' ? undefined : parseInt(value, 10);
-    onFilterChange({ ...filters, projectId });
+  const handlePlatformChange = (value: string) => {
+    const platformId = value === 'all' ? undefined : parseInt(value, 10);
+    onFilterChange({ ...filters, platformId });
   };
 
   const handleLevelToggle = (levelId: number) => {
@@ -316,17 +316,17 @@ export function ExceptionFilters({
 
         {/* Platform Select */}
         <Select
-          value={filters.projectId?.toString() || 'all'}
-          onValueChange={handleProjectChange}
+          value={filters.platformId?.toString() || 'all'}
+          onValueChange={handlePlatformChange}
         >
           <SelectTrigger className="w-[160px] h-10 bg-transparent border-input flex-shrink-0">
             <SelectValue placeholder={t('platformAll')} />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">{t('platformAll')}</SelectItem>
-            {projects.map((project) => (
-              <SelectItem key={project.id} value={project.id.toString()}>
-                {project.name}
+            {platforms.map((platform) => (
+              <SelectItem key={platform.id} value={platform.id.toString()}>
+                {platform.name}
               </SelectItem>
             ))}
           </SelectContent>
