@@ -41,6 +41,7 @@ export const ExceptionFilterSchema = z.object({
   
   // Búsqueda por campo específico (ILIKE %valor%)
   messageSearch: z.string().optional(),
+  stackTraceSearch: z.string().optional(),
   urlSearch: z.string().optional(),
   userAgentSearch: z.string().optional(),
   appVersionSearch: z.string().optional(),

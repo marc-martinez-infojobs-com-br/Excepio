@@ -81,6 +81,10 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
       const search = filters.messageSearch.toLowerCase();
       exceptions = exceptions.filter((e) => e.message.toLowerCase().includes(search));
     }
+    if (filters.stackTraceSearch && filters.stackTraceSearch.trim() !== '') {
+      const search = filters.stackTraceSearch.toLowerCase();
+      exceptions = exceptions.filter((e) => e.stackTrace?.toLowerCase().includes(search));
+    }
     if (filters.urlSearch && filters.urlSearch.trim() !== '') {
       const search = filters.urlSearch.toLowerCase();
       exceptions = exceptions.filter((e) => e.url?.toLowerCase().includes(search));
