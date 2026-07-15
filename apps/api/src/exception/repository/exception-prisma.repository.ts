@@ -58,6 +58,16 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
   }
 
   async findAll(filters: ExceptionFilterDto): Promise<ExceptionListResponseDto> {
+    // Paginación
+    const page = filters.page || 1;
+    const limit = filters.limit || 50;
+    const offset = (page - 1) * limit;
+
+    // Si hay metadataSearch, usamos raw query porque Prisma no soporta ILIKE en JSON
+    if (filters.metadataSearch) {
+      return this.findAllWithMetadataSearch(filters, page, limit, offset);
+    }
+
     const where: Prisma.ExceptionWhereInput = {};
 
     // Filtros exactos
@@ -86,6 +96,9 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     if (filters.messageSearch) {
       where.message = { contains: filters.messageSearch, mode: 'insensitive' };
     }
+    if (filters.stackTraceSearch) {
+      where.stackTrace = { contains: filters.stackTraceSearch, mode: 'insensitive' };
+    }
     if (filters.urlSearch) {
       where.url = { contains: filters.urlSearch, mode: 'insensitive' };
     }
@@ -95,18 +108,6 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     if (filters.appVersionSearch) {
       where.appVersion = { contains: filters.appVersionSearch, mode: 'insensitive' };
     }
-    if (filters.metadataSearch) {
-      // Para búsqueda en JSON usamos string_contains en path vacío
-      where.metadata = {
-        path: [],
-        string_contains: filters.metadataSearch,
-      };
-    }
-
-    // Paginación
-    const page = filters.page || 1;
-    const limit = filters.limit || 50;
-    const offset = (page - 1) * limit;
 
     // Ejecutar consultas en paralelo
     const [exceptions, total] = await Promise.all([
@@ -122,6 +123,102 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     return {
       data: exceptions.map((e) => this.mapToDto(e)),
       total,
+      page,
+      limit,
+    };
+  }
+
+  /**
+   * Búsqueda con metadataSearch usando raw SQL (PostgreSQL ILIKE en JSON::text)
+   */
+  private async findAllWithMetadataSearch(
+    filters: ExceptionFilterDto,
+    page: number,
+    limit: number,
+    offset: number,
+  ): Promise<ExceptionListResponseDto> {
+    // Construir condiciones WHERE dinámicamente
+    const conditions: string[] = ['metadata IS NOT NULL', 'metadata::text ILIKE $1'];
+    const params: (string | number | Date)[] = [`%${filters.metadataSearch}%`];
+    let paramIndex = 2;
+
+    if (filters.projectId !== undefined) {
+      conditions.push(`"projectId" = $${paramIndex}`);
+      params.push(filters.projectId);
+      paramIndex++;
+    }
+    if (filters.levelId !== undefined) {
+      conditions.push(`"levelId" = $${paramIndex}`);
+      params.push(filters.levelId);
+      paramIndex++;
+    }
+    if (filters.userId !== undefined) {
+      conditions.push(`"userId" = $${paramIndex}`);
+      params.push(filters.userId);
+      paramIndex++;
+    }
+    if (filters.startDate) {
+      conditions.push(`"createdAt" >= $${paramIndex}`);
+      params.push(new Date(filters.startDate));
+      paramIndex++;
+    }
+    if (filters.endDate) {
+      conditions.push(`"createdAt" <= $${paramIndex}`);
+      params.push(new Date(filters.endDate));
+      paramIndex++;
+    }
+    if (filters.messageSearch) {
+      conditions.push(`message ILIKE $${paramIndex}`);
+      params.push(`%${filters.messageSearch}%`);
+      paramIndex++;
+    }
+    if (filters.stackTraceSearch) {
+      conditions.push(`"stackTrace" ILIKE $${paramIndex}`);
+      params.push(`%${filters.stackTraceSearch}%`);
+      paramIndex++;
+    }
+    if (filters.urlSearch) {
+      conditions.push(`url ILIKE $${paramIndex}`);
+      params.push(`%${filters.urlSearch}%`);
+      paramIndex++;
+    }
+    if (filters.userAgentSearch) {
+      conditions.push(`"userAgent" ILIKE $${paramIndex}`);
+      params.push(`%${filters.userAgentSearch}%`);
+      paramIndex++;
+    }
+    if (filters.appVersionSearch) {
+      conditions.push(`"appVersion" ILIKE $${paramIndex}`);
+      params.push(`%${filters.appVersionSearch}%`);
+      paramIndex++;
+    }
+
+    const whereClause = conditions.join(' AND ');
+
+    // Query para datos
+    const dataQuery = `
+      SELECT * FROM "Exception"
+      WHERE ${whereClause}
+      ORDER BY "createdAt" DESC
+      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
+    `;
+    params.push(limit, offset);
+
+    // Query para count (sin limit/offset)
+    const countQuery = `
+      SELECT COUNT(*)::int as count FROM "Exception"
+      WHERE ${whereClause}
+    `;
+    const countParams = params.slice(0, -2); // Sin limit y offset
+
+    const [exceptions, countResult] = await Promise.all([
+      this.prisma.$queryRawUnsafe<any[]>(dataQuery, ...params),
+      this.prisma.$queryRawUnsafe<[{ count: number }]>(countQuery, ...countParams),
+    ]);
+
+    return {
+      data: exceptions.map((e) => this.mapToDto(e)),
+      total: countResult[0].count,
       page,
       limit,
     };

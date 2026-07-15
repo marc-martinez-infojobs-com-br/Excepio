@@ -42,6 +42,7 @@ export class ExceptionController {
   @ApiQuery({ name: 'urlSearch', required: false, type: String })
   @ApiQuery({ name: 'userAgentSearch', required: false, type: String })
   @ApiQuery({ name: 'appVersionSearch', required: false, type: String })
+  @ApiQuery({ name: 'stackTraceSearch', required: false, type: String })
   @ApiQuery({ name: 'metadataSearch', required: false, type: String })
   @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 50 })

@@ -187,7 +187,29 @@ export function ExceptionFilters({
     <div className="flex items-center gap-2 flex-wrap justify-end">
       {/* Search Field Select + Input */}
       <div className="flex items-center">
-        <Select value={searchField} onValueChange={setSearchField}>
+        <Select
+          value={searchField}
+          onValueChange={(value) => {
+            setSearchField(value);
+            // Si hay texto de búsqueda, disparar búsqueda con el nuevo campo
+            if (searchText.trim()) {
+              const clearedFilters: Partial<ExceptionFilterDto> = {
+                messageSearch: undefined,
+                stackTraceSearch: undefined,
+                userId: undefined,
+                userAgentSearch: undefined,
+                appVersionSearch: undefined,
+                urlSearch: undefined,
+                metadataSearch: undefined,
+              };
+              const field = SEARCH_FIELDS.find((f) => f.value === value);
+              if (field) {
+                clearedFilters[field.filterKey as SearchFieldKey] = searchText.trim();
+              }
+              onFilterChange({ ...filters, ...clearedFilters });
+            }
+          }}
+        >
           <SelectTrigger className="w-[120px] h-10 rounded-r-none border-r-0 bg-transparent">
             <SelectValue />
           </SelectTrigger>

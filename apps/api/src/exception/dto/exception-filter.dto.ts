@@ -78,6 +78,14 @@ export class ExceptionFilterDto {
   appVersionSearch?: string;
 
   @ApiPropertyOptional({
+    description: 'Buscar en stackTrace (case-insensitive)',
+    example: 'NullPointerException',
+  })
+  @IsOptional()
+  @IsString()
+  stackTraceSearch?: string;
+
+  @ApiPropertyOptional({
     description: 'Buscar en metadata JSON (case-insensitive)',
     example: 'getData',
   })
