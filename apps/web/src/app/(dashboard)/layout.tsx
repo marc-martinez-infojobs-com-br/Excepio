@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { ThemeLogo } from '@/components/theme/theme-logo';
 import { ThemeAvatar } from '@/components/theme/theme-avatar';
+import { LanguageSelector } from '@/components/language-selector';
 import { LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -27,6 +28,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           
           {/* Right side actions */}
           <div className="flex items-center gap-3">
+            <LanguageSelector />
             <ThemeToggle />
             
             {user && (

@@ -127,6 +127,7 @@
   "layout": {
     "appName": "Excepio",
     "appVersion": "Sistema de Excepciones v1.0",
+    "changeLanguage": "Cambiar idioma",
     "footer": {
       "status": "Estado",
       "support": "Soporte",

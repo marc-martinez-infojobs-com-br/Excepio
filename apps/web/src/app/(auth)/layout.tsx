@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { ThemeLogo } from '@/components/theme/theme-logo';
+import { LanguageSelector } from '@/components/language-selector';
 import { useTranslations } from 'next-intl';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
@@ -9,7 +10,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background flex flex-col selection:bg-accent selection:text-accent-foreground">
       {/* Theme Toggle Header */}
-      <header className="w-full flex justify-end p-4">
+      <header className="w-full flex justify-end gap-2 p-4">
+        <LanguageSelector />
         <ThemeToggle />
       </header>
 
