@@ -1,6 +1,38 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { PasswordStrength, checkPasswordStrength } from '@/components/auth/password-strength';
+import { NextIntlClientProvider } from 'next-intl';
+
+// Desactivar el mock global de next-intl para este archivo
+vi.unmock('next-intl');
+
+// Messages for testing
+const messages = {
+  auth: {
+    passwordStrength: {
+      label: 'Fortaleza:',
+      weak: 'Débil',
+      medium: 'Media',
+      strong: 'Fuerte',
+      veryStrong: 'Muy Fuerte',
+      requirements: {
+        minLength: 'Mínimo 8 caracteres',
+        uppercase: 'Al menos 1 mayúscula',
+        lowercase: 'Al menos 1 minúscula',
+        number: 'Al menos 1 número',
+        special: 'Al menos 1 carácter especial',
+      },
+    },
+  },
+};
+
+const renderWithIntl = (ui: React.ReactElement) => {
+  return render(
+    <NextIntlClientProvider locale="es" messages={messages}>
+      {ui}
+    </NextIntlClientProvider>
+  );
+};
 
 describe('checkPasswordStrength', () => {
   describe('requirements validation', () => {
@@ -8,7 +40,7 @@ describe('checkPasswordStrength', () => {
       const result = checkPasswordStrength('');
       
       expect(result.score).toBe(0);
-      expect(result.level).toBe('Débil');
+      expect(result.level).toBe('weak');
       expect(result.requirements).toHaveLength(5);
       expect(result.requirements.every((r) => !r.met)).toBe(true);
     });
@@ -87,29 +119,29 @@ describe('checkPasswordStrength', () => {
   });
 
   describe('level calculation', () => {
-    it('should return "Débil" for score 0-2', () => {
-      expect(checkPasswordStrength('').level).toBe('Débil');
-      expect(checkPasswordStrength('ab').level).toBe('Débil');
-      expect(checkPasswordStrength('abcdefgh').level).toBe('Débil'); // score 2
+    it('should return "weak" for score 0-2', () => {
+      expect(checkPasswordStrength('').level).toBe('weak');
+      expect(checkPasswordStrength('ab').level).toBe('weak');
+      expect(checkPasswordStrength('abcdefgh').level).toBe('weak'); // score 2
     });
 
-    it('should return "Media" for score 3', () => {
-      expect(checkPasswordStrength('Abcdefgh').level).toBe('Media'); // length + upper + lower = 3
+    it('should return "medium" for score 3', () => {
+      expect(checkPasswordStrength('Abcdefgh').level).toBe('medium'); // length + upper + lower = 3
     });
 
-    it('should return "Fuerte" for score 4', () => {
-      expect(checkPasswordStrength('Abcdefg1').level).toBe('Fuerte'); // length + upper + lower + number = 4
+    it('should return "strong" for score 4', () => {
+      expect(checkPasswordStrength('Abcdefg1').level).toBe('strong'); // length + upper + lower + number = 4
     });
 
-    it('should return "Muy Fuerte" for score 5', () => {
-      expect(checkPasswordStrength('Password1!').level).toBe('Muy Fuerte');
+    it('should return "veryStrong" for score 5', () => {
+      expect(checkPasswordStrength('Password1!').level).toBe('veryStrong');
     });
   });
 });
 
 describe('PasswordStrength Component', () => {
   it('should render all 5 requirements', () => {
-    render(<PasswordStrength password="" />);
+    renderWithIntl(<PasswordStrength password="" />);
     
     expect(screen.getByText('Mínimo 8 caracteres')).toBeInTheDocument();
     expect(screen.getByText('Al menos 1 mayúscula')).toBeInTheDocument();
@@ -119,21 +151,25 @@ describe('PasswordStrength Component', () => {
   });
 
   it('should render progress bar', () => {
-    render(<PasswordStrength password="" />);
+    renderWithIntl(<PasswordStrength password="" />);
     
     expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   it('should show level text', () => {
-    const { rerender } = render(<PasswordStrength password="" />);
+    const { rerender } = renderWithIntl(<PasswordStrength password="" />);
     expect(screen.getByText('Débil')).toBeInTheDocument();
 
-    rerender(<PasswordStrength password="Password1!" />);
+    rerender(
+      <NextIntlClientProvider locale="es" messages={messages}>
+        <PasswordStrength password="Password1!" />
+      </NextIntlClientProvider>
+    );
     expect(screen.getByText('Muy Fuerte')).toBeInTheDocument();
   });
 
   it('should update requirements check marks based on password', () => {
-    const { rerender } = render(<PasswordStrength password="" />);
+    const { rerender } = renderWithIntl(<PasswordStrength password="" />);
     
     // All should be unchecked initially
     const checkIcons = screen.queryAllByTestId('check-icon');
@@ -143,7 +179,11 @@ describe('PasswordStrength Component', () => {
     expect(xIcons).toHaveLength(5);
 
     // After entering valid password, all should be checked
-    rerender(<PasswordStrength password="Password1!" />);
+    rerender(
+      <NextIntlClientProvider locale="es" messages={messages}>
+        <PasswordStrength password="Password1!" />
+      </NextIntlClientProvider>
+    );
     
     const newCheckIcons = screen.queryAllByTestId('check-icon');
     const newXIcons = screen.queryAllByTestId('x-icon');
@@ -153,7 +193,7 @@ describe('PasswordStrength Component', () => {
   });
 
   it('should apply correct color classes based on level', () => {
-    const { rerender } = render(<PasswordStrength password="" />);
+    const { rerender } = renderWithIntl(<PasswordStrength password="" />);
     
     // Débil - red
     let progressBar = screen.getByRole('progressbar');
@@ -162,7 +202,11 @@ describe('PasswordStrength Component', () => {
            progressBar.firstElementChild?.className.includes('red')).toBeTruthy;
 
     // Muy Fuerte - green
-    rerender(<PasswordStrength password="Password1!" />);
+    rerender(
+      <NextIntlClientProvider locale="es" messages={messages}>
+        <PasswordStrength password="Password1!" />
+      </NextIntlClientProvider>
+    );
     progressBar = screen.getByRole('progressbar');
     expect(progressBar.querySelector('[class*="bg-green"]') || 
            progressBar.className.includes('green') ||

@@ -25,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import type { ExceptionFilterDto } from '@excepio/shared';
+import { useTranslations } from 'next-intl';
 
 interface Project {
   id: number;
@@ -77,25 +78,25 @@ const LEVEL_TEXT_STYLES: Record<number, { base: string; active: string }> = {
 };
 
 // Opciones predefinidas de rango de fechas
-const DATE_PRESETS = [
-  { label: 'Last 1h', hours: 1 },
-  { label: 'Last 24h', hours: 24 },
-  { label: 'Last 7d', hours: 24 * 7 },
-  { label: 'Last 30d', hours: 24 * 30 },
-];
+const DATE_PRESET_KEYS = ['last1h', 'last24h', 'last7d', 'last30d'] as const;
+const DATE_PRESET_HOURS: Record<typeof DATE_PRESET_KEYS[number], number> = {
+  last1h: 1,
+  last24h: 24,
+  last7d: 24 * 7,
+  last30d: 24 * 30,
+};
 
 // Campos de texto sobre los que se puede buscar
-const SEARCH_FIELDS = [
-  { value: 'message', label: 'Message', filterKey: 'messageSearch' },
-  { value: 'stackTrace', label: 'Stack Trace', filterKey: 'stackTraceSearch' },
-  { value: 'userId', label: 'User ID', filterKey: 'userId' },
-  { value: 'userAgent', label: 'User Agent', filterKey: 'userAgentSearch' },
-  { value: 'appVersion', label: 'App Version', filterKey: 'appVersionSearch' },
-  { value: 'url', label: 'URL', filterKey: 'urlSearch' },
-  { value: 'metadata', label: 'Metadata', filterKey: 'metadataSearch' },
-] as const;
-
-type SearchFieldKey = typeof SEARCH_FIELDS[number]['filterKey'];
+const SEARCH_FIELD_KEYS = ['message', 'stackTrace', 'userId', 'userAgent', 'appVersion', 'url', 'metadata'] as const;
+const SEARCH_FIELD_FILTERS: Record<typeof SEARCH_FIELD_KEYS[number], string> = {
+  message: 'messageSearch',
+  stackTrace: 'stackTraceSearch',
+  userId: 'userId',
+  userAgent: 'userAgentSearch',
+  appVersion: 'appVersionSearch',
+  url: 'urlSearch',
+  metadata: 'metadataSearch',
+};
 
 export function ExceptionFilters({
   filters,
@@ -103,8 +104,10 @@ export function ExceptionFilters({
   levels,
   onFilterChange,
 }: ExceptionFiltersProps) {
-  const [dateLabel, setDateLabel] = useState<string>('Last 24h');
-  const [searchField, setSearchField] = useState<string>('message');
+  const t = useTranslations('exceptions.filters');
+  const tCommon = useTranslations('common.buttons');
+  const [dateLabel, setDateLabel] = useState<string>(t('datePresets.last24h'));
+  const [searchField, setSearchField] = useState<typeof SEARCH_FIELD_KEYS[number]>('message');
   const [searchText, setSearchText] = useState<string>('');
   const [datePopoverOpen, setDatePopoverOpen] = useState(false);
   
@@ -126,11 +129,12 @@ export function ExceptionFilters({
     onFilterChange({ ...filters, levelId: newLevelId });
   };
 
-  const handleDatePresetChange = (preset: { label: string; hours: number }) => {
-    setDateLabel(preset.label);
+  const handleDatePresetChange = (presetKey: typeof DATE_PRESET_KEYS[number]) => {
+    setDateLabel(t(`datePresets.${presetKey}`));
     setDatePopoverOpen(false);
+    const hours = DATE_PRESET_HOURS[presetKey];
     const now = new Date();
-    const startDate = new Date(now.getTime() - preset.hours * 60 * 60 * 1000);
+    const startDate = new Date(now.getTime() - hours * 60 * 60 * 1000);
     onFilterChange({
       ...filters,
       startDate: startDate.toISOString(),
@@ -199,9 +203,9 @@ export function ExceptionFilters({
     };
 
     // Aplicar el filtro seleccionado
-    const field = SEARCH_FIELDS.find((f) => f.value === searchField);
-    if (field) {
-      clearedFilters[field.filterKey as SearchFieldKey] = searchText.trim();
+    const filterKey = SEARCH_FIELD_FILTERS[searchField];
+    if (filterKey) {
+      (clearedFilters as Record<string, string | undefined>)[filterKey] = searchText.trim();
     }
 
     onFilterChange({
@@ -253,7 +257,7 @@ export function ExceptionFilters({
         <div className="flex items-center flex-shrink-0">
           <Select
             value={searchField}
-            onValueChange={(value) => {
+            onValueChange={(value: typeof SEARCH_FIELD_KEYS[number]) => {
               setSearchField(value);
               // Si hay texto de búsqueda, disparar búsqueda con el nuevo campo
               if (searchText.trim()) {
@@ -266,9 +270,9 @@ export function ExceptionFilters({
                   urlSearch: undefined,
                   metadataSearch: undefined,
                 };
-                const field = SEARCH_FIELDS.find((f) => f.value === value);
-                if (field) {
-                  clearedFilters[field.filterKey as SearchFieldKey] = searchText.trim();
+                const filterKey = SEARCH_FIELD_FILTERS[value];
+                if (filterKey) {
+                  (clearedFilters as Record<string, string | undefined>)[filterKey] = searchText.trim();
                 }
                 onFilterChange({ ...filters, ...clearedFilters });
               }
@@ -278,16 +282,16 @@ export function ExceptionFilters({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {SEARCH_FIELDS.map((field) => (
-                <SelectItem key={field.value} value={field.value}>
-                  {field.label}
+              {SEARCH_FIELD_KEYS.map((fieldKey) => (
+                <SelectItem key={fieldKey} value={fieldKey}>
+                  {t(`searchFields.${fieldKey}`)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
           <div className="relative">
             <Input
-              placeholder="Search..."
+              placeholder={t('searchPlaceholder')}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               onKeyDown={handleSearchKeyDown}
@@ -316,10 +320,10 @@ export function ExceptionFilters({
           onValueChange={handleProjectChange}
         >
           <SelectTrigger className="w-[160px] h-10 bg-transparent border-input flex-shrink-0">
-            <SelectValue placeholder="Platform: All" />
+            <SelectValue placeholder={t('platformAll')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Platform: All</SelectItem>
+            <SelectItem value="all">{t('platformAll')}</SelectItem>
             {projects.map((project) => (
               <SelectItem key={project.id} value={project.id.toString()}>
                 {project.name}
@@ -364,15 +368,15 @@ export function ExceptionFilters({
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-44 p-1" align="end">
-            {DATE_PRESETS.map((preset) => (
+            {DATE_PRESET_KEYS.map((presetKey) => (
               <Button
-                key={preset.label}
+                key={presetKey}
                 variant="ghost"
                 size="sm"
                 className="w-full justify-start"
-                onClick={() => handleDatePresetChange(preset)}
+                onClick={() => handleDatePresetChange(presetKey)}
               >
-                {preset.label}
+                {t(`datePresets.${presetKey}`)}
               </Button>
             ))}
             <div className="my-1 border-t border-border" />
@@ -382,7 +386,7 @@ export function ExceptionFilters({
               className="w-full justify-start"
               onClick={handleOpenDayDialog}
             >
-              Specific day...
+              {t('specificDay')}
             </Button>
             <Button
               variant="ghost"
@@ -390,7 +394,7 @@ export function ExceptionFilters({
               className="w-full justify-start"
               onClick={handleOpenRangeDialog}
             >
-              Custom range...
+              {t('customRange')}
             </Button>
           </PopoverContent>
         </Popover>
@@ -420,10 +424,10 @@ export function ExceptionFilters({
           </div>
           <div className="flex justify-end gap-2 border-t border-border px-4 py-3 bg-muted/30">
             <Button variant="ghost" size="sm" onClick={() => setDayDialogOpen(false)}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button size="sm" onClick={handleApplyDay} disabled={!selectedDay}>
-              Apply
+              {tCommon('apply')}
             </Button>
           </div>
         </DialogContent>
@@ -455,10 +459,10 @@ export function ExceptionFilters({
           </div>
           <div className="flex justify-end gap-2 border-t border-border px-4 py-3 bg-muted/30">
             <Button variant="ghost" size="sm" onClick={() => setRangeDialogOpen(false)}>
-              Cancel
+              {tCommon('cancel')}
             </Button>
             <Button size="sm" onClick={handleApplyRange} disabled={!selectedRange?.from}>
-              Apply
+              {tCommon('apply')}
             </Button>
           </div>
         </DialogContent>

@@ -5,6 +5,7 @@ import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Monitor, Server, Cpu, Smartphone } from 'lucide-react';
 import type { ExceptionDto } from '@excepio/shared';
+import { useTranslations } from 'next-intl';
 
 /**
  * TODO: Mejoras pendientes para Projects
@@ -117,7 +118,10 @@ function formatDate(isoDate: string): { relative: string; absolute: string } {
 /**
  * Calcula el tiempo relativo (solo en cliente)
  */
-function getRelativeTime(isoDate: string): string {
+function getRelativeTime(
+  isoDate: string,
+  t: (key: string, values?: Record<string, number>) => string
+): string {
   const date = new Date(isoDate);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -126,13 +130,13 @@ function getRelativeTime(isoDate: string): string {
   const diffDays = Math.floor(diffMs / 86400000);
 
   if (diffMins < 1) {
-    return 'Just now';
+    return t('justNow');
   } else if (diffMins < 60) {
-    return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    return t('minutesAgo', { count: diffMins });
   } else if (diffHours < 24) {
-    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    return t('hoursAgo', { count: diffHours });
   } else if (diffDays < 7) {
-    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    return t('daysAgo', { count: diffDays });
   } else {
     return date.toLocaleDateString();
   }
@@ -149,6 +153,8 @@ function getStackTracePreview(stackTrace: string | null | undefined): string | n
 }
 
 export function ExceptionRow({ exception, projects, levels, onClick }: ExceptionRowProps) {
+  const t = useTranslations('exceptions');
+  const tTime = useTranslations('exceptions.time');
   const [relativeTime, setRelativeTime] = useState<string>('');
   const level = levels.find((l) => l.id === exception.levelId);
   const project = projects.find((p) => p.id === exception.projectId);
@@ -157,8 +163,8 @@ export function ExceptionRow({ exception, projects, levels, onClick }: Exception
 
   // Calcular tiempo relativo solo en cliente para evitar hydration mismatch
   useEffect(() => {
-    setRelativeTime(getRelativeTime(exception.createdAt));
-  }, [exception.createdAt]);
+    setRelativeTime(getRelativeTime(exception.createdAt, tTime));
+  }, [exception.createdAt, tTime]);
 
   const handleClick = () => {
     onClick?.(exception.id);
@@ -179,7 +185,7 @@ export function ExceptionRow({ exception, projects, levels, onClick }: Exception
             getLevelBadgeClasses(exception.levelId)
           )}
         >
-          {getLevelDisplayName(exception.levelId, level?.name ?? 'UNKNOWN')}
+          {getLevelDisplayName(exception.levelId, level?.name ?? t('unknownLevel'))}
         </span>
       </TableCell>
 
@@ -199,7 +205,7 @@ export function ExceptionRow({ exception, projects, levels, onClick }: Exception
 
       {/* Project Icon */}
       <TableCell className="w-[80px] py-4">
-        <div className="flex justify-center" title={project?.name ?? 'Unknown'}>
+        <div className="flex justify-center" title={project?.name ?? t('unknownProject')}>
           {getProjectIcon(project?.name ?? '')}
         </div>
       </TableCell>

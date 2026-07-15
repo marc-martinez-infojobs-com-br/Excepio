@@ -30,6 +30,7 @@ describe('HealthStatus', () => {
   it('should render loading state initially', () => {
     renderWithProviders(<HealthStatus />);
 
-    expect(screen.getByText('Conectando con la API...')).toBeInTheDocument();
+    // El mock de useTranslations devuelve la key, así que buscamos la key
+    expect(screen.getByText('health.connecting')).toBeInTheDocument();
   });
 });

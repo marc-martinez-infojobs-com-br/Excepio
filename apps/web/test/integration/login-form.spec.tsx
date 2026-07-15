@@ -27,20 +27,23 @@ describe('LoginForm', () => {
   it('debería renderizar el formulario correctamente', () => {
     render(<LoginForm />);
 
-    expect(screen.getByPlaceholderText(/admin@excepio.com/i)).toBeInTheDocument();
+    // Los placeholders están hardcodeados en el componente
+    expect(screen.getByPlaceholderText('admin@excepio.com')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('••••••••')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /iniciar sesión/i })).toBeInTheDocument();
+    // El botón usa la key de traducción auth.login.submit
+    expect(screen.getByRole('button', { name: /auth\.login\.submit/ })).toBeInTheDocument();
   });
 
   it('debería mostrar errores de validación para campos vacíos', async () => {
     const user = userEvent.setup();
     render(<LoginForm />);
 
-    const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
+    const submitButton = screen.getByRole('button', { name: /auth\.login\.submit/ });
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText(/email inválido/i)).toBeInTheDocument();
+      // Los mensajes de error vienen del schema de Zod en shared (hardcodeados)
+      expect(screen.getByText(/Email inválido/i)).toBeInTheDocument();
       expect(screen.getByText(/contraseña es requerida/i)).toBeInTheDocument();
     });
 
@@ -53,9 +56,9 @@ describe('LoginForm', () => {
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByPlaceholderText(/admin@excepio.com/i);
+    const emailInput = screen.getByPlaceholderText('admin@excepio.com');
     const passwordInput = screen.getByPlaceholderText('••••••••');
-    const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
+    const submitButton = screen.getByRole('button', { name: /auth\.login\.submit/ });
 
     await user.type(emailInput, 'test@test.com');
     await user.type(passwordInput, 'password123');
@@ -78,9 +81,9 @@ describe('LoginForm', () => {
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByPlaceholderText(/admin@excepio.com/i) as HTMLInputElement;
+    const emailInput = screen.getByPlaceholderText('admin@excepio.com') as HTMLInputElement;
     const passwordInput = screen.getByPlaceholderText('••••••••') as HTMLInputElement;
-    const submitButton = screen.getByRole('button', { name: /iniciar sesión/i }) as HTMLButtonElement;
+    const submitButton = screen.getByRole('button', { name: /auth\.login\.submit/ }) as HTMLButtonElement;
 
     await user.type(emailInput, 'test@test.com');
     await user.type(passwordInput, 'password123');
@@ -102,9 +105,9 @@ describe('LoginForm', () => {
 
     render(<LoginForm />);
 
-    const emailInput = screen.getByPlaceholderText(/admin@excepio.com/i);
+    const emailInput = screen.getByPlaceholderText('admin@excepio.com');
     const passwordInput = screen.getByPlaceholderText('••••••••');
-    const submitButton = screen.getByRole('button', { name: /iniciar sesión/i });
+    const submitButton = screen.getByRole('button', { name: /auth\.login\.submit/ });
 
     await user.type(emailInput, 'test@test.com');
     await user.type(passwordInput, 'wrongpassword');

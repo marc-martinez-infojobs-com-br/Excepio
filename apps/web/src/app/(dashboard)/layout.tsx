@@ -7,8 +7,11 @@ import { ThemeToggle } from '@/components/theme/theme-toggle';
 import { ThemeLogo } from '@/components/theme/theme-logo';
 import { ThemeAvatar } from '@/components/theme/theme-avatar';
 import { LogOut } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
+  const t = useTranslations('auth');
+  const tLayout = useTranslations('layout');
   const { user, logout } = useAuth();
 
   return (
@@ -19,7 +22,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           {/* Logo */}
           <div className="flex items-center gap-2">
             <ThemeLogo width={32} height={32} />
-            <span className="text-2xl font-bold text-primary tracking-tight">Excepio</span>
+            <span className="text-2xl font-bold text-primary tracking-tight">{tLayout('appName')}</span>
           </div>
           
           {/* Right side actions */}
@@ -34,11 +37,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
                   variant="ghost" 
                   size="icon"
                   onClick={logout}
-                  title="Cerrar sesión"
+                  title={t('logout')}
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <LogOut className="h-5 w-5" />
-                  <span className="sr-only">Cerrar sesión</span>
+                  <span className="sr-only">{t('logout')}</span>
                 </Button>
               </>
             )}

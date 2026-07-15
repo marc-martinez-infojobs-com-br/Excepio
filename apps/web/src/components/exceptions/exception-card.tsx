@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Monitor, Server, Cpu, Smartphone } from 'lucide-react';
 import type { ExceptionDto } from '@excepio/shared';
+import { useTranslations } from 'next-intl';
 
 interface Project {
   id: number;
@@ -83,7 +84,10 @@ function getProjectIcon(projectName: string) {
 /**
  * Calcula el tiempo relativo
  */
-function getRelativeTime(isoDate: string): string {
+function getRelativeTime(
+  isoDate: string,
+  t: (key: string, values?: Record<string, number>) => string
+): string {
   const date = new Date(isoDate);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -92,13 +96,13 @@ function getRelativeTime(isoDate: string): string {
   const diffDays = Math.floor(diffMs / 86400000);
 
   if (diffMins < 1) {
-    return 'Just now';
+    return t('justNow');
   } else if (diffMins < 60) {
-    return `${diffMins}m ago`;
+    return t('minutesAgo', { count: diffMins });
   } else if (diffHours < 24) {
-    return `${diffHours}h ago`;
+    return t('hoursAgo', { count: diffHours });
   } else if (diffDays < 7) {
-    return `${diffDays}d ago`;
+    return t('daysAgo', { count: diffDays });
   } else {
     return date.toLocaleDateString();
   }
@@ -114,14 +118,16 @@ function getStackTracePreview(stackTrace: string | null | undefined, maxLines: n
 }
 
 export function ExceptionCard({ exception, projects, levels, onClick }: ExceptionCardProps) {
+  const t = useTranslations('exceptions');
+  const tTime = useTranslations('exceptions.time');
   const [relativeTime, setRelativeTime] = useState<string>('');
   const level = levels.find((l) => l.id === exception.levelId);
   const project = projects.find((p) => p.id === exception.projectId);
   const stackPreview = getStackTracePreview(exception.stackTrace);
 
   useEffect(() => {
-    setRelativeTime(getRelativeTime(exception.createdAt));
-  }, [exception.createdAt]);
+    setRelativeTime(getRelativeTime(exception.createdAt, tTime));
+  }, [exception.createdAt, tTime]);
 
   const handleClick = () => {
     onClick?.(exception.id);
@@ -147,10 +153,10 @@ export function ExceptionCard({ exception, projects, levels, onClick }: Exceptio
             getLevelBadgeClasses(exception.levelId)
           )}
         >
-          {getLevelDisplayName(exception.levelId, level?.name ?? 'UNKNOWN')}
+          {getLevelDisplayName(exception.levelId, level?.name ?? t('unknownLevel'))}
         </span>
         <div className="flex items-center gap-2 text-muted-foreground text-xs">
-          <span className="flex items-center gap-1" title={project?.name ?? 'Unknown'}>
+          <span className="flex items-center gap-1" title={project?.name ?? t('unknownProject')}>
             {getProjectIcon(project?.name ?? '')}
             <span className="sr-only md:not-sr-only">{project?.name}</span>
           </span>
