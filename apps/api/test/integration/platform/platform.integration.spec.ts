@@ -5,14 +5,14 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { PlatformDto, CreatePlatformDto, UpdatePlatformDto, STATUS_ID } from '@excepio/shared';
 import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '../../../src/platform/repository';
-import type { ProjectRepository } from '../../../src/platform/repository';
+import type { PlatformRepository } from '../../../src/platform/repository';
 
 const TEST_PROJECT_SERVICE = Symbol('TEST_PROJECT_SERVICE');
 
 // Recreamos el servicio y controller inline para evitar problemas con metadata
 @Injectable()
 class TestPlatformService {
-  constructor(@Inject(PLATFORM_REPOSITORY) private readonly repo: ProjectRepository) {}
+  constructor(@Inject(PLATFORM_REPOSITORY) private readonly repo: PlatformRepository) {}
 
   async findAll(): Promise<PlatformDto[]> {
     return this.repo.findAll();

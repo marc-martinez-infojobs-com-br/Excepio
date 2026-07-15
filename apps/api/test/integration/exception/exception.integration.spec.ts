@@ -7,7 +7,7 @@ import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, PlatformDto } fro
 import { ExceptionMemoryRepository, EXCEPTION_REPOSITORY } from '../../../src/exception/repository';
 import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '../../../src/platform/repository';
 import type { ExceptionRepository } from '../../../src/exception/repository';
-import type { ProjectRepository } from '../../../src/platform/repository';
+import type { PlatformRepository } from '../../../src/platform/repository';
 
 const TEST_EXCEPTION_SERVICE = Symbol('TEST_EXCEPTION_SERVICE');
 
@@ -16,7 +16,7 @@ const TEST_EXCEPTION_SERVICE = Symbol('TEST_EXCEPTION_SERVICE');
 class TestExceptionService {
   constructor(
     @Inject(EXCEPTION_REPOSITORY) private readonly exceptionRepo: ExceptionRepository,
-    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: ProjectRepository,
+    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository,
   ) {}
 
   async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
@@ -51,7 +51,7 @@ class TestExceptionService {
 // Mock guards para tests
 @Injectable()
 class MockApiKeyAuthGuard {
-  constructor(@Inject(PLATFORM_REPOSITORY) private readonly projectRepo: ProjectRepository) {}
+  constructor(@Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository) {}
 
   async canActivate(context: any): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -92,7 +92,7 @@ const CurrentProject = () => {
 class TestExceptionController {
   constructor(
     @Inject(TEST_EXCEPTION_SERVICE) private readonly service: TestExceptionService,
-    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: ProjectRepository,
+    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository,
   ) {}
 
   @Post()
@@ -128,7 +128,7 @@ class TestExceptionController {
 
 // Instancias compartidas para seed/clear
 let sharedExceptionRepository: ExceptionMemoryRepository;
-let sharedProjectRepository: PlatformMemoryRepository;
+let sharedPlatformRepository: PlatformMemoryRepository;
 
 @Module({
   controllers: [TestExceptionController],
@@ -147,8 +147,8 @@ let sharedProjectRepository: PlatformMemoryRepository;
     {
       provide: PLATFORM_REPOSITORY,
       useFactory: () => {
-        sharedProjectRepository = new PlatformMemoryRepository();
-        return sharedProjectRepository;
+        sharedPlatformRepository = new PlatformMemoryRepository();
+        return sharedPlatformRepository;
       },
     },
     MockApiKeyAuthGuard,
@@ -183,8 +183,8 @@ describe('Exception CRUD (integration)', () => {
 
   beforeEach(() => {
     sharedExceptionRepository.clear();
-    sharedProjectRepository.clear();
-    sharedProjectRepository.seed([mockPlatform]);
+    sharedPlatformRepository.clear();
+    sharedPlatformRepository.seed([mockPlatform]);
   });
 
   describe('POST /api/exceptions (API Key authentication)', () => {

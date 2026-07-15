@@ -17,7 +17,7 @@ describe('ExceptionController', () => {
 
   const mockException: ExceptionDto = {
     id: '123e4567-e89b-12d3-a456-426614174000',
-    projectId: 1,
+    platformId: 1,
     levelId: 4,
     message: 'Test error message',
     stackTrace: 'at test (test.js:1:1)',
@@ -112,7 +112,7 @@ describe('ExceptionController', () => {
 
     it('Given_ProjectIdFilter_When_FindAll_Then_ReturnsFilteredExceptions', async () => {
       // Arrange
-      const filters: ExceptionFilterDto = { projectId: 1 };
+      const filters: ExceptionFilterDto = { platformId: 1 };
       const response = {
         data: [mockException],
         total: 1,
@@ -132,7 +132,7 @@ describe('ExceptionController', () => {
     it('Given_MultipleFilters_When_FindAll_Then_PassesAllFiltersToService', async () => {
       // Arrange
       const filters: ExceptionFilterDto = {
-        projectId: 1,
+        platformId: 1,
         levelId: 4,
         userId: 'user_123',
         messageSearch: 'error',
