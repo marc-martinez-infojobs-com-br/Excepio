@@ -122,6 +122,61 @@ El sistema implementa control de acceso basado en roles (RBAC):
 └── CONTRIBUTING.md               # Comandos y guía de desarrollo
 ```
 
+## Path Aliases (Imports Absolutos)
+
+El proyecto utiliza path aliases para evitar imports relativos (`../../`).
+
+### Backend API (`apps/api`)
+
+| Alias | Resuelve a | Uso |
+|-------|------------|-----|
+| `@app/*` | `src/*` | Imports generales desde src |
+| `@platform/*` | `src/platform/*` | Módulo de plataformas |
+| `@exception/*` | `src/exception/*` | Módulo de excepciones |
+| `@auth/*` | `src/auth/*` | Autenticación y guards |
+| `@user/*` | `src/user/*` | Módulo de usuarios |
+| `@level/*` | `src/level/*` | Módulo de niveles |
+| `@status/*` | `src/status/*` | Módulo de estados |
+| `@config/*` | `src/config/*` | Configuración |
+| `@app/prisma/*` | `src/prisma/*` | Cliente Prisma |
+| `@test/*` | `test/*` | Utilidades de testing |
+
+**Ejemplo:**
+```typescript
+// ❌ Antes (imports relativos)
+import { PrismaService } from '../../../prisma/prisma.service';
+
+// ✅ Ahora (path aliases)
+import { PrismaService } from '@app/prisma/prisma.service';
+```
+
+### Frontend Web (`apps/web`)
+
+| Alias | Resuelve a | Uso |
+|-------|------------|-----|
+| `@app/*` | `src/app/*` | Páginas y layouts (App Router) |
+| `@components/*` | `src/components/*` | Componentes React |
+| `@contexts/*` | `src/contexts/*` | Contextos React |
+| `@hooks/*` | `src/hooks/*` | Custom hooks |
+| `@i18n/*` | `src/i18n/*` | Configuración de i18n |
+| `@lib/*` | `src/lib/*` | Utilidades y cliente API |
+| `@providers/*` | `src/providers/*` | Providers React |
+| `@test/*` | `test/*` | Utilidades de testing |
+| `@messages/*` | `messages/*` | Archivos de traducciones |
+
+**Ejemplo:**
+```typescript
+// ❌ Antes (imports relativos o genérico @/*)
+import { useAuth } from '@/hooks/use-auth';
+import { apiClient } from '@/lib/api-client';
+
+// ✅ Ahora (path aliases específicos)
+import { useAuth } from '@hooks/use-auth';
+import { apiClient } from '@lib/api-client';
+```
+
+**Nota:** El alias genérico `@/*` fue reemplazado por aliases específicos para mejor claridad y mantenibilidad.
+
 ## Requisitos Técnicos
 
 ### Frontend

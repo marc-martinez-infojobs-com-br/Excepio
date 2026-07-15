@@ -68,6 +68,33 @@ Todos los tipos de request/response viven en `packages/shared/` e importados por
 
 4. **Swagger:** Debe configurarse explícitamente en `main.ts`. No se genera automáticamente.
 
+5. **Path Aliases (Imports):** Usa siempre imports absolutos con path aliases. Nunca uses imports relativos (`../../`).
+
+   **Backend API:**
+   ```typescript
+   // ✅ Correcto
+   import { PrismaService } from '@app/prisma/prisma.service';
+   import { PlatformService } from '@platform/platform.service';
+   import { JwtAuthGuard } from '@auth/guards/jwt-auth.guard';
+   
+   // ❌ Incorrecto
+   import { PrismaService } from '../../../prisma/prisma.service';
+   ```
+   
+   **Frontend Web:**
+   ```typescript
+   // ✅ Correcto
+   import { useAuth } from '@hooks/use-auth';
+   import { apiClient } from '@lib/api-client';
+   import { Button } from '@components/ui/button';
+   
+   // ❌ Incorrecto
+   import { useAuth } from '../../hooks/use-auth';
+   import { useAuth } from '@/hooks/use-auth'; // Alias genérico obsoleto
+   ```
+   
+   Ver tabla completa de aliases en `docs/ARCHITECTURE.md`.
+
 ## Referencias Rápidas
 
 | Necesitas... | Consulta |
