@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { Monitor, Server, Cpu, Smartphone } from 'lucide-react';
@@ -100,8 +103,21 @@ function getProjectIcon(projectName: string) {
 
 /**
  * Formatea una fecha ISO a un formato legible
+ * Retorna solo el formato absoluto para SSR, el relativo se calcula en cliente
  */
 function formatDate(isoDate: string): { relative: string; absolute: string } {
+  const date = new Date(isoDate);
+  
+  // Formato absoluto: YYYY-MM-DD HH:MM:SS (seguro para SSR)
+  const absolute = date.toISOString().slice(0, 19).replace('T', ' ');
+
+  return { relative: '', absolute };
+}
+
+/**
+ * Calcula el tiempo relativo (solo en cliente)
+ */
+function getRelativeTime(isoDate: string): string {
   const date = new Date(isoDate);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -109,31 +125,17 @@ function formatDate(isoDate: string): { relative: string; absolute: string } {
   const diffHours = Math.floor(diffMs / 3600000);
   const diffDays = Math.floor(diffMs / 86400000);
 
-  let relative: string;
   if (diffMins < 1) {
-    relative = 'Just now';
+    return 'Just now';
   } else if (diffMins < 60) {
-    relative = `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
+    return `${diffMins} min${diffMins > 1 ? 's' : ''} ago`;
   } else if (diffHours < 24) {
-    relative = `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
   } else if (diffDays < 7) {
-    relative = `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   } else {
-    relative = date.toLocaleDateString();
+    return date.toLocaleDateString();
   }
-
-  // Formato: YYYY-MM-DD HH:MM:SS
-  const absolute = date.toLocaleString('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  }).replace(',', '');
-
-  return { relative, absolute };
 }
 
 /**
@@ -147,10 +149,16 @@ function getStackTracePreview(stackTrace: string | null | undefined): string | n
 }
 
 export function ExceptionRow({ exception, projects, levels, onClick }: ExceptionRowProps) {
+  const [relativeTime, setRelativeTime] = useState<string>('');
   const level = levels.find((l) => l.id === exception.levelId);
   const project = projects.find((p) => p.id === exception.projectId);
-  const { relative, absolute } = formatDate(exception.createdAt);
+  const { absolute } = formatDate(exception.createdAt);
   const stackPreview = getStackTracePreview(exception.stackTrace);
+
+  // Calcular tiempo relativo solo en cliente para evitar hydration mismatch
+  useEffect(() => {
+    setRelativeTime(getRelativeTime(exception.createdAt));
+  }, [exception.createdAt]);
 
   const handleClick = () => {
     onClick?.(exception.id);
@@ -199,7 +207,7 @@ export function ExceptionRow({ exception, projects, levels, onClick }: Exception
       {/* Date */}
       <TableCell className="w-[160px] text-right py-4">
         <div className="space-y-0.5">
-          <p className="text-sm font-medium text-foreground">{relative}</p>
+          <p className="text-sm font-medium text-foreground">{relativeTime || absolute}</p>
           <p className="text-xs text-muted-foreground">{absolute}</p>
         </div>
       </TableCell>

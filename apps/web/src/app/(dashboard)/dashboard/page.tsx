@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ExceptionRow } from '@/components/exceptions/exception-row';
 import { ExceptionFilters } from '@/components/exceptions/exception-filters';
+import { ExceptionPagination } from '@/components/exceptions/exception-pagination';
 import type { ExceptionDto, ExceptionFilterDto } from '@excepio/shared';
 
 // Datos fake para visualizar el componente
@@ -108,6 +109,8 @@ const fakeLevels = [
 export default function DashboardPage() {
   const { user } = useAuth();
   const [filters, setFilters] = useState<ExceptionFilterDto>({});
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(25);
 
   const handleRowClick = (id: string) => {
     console.log('Navigate to exception:', id);
@@ -116,6 +119,18 @@ export default function DashboardPage() {
   const handleFilterChange = (newFilters: ExceptionFilterDto) => {
     console.log('Filters changed:', newFilters);
     setFilters(newFilters);
+    setPage(1); // Reset to first page when filters change
+  };
+
+  const handlePageChange = (newPage: number) => {
+    console.log('Page changed:', newPage);
+    setPage(newPage);
+  };
+
+  const handleLimitChange = (newLimit: number) => {
+    console.log('Limit changed:', newLimit);
+    setLimit(newLimit);
+    setPage(1); // Reset to first page when limit changes
   };
 
   return (
@@ -182,6 +197,15 @@ export default function DashboardPage() {
               ))}
             </TableBody>
           </Table>
+        </div>
+        <div className="mt-4">
+          <ExceptionPagination
+            page={page}
+            limit={limit}
+            total={1284}
+            onPageChange={handlePageChange}
+            onLimitChange={handleLimitChange}
+          />
         </div>
       </div>
     </div>
