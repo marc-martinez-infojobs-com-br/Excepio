@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { ExceptionFilters } from '@/components/exceptions/exception-filters';
 import type { ExceptionFilterDto } from '@excepio/shared';
 
-const mockProjects = [
+const mockPlatforms = [
   { id: 1, name: 'Web' },
   { id: 2, name: 'WM' },
   { id: 3, name: 'Android' },
@@ -25,7 +25,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{}}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -41,7 +41,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{}}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -58,7 +58,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{}}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -74,7 +74,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{}}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -91,7 +91,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{}}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -110,7 +110,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{ levelId: 4 }}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -126,7 +126,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{}}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -145,7 +145,7 @@ describe('ExceptionFilters', () => {
     render(
       <ExceptionFilters
         filters={{ levelId: 5 }}
-        projects={mockProjects}
+        platforms={mockPlatforms}
         levels={mockLevels}
         onFilterChange={onFilterChange}
       />
@@ -166,7 +166,7 @@ describe('ExceptionFilters', () => {
       render(
         <ExceptionFilters
           filters={{}}
-          projects={mockProjects}
+          platforms={mockPlatforms}
           levels={mockLevels}
           onFilterChange={onFilterChange}
         />
@@ -194,7 +194,7 @@ describe('ExceptionFilters', () => {
       render(
         <ExceptionFilters
           filters={{}}
-          projects={mockProjects}
+          platforms={mockPlatforms}
           levels={mockLevels}
           onFilterChange={onFilterChange}
         />
@@ -224,7 +224,7 @@ describe('ExceptionFilters', () => {
       render(
         <ExceptionFilters
           filters={{}}
-          projects={mockProjects}
+          platforms={mockPlatforms}
           levels={mockLevels}
           onFilterChange={onFilterChange}
         />
@@ -254,7 +254,7 @@ describe('ExceptionFilters', () => {
       render(
         <ExceptionFilters
           filters={{}}
-          projects={mockProjects}
+          platforms={mockPlatforms}
           levels={mockLevels}
           onFilterChange={onFilterChange}
         />
@@ -292,7 +292,7 @@ describe('ExceptionFilters', () => {
       render(
         <ExceptionFilters
           filters={{}}
-          projects={mockProjects}
+          platforms={mockPlatforms}
           levels={mockLevels}
           onFilterChange={onFilterChange}
         />
@@ -337,7 +337,7 @@ describe('ExceptionFilters', () => {
       render(
         <ExceptionFilters
           filters={{}}
-          projects={mockProjects}
+          platforms={mockPlatforms}
           levels={mockLevels}
           onFilterChange={onFilterChange}
         />

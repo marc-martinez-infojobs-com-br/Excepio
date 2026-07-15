@@ -104,7 +104,7 @@
     },
     "empty": "No exceptions found",
     "unknownLevel": "UNKNOWN",
-    "unknownProject": "Unknown"
+    "unknownPlatform": "Unknown"
   },
   "dashboard": {
     "title": "Welcome to Excepio",
@@ -113,7 +113,7 @@
     "cards": {
       "exceptions": {
         "title": "Exceptions",
-        "description": "View and manage all exceptions across your projects",
+        "description": "View and manage all exceptions across your platforms",
         "action": "View Exceptions"
       }
     }

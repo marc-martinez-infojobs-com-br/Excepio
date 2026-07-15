@@ -35,7 +35,7 @@ const mockExceptionsResponse: ExceptionListResponseDto = {
   data: [
     {
       id: '123e4567-e89b-12d3-a456-426614174000',
-      projectId: 1,
+      platformId: 1,
       levelId: 4,
       message: 'Test error message',
       stackTrace: 'at test.js:1',
@@ -78,7 +78,7 @@ describe('useExceptions', () => {
     mockApiClient.get.mockResolvedValueOnce({ data: mockExceptionsResponse });
 
     const filters = {
-      projectId: 1,
+      platformId: 1,
       levelId: 4,
       page: 2,
       limit: 25,
@@ -171,7 +171,7 @@ describe('useExceptions', () => {
     mockApiClient.get.mockResolvedValueOnce({ data: mockExceptionsResponse });
 
     const filters = {
-      projectId: 1,
+      platformId: 1,
       levelId: undefined,
       messageSearch: undefined,
     };
@@ -184,9 +184,9 @@ describe('useExceptions', () => {
       expect(result.current.isSuccess).toBe(true);
     });
 
-    // Solo debería enviar projectId, no los undefined
+    // Solo debería enviar platformId, no los undefined
     expect(mockApiClient.get).toHaveBeenCalledWith('/exceptions', {
-      params: { projectId: 1 },
+      params: { platformId: 1 },
     });
   });
 });

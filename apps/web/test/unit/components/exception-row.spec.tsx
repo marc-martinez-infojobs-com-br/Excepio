@@ -5,7 +5,7 @@ import type { ExceptionDto } from '@excepio/shared';
 
 const mockException: ExceptionDto = {
   id: '123e4567-e89b-12d3-a456-426614174000',
-  projectId: 1,
+  platformId: 1,
   levelId: 4,
   message: 'NullReferenceException: Object reference not set to an instance',
   stackTrace: 'at AuthService.validateToken (auth_service.py:42)',
@@ -18,7 +18,7 @@ const mockException: ExceptionDto = {
 };
 
 // Mock de proyectos y levels para mostrar nombres
-const mockProjects = [
+const mockPlatforms = [
   { id: 1, name: 'Web' },
   { id: 2, name: 'Android' },
   { id: 3, name: 'iOS' },
@@ -39,7 +39,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -55,7 +55,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -71,7 +71,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -89,7 +89,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -107,7 +107,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -128,7 +128,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={warningException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -149,7 +149,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={fatalException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -169,7 +169,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>
@@ -185,7 +185,7 @@ describe('ExceptionRow', () => {
         <tbody>
           <ExceptionRow
             exception={mockException}
-            projects={mockProjects}
+            platforms={mockPlatforms}
             levels={mockLevels}
           />
         </tbody>

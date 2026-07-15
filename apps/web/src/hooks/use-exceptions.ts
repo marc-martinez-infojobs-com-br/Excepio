@@ -7,7 +7,7 @@ import type { ExceptionFilterDto, ExceptionListResponseDto } from '@excepio/shar
 /**
  * Hook para obtener el listado de excepciones con filtros y paginación.
  * 
- * @param filters - Filtros opcionales (projectId, levelId, fechas, búsquedas, paginación)
+ * @param filters - Filtros opcionales (platformId, levelId, fechas, búsquedas, paginación)
  * @returns Query result con data, isLoading, isError, etc.
  */
 export function useExceptions(filters?: ExceptionFilterDto) {
