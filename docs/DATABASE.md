@@ -6,7 +6,7 @@ Este documento define la estructura de datos del sistema de registro de excepcio
 
 ```
 ┌─────────────────┐     ┌─────────────────┐
-│     Level       │     │    Project      │
+│     Level       │     │    Platform     │
 ├─────────────────┤     ├─────────────────┤
 │ id (int, PK)    │     │ id (int, PK)    │
 │ name            │     │ name            │
@@ -26,7 +26,7 @@ Este documento define la estructura de datos del sistema de registro de excepcio
          │                  Exception                     │
          ├────────────────────────────────────────────────┤
          │ id (UUID, PK auto)                             │
-         │ projectId (FK → Project)                       │
+         │ platformId (FK → Platform)                     │
          │ levelId (FK → Level)                           │
          │ message (string)                               │
          │ stackTrace (text, opcional)                    │
@@ -57,7 +57,7 @@ Este documento define la estructura de datos del sistema de registro de excepcio
 
 ### Status
 
-Tabla compartida para borrado lógico en Level, Project y User.
+Tabla compartida para borrado lógico en Level, Platform y User.
 
 | id | name |
 |----|------|
@@ -84,25 +84,25 @@ Roles de usuario para el sistema de autenticación web.
 
 | Valor | Descripción |
 |-------|-------------|
-| ADMINISTRADOR | Acceso completo: CRUD de usuarios, gestión de proyectos, visualización de todas las excepciones |
-| USUARIO | Acceso de solo lectura a excepciones y proyectos |
+| ADMINISTRADOR | Acceso completo: CRUD de usuarios, gestión de plataformas, visualización de todas las excepciones |
+| USUARIO | Acceso de solo lectura a excepciones y plataformas |
 
 ## Tablas Principales
 
-### Project
+### Platform
 
-Proyectos/aplicaciones que envían excepciones. Cada proyecto representa una aplicación o plataforma específica (ej. "Web", "Android", "iOS").
+Plataformas/aplicaciones que envían excepciones. Cada plataforma representa una aplicación específica (ej. "Web", "Android", "iOS").
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | int | Clave primaria asignada por el administrador |
-| name | string | Nombre del proyecto |
+| name | string | Nombre de la plataforma |
 | apiKey | string (unique) | API key autogenerada para autenticar peticiones |
 | statusId | int (FK) | Estado del registro |
 | createdAt | datetime | Fecha de creación |
 
 **Notas:**
-- El `id` es numérico y asignado manualmente por el administrador al crear el proyecto
+- El `id` es numérico y asignado manualmente por el administrador al crear la plataforma
 - El `apiKey` se genera automáticamente y solo puede regenerarse mediante endpoint específico
 
 ### Exception
@@ -112,7 +112,7 @@ Registro de excepciones.
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
 | id | UUID | Clave primaria autogenerada |
-| projectId | int (FK) | Proyecto que reporta la excepción |
+| platformId | int (FK) | Plataforma que reporta la excepción |
 | levelId | int (FK) | Nivel de severidad |
 | message | string | Mensaje de la excepción |
 | stackTrace | text (opcional) | Stack trace completo |
@@ -127,7 +127,7 @@ Registro de excepciones.
 
 Usuarios del sistema que acceden a la plataforma web para gestionar y visualizar excepciones.
 
-**Importante:** Los usuarios se autentican mediante JWT (email + password). Esto es independiente del sistema de API Key que usan los Projects para reportar excepciones.
+**Importante:** Los usuarios se autentican mediante JWT (email + password). Esto es independiente del sistema de API Key que usan las Platforms para reportar excepciones.
 
 | Campo | Tipo | Descripción |
 |-------|------|-------------|
@@ -148,12 +148,12 @@ Usuarios del sistema que acceden a la plataforma web para gestionar y visualizar
 
 ## Notas
 
-- **Borrado lógico**: Level, Project y User usan `statusId` para borrado lógico. Esto evita romper las FK en Exception.
+- **Borrado lógico**: Level, Platform y User usan `statusId` para borrado lógico. Esto evita romper las FK en Exception.
 - **Exception no se borra**: Las excepciones nunca se eliminan, por lo que no tienen `statusId`.
 - **Dos sistemas de autenticación**:
   - **JWT (User)**: Para usuarios humanos que acceden a la plataforma web (email + password)
-  - **API Key (Project)**: Para aplicaciones que reportan excepciones
-- **Sin relación User-Project**: Actualmente cualquier usuario autenticado puede ver excepciones de todos los proyectos.
+  - **API Key (Platform)**: Para aplicaciones que reportan excepciones
+- **Sin relación User-Platform**: Actualmente cualquier usuario autenticado puede ver excepciones de todas las plataformas.
 
 
 ## Conexión a la Base de Datos
