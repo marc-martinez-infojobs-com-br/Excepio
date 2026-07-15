@@ -188,7 +188,7 @@ export function ExceptionFilters({
       {/* Search Field Select + Input */}
       <div className="flex items-center">
         <Select value={searchField} onValueChange={setSearchField}>
-          <SelectTrigger className="w-[120px] h-9 rounded-r-none border-r-0 bg-transparent">
+          <SelectTrigger className="w-[120px] h-10 rounded-r-none border-r-0 bg-transparent">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -205,19 +205,19 @@ export function ExceptionFilters({
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             onKeyDown={handleSearchKeyDown}
-            className="h-9 w-40 rounded-l-none pr-8"
+            className="h-10 w-40 rounded-l-none pr-8 bg-transparent"
           />
           {searchText ? (
             <Button
               variant="ghost"
               size="icon"
-              className="absolute right-0 top-0 h-9 w-8 hover:bg-transparent"
+              className="absolute right-0 top-0 h-10 w-8 hover:bg-transparent"
               onClick={handleClearSearch}
             >
               <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
             </Button>
           ) : (
-            <div className="absolute right-0 top-0 h-9 w-8 flex items-center justify-center pointer-events-none">
+            <div className="absolute right-0 top-0 h-10 w-8 flex items-center justify-center pointer-events-none">
               <Search className="h-4 w-4 text-muted-foreground" />
             </div>
           )}
@@ -229,7 +229,7 @@ export function ExceptionFilters({
         value={filters.projectId?.toString() || 'all'}
         onValueChange={handleProjectChange}
       >
-        <SelectTrigger className="w-[160px] h-9 bg-transparent border-input">
+        <SelectTrigger className="w-[160px] h-10 bg-transparent border-input">
           <SelectValue placeholder="Platform: All" />
         </SelectTrigger>
         <SelectContent>
@@ -243,7 +243,7 @@ export function ExceptionFilters({
       </Select>
 
       {/* Level Buttons */}
-      <div className="flex items-center border border-input rounded-md">
+      <div className="flex items-center border border-input rounded-md h-10">
         {[5, 4, 3, 2, 1].map((levelId, index) => {
           const isActive = filters.levelId === levelId;
           const styles = LEVEL_TEXT_STYLES[levelId];
@@ -254,7 +254,7 @@ export function ExceptionFilters({
               size="sm"
               data-active={isActive}
               className={cn(
-                'rounded-none h-9 px-3 font-bold',
+                'rounded-none h-full px-3 font-bold',
                 index === 0 && 'rounded-l-md',
                 index === 4 && 'rounded-r-md',
                 index < 4 && 'border-r border-input',
@@ -272,7 +272,7 @@ export function ExceptionFilters({
       {/* Date Preset Select */}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="sm" className="gap-2 h-9 border border-input">
+          <Button variant="ghost" size="sm" className="gap-2 h-10 border border-input">
             <Calendar className="h-4 w-4" />
             {datePreset}
           </Button>

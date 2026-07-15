@@ -186,7 +186,7 @@ export function ExceptionRow({ exception, projects, levels, onClick }: Exception
       {/* Message & Stack Trace */}
       <TableCell className="py-4">
         <div className="space-y-1">
-          <p className="text-base font-semibold text-primary hover:underline">
+          <p className="text-lg font-semibold text-primary hover:underline">
             {exception.message}
           </p>
           {stackPreview && (
