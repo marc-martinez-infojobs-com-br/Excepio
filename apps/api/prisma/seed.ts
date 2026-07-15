@@ -221,8 +221,8 @@ async function main() {
   }
   console.log(`✓ ${levels.length} Level records`);
 
-  // Projects de ejemplo (para desarrollo)
-  const projects = [
+  // Platforms de ejemplo (para desarrollo)
+  const platforms = [
     { id: 1, name: 'Web', statusId: 2 },
     { id: 2, name: 'WM', statusId: 2 },
     { id: 3, name: 'Android', statusId: 2 },
@@ -230,23 +230,23 @@ async function main() {
     { id: 5, name: 'API', statusId: 2 },
   ];
 
-  for (const project of projects) {
-    const existing = await prisma.project.findUnique({
-      where: { id: project.id },
+  for (const platform of platforms) {
+    const existing = await prisma.platform.findUnique({
+      where: { id: platform.id },
     });
 
     if (!existing) {
-      await prisma.project.create({
+      await prisma.platform.create({
         data: {
-          id: project.id,
-          name: project.name,
+          id: platform.id,
+          name: platform.name,
           apiKey: generateApiKey(),
-          statusId: project.statusId,
+          statusId: platform.statusId,
         },
       });
     }
   }
-  console.log(`✓ ${projects.length} Project records`);
+  console.log(`✓ ${platforms.length} Platform records`);
 
   // Usuario administrador inicial
   const adminEmail = 'admin@excepio.com';
@@ -307,11 +307,11 @@ async function seedExceptions() {
       }
     }
 
-    // Distribución de projects
-    const projectId = randomElement([1, 1, 1, 2, 2, 3, 3, 4, 4, 5]); // Web más frecuente
+    // Distribución de platforms
+    const platformId = randomElement([1, 1, 1, 2, 2, 3, 3, 4, 4, 5]); // Web más frecuente
 
     exceptions.push({
-      projectId,
+      platformId,
       levelId,
       message: randomElement(EXCEPTION_MESSAGES),
       stackTrace: Math.random() > 0.2 ? randomElement(STACK_TRACES) : null,
