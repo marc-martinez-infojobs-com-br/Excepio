@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface ExceptionPaginationProps {
   page: number;
@@ -29,6 +30,8 @@ export function ExceptionPagination({
   onPageChange,
   onLimitChange,
 }: ExceptionPaginationProps) {
+  const t = useTranslations('exceptions.pagination');
+  
   if (total === 0) {
     return null;
   }
@@ -100,7 +103,7 @@ export function ExceptionPagination({
       {/* Info text - hidden on mobile */}
       <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
         <span>
-          Showing <span className="font-semibold text-foreground">{startItem} - {endItem}</span> of {total.toLocaleString()} issues
+          {t('showing')} <span className="font-semibold text-foreground">{startItem} - {endItem}</span> {t('of')} {total.toLocaleString()} {t('issues')}
         </span>
         {onLimitChange && (
           <>
@@ -120,7 +123,7 @@ export function ExceptionPagination({
                 ))}
               </SelectContent>
             </Select>
-            <span>per page</span>
+            <span>{t('perPage')}</span>
           </>
         )}
       </div>
@@ -135,11 +138,11 @@ export function ExceptionPagination({
           disabled={isFirstPage}
         >
           <ChevronLeft className="h-4 w-4" />
-          Prev
+          {t('previous')}
         </Button>
         
         <span className="text-sm text-muted-foreground">
-          Page <span className="font-semibold text-foreground">{page}</span> of {totalPages}
+          {t('page')} <span className="font-semibold text-foreground">{page}</span> {t('of')} {totalPages}
         </span>
         
         <Button
@@ -149,7 +152,7 @@ export function ExceptionPagination({
           onClick={() => onPageChange(page + 1)}
           disabled={isLastPage}
         >
-          Next
+          {t('next')}
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>

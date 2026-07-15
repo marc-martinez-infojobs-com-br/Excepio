@@ -1,16 +1,19 @@
 'use client';
 
 import { Check, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface PasswordRequirement {
   key: string;
-  text: string;
+  label: string;
   met: boolean;
 }
 
+type StrengthLevel = 'weak' | 'medium' | 'strong' | 'veryStrong';
+
 interface PasswordStrengthResult {
   score: number;
-  level: 'Débil' | 'Media' | 'Fuerte' | 'Muy Fuerte';
+  level: StrengthLevel;
   requirements: PasswordRequirement[];
 }
 
@@ -22,42 +25,42 @@ export function checkPasswordStrength(password: string): PasswordStrengthResult 
   const requirements: PasswordRequirement[] = [
     {
       key: 'minLength',
-      text: 'Mínimo 8 caracteres',
+      label: 'minLength',
       met: password.length >= 8,
     },
     {
       key: 'uppercase',
-      text: 'Al menos 1 mayúscula',
+      label: 'uppercase',
       met: /[A-Z]/.test(password),
     },
     {
       key: 'lowercase',
-      text: 'Al menos 1 minúscula',
+      label: 'lowercase',
       met: /[a-z]/.test(password),
     },
     {
       key: 'number',
-      text: 'Al menos 1 número',
+      label: 'number',
       met: /[0-9]/.test(password),
     },
     {
       key: 'special',
-      text: 'Al menos 1 carácter especial',
+      label: 'special',
       met: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password),
     },
   ];
 
   const score = requirements.filter((r) => r.met).length;
 
-  let level: PasswordStrengthResult['level'];
+  let level: StrengthLevel;
   if (score <= 2) {
-    level = 'Débil';
+    level = 'weak';
   } else if (score === 3) {
-    level = 'Media';
+    level = 'medium';
   } else if (score === 4) {
-    level = 'Fuerte';
+    level = 'strong';
   } else {
-    level = 'Muy Fuerte';
+    level = 'veryStrong';
   }
 
   return { score, level, requirements };
@@ -72,18 +75,19 @@ interface PasswordStrengthProps {
  * Incluye barra de progreso y lista de requisitos
  */
 export function PasswordStrength({ password }: PasswordStrengthProps) {
+  const t = useTranslations('auth.passwordStrength');
   const { score, level, requirements } = checkPasswordStrength(password);
 
   // Colores según el nivel
   const getColorClass = () => {
     switch (level) {
-      case 'Débil':
+      case 'weak':
         return 'bg-red-500';
-      case 'Media':
+      case 'medium':
         return 'bg-yellow-500';
-      case 'Fuerte':
+      case 'strong':
         return 'bg-green-400';
-      case 'Muy Fuerte':
+      case 'veryStrong':
         return 'bg-green-600';
       default:
         return 'bg-gray-300';
@@ -92,13 +96,13 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
 
   const getLevelColorClass = () => {
     switch (level) {
-      case 'Débil':
+      case 'weak':
         return 'text-red-500';
-      case 'Media':
+      case 'medium':
         return 'text-yellow-500';
-      case 'Fuerte':
+      case 'strong':
         return 'text-green-400';
-      case 'Muy Fuerte':
+      case 'veryStrong':
         return 'text-green-600';
       default:
         return 'text-muted-foreground';
@@ -113,8 +117,8 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
       {/* Barra de progreso */}
       <div className="space-y-1">
         <div className="flex justify-between items-center text-[10px]">
-          <span className="text-muted-foreground">Fortaleza:</span>
-          <span className={`font-medium ${getLevelColorClass()}`}>{level}</span>
+          <span className="text-muted-foreground">{t('label')}</span>
+          <span className={`font-medium ${getLevelColorClass()}`}>{t(level)}</span>
         </div>
         <div
           role="progressbar"
@@ -146,7 +150,7 @@ export function PasswordStrength({ password }: PasswordStrengthProps) {
             ) : (
               <X className="h-3 w-3 flex-shrink-0" data-testid="x-icon" />
             )}
-            <span className="truncate">{req.text}</span>
+            <span className="truncate">{t(`requirements.${req.label}`)}</span>
           </li>
         ))}
       </ul>

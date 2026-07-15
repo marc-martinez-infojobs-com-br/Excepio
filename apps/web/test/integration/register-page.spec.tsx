@@ -36,30 +36,32 @@ describe('RegisterPage', () => {
     it('debería renderizar Card con título "Crear cuenta"', () => {
       render(<RegisterPage />);
 
-      expect(screen.getByText('Crear cuenta')).toBeInTheDocument();
+      // Con el mock de i18n, se muestra la key de traducción
+      expect(screen.getByText(/auth\.register\.title/)).toBeInTheDocument();
     });
 
     it('debería renderizar descripción "Crea tu cuenta en Excepio"', () => {
       render(<RegisterPage />);
 
-      expect(screen.getByText('Crea tu cuenta en Excepio')).toBeInTheDocument();
+      expect(screen.getByText(/auth\.register\.subtitle/)).toBeInTheDocument();
     });
 
     it('debería contener RegisterForm', () => {
       render(<RegisterPage />);
 
-      // Verificamos elementos del RegisterForm
-      expect(screen.getByPlaceholderText(/tu nombre/i)).toBeInTheDocument();
-      expect(screen.getByPlaceholderText(/tu@email.com/i)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /crear cuenta/i })).toBeInTheDocument();
+      // Verificamos elementos del RegisterForm con keys de traducción
+      expect(screen.getByPlaceholderText(/auth\.register\.namePlaceholder/)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText(/auth\.register\.emailPlaceholder/)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /auth\.register\.submit/ })).toBeInTheDocument();
     });
 
     it('debería renderizar footer con link a login', () => {
       render(<RegisterPage />);
 
-      expect(screen.getByText(/¿ya tienes una cuenta\?/i)).toBeInTheDocument();
+      // El texto del footer usa key de traducción
+      expect(screen.getByText(/auth\.register\.hasAccount/)).toBeInTheDocument();
       
-      const loginLink = screen.getByRole('link', { name: /inicia sesión/i });
+      const loginLink = screen.getByRole('link', { name: /auth\.register\.signIn/ });
       expect(loginLink).toBeInTheDocument();
       expect(loginLink).toHaveAttribute('href', '/login');
     });
@@ -73,11 +75,11 @@ describe('RegisterPage', () => {
 
       const passwordFields = screen.getAllByPlaceholderText('••••••••');
 
-      await user.type(screen.getByPlaceholderText(/tu nombre/i), 'Test User');
-      await user.type(screen.getByPlaceholderText(/tu@email.com/i), 'test@example.com');
+      await user.type(screen.getByPlaceholderText(/auth\.register\.namePlaceholder/), 'Test User');
+      await user.type(screen.getByPlaceholderText(/auth\.register\.emailPlaceholder/), 'test@example.com');
       await user.type(passwordFields[0], 'Password1!');
       await user.type(passwordFields[1], 'Password1!');
-      await user.click(screen.getByRole('button', { name: /crear cuenta/i }));
+      await user.click(screen.getByRole('button', { name: /auth\.register\.submit/ }));
 
       await waitFor(() => {
         expect(mockRegister).toHaveBeenCalledWith(
@@ -97,11 +99,11 @@ describe('RegisterPage', () => {
 
       const passwordFields = screen.getAllByPlaceholderText('••••••••');
 
-      await user.type(screen.getByPlaceholderText(/tu nombre/i), 'Test User');
-      await user.type(screen.getByPlaceholderText(/tu@email.com/i), 'test@example.com');
+      await user.type(screen.getByPlaceholderText(/auth\.register\.namePlaceholder/), 'Test User');
+      await user.type(screen.getByPlaceholderText(/auth\.register\.emailPlaceholder/), 'test@example.com');
       await user.type(passwordFields[0], 'Password1!');
       await user.type(passwordFields[1], 'Password1!');
-      await user.click(screen.getByRole('button', { name: /crear cuenta/i }));
+      await user.click(screen.getByRole('button', { name: /auth\.register\.submit/ }));
 
       await waitFor(() => {
         expect(screen.getByText(/el email ya está registrado/i)).toBeInTheDocument();

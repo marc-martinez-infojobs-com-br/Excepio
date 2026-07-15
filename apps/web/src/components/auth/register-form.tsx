@@ -17,8 +17,10 @@ import {
 import { useState } from 'react';
 import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 import { PasswordStrength } from './password-strength';
+import { useTranslations } from 'next-intl';
 
 export function RegisterForm() {
+  const t = useTranslations('auth.register');
   const { register } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
@@ -45,14 +47,14 @@ export function RegisterForm() {
       if (data.password !== data.confirmPassword) {
         form.setError('confirmPassword', {
           type: 'manual',
-          message: 'Las contraseñas no coinciden',
+          message: t('passwordMismatch'),
         });
         return;
       }
       
       await register(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al crear cuenta');
+      setError(err instanceof Error ? err.message : t('error'));
     }
   };
 
@@ -65,14 +67,14 @@ export function RegisterForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                Nombre
+                {t('name')}
               </FormLabel>
               <FormControl>
                 <div className="relative group">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <Input
                     type="text"
-                    placeholder="Tu nombre"
+                    placeholder={t('namePlaceholder')}
                     className="pl-10 py-[10px] border-border bg-card focus:border-primary"
                     {...field}
                     disabled={form.formState.isSubmitting}
@@ -90,14 +92,14 @@ export function RegisterForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                Email
+                {t('email')}
               </FormLabel>
               <FormControl>
                 <div className="relative group">
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-muted-foreground group-focus-within:text-primary transition-colors" />
                   <Input
                     type="email"
-                    placeholder="tu@email.com"
+                    placeholder={t('emailPlaceholder')}
                     className="pl-10 py-[10px] border-border bg-card focus:border-primary"
                     {...field}
                     disabled={form.formState.isSubmitting}
@@ -115,7 +117,7 @@ export function RegisterForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                Contraseña
+                {t('password')}
               </FormLabel>
               <FormControl>
                 <div className="relative group">
@@ -141,7 +143,7 @@ export function RegisterForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                Confirmar Contraseña
+                {t('confirmPassword')}
               </FormLabel>
               <FormControl>
                 <div className="relative group">
@@ -171,7 +173,7 @@ export function RegisterForm() {
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-5 mt-6 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
           disabled={form.formState.isSubmitting}
         >
-          <span>{form.formState.isSubmitting ? 'Creando cuenta...' : 'Crear Cuenta'}</span>
+          <span>{form.formState.isSubmitting ? t('submitting') : t('submit')}</span>
           {!form.formState.isSubmitting && <ArrowRight className="h-[18px] w-[18px]" />}
         </Button>
       </form>

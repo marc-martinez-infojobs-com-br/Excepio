@@ -31,7 +31,8 @@ describe('ExceptionFilters', () => {
       />
     );
 
-    expect(screen.getByText('Platform: All')).toBeInTheDocument();
+    // Con el mock de i18n, se renderiza la key de traducción
+    expect(screen.getByText(/exceptions\.filters\.platformAll/)).toBeInTheDocument();
   });
 
   it('debería renderizar los botones de level', () => {
@@ -63,7 +64,8 @@ describe('ExceptionFilters', () => {
       />
     );
 
-    expect(screen.getByText(/last 24h/i)).toBeInTheDocument();
+    // Con el mock de i18n, la key es exceptions.filters.datePresets.last24h
+    expect(screen.getByText(/exceptions\.filters\.datePresets\.last24h/)).toBeInTheDocument();
   });
 
   it('debería renderizar el select de Platform con opciones', () => {
@@ -79,7 +81,7 @@ describe('ExceptionFilters', () => {
     );
 
     // Verificar que Platform está presente
-    expect(screen.getByText('Platform: All')).toBeInTheDocument();
+    expect(screen.getByText(/exceptions\.filters\.platformAll/)).toBeInTheDocument();
   });
 
   it('debería llamar onFilterChange cuando se hace click en un level', async () => {
@@ -130,10 +132,10 @@ describe('ExceptionFilters', () => {
       />
     );
 
-    // Verificar que el input de búsqueda está presente
-    expect(screen.getByPlaceholderText(/search/i)).toBeInTheDocument();
-    // Verificar que el selector de campo muestra "Message" por defecto
-    expect(screen.getByText('Message')).toBeInTheDocument();
+    // Verificar que el input de búsqueda está presente (placeholder usa key de traducción)
+    expect(screen.getByPlaceholderText(/exceptions\.filters\.searchPlaceholder/)).toBeInTheDocument();
+    // Verificar que el selector de campo muestra la key de traducción para "Message"
+    expect(screen.getByText(/exceptions\.filters\.searchFields\.message/)).toBeInTheDocument();
   });
 
   it('debería deseleccionar level al hacer click en el mismo', async () => {
@@ -171,18 +173,18 @@ describe('ExceptionFilters', () => {
       );
 
       // Abrir el popover de fecha
-      await user.click(screen.getByText(/last 24h/i));
+      await user.click(screen.getByText(/exceptions\.filters\.datePresets\.last24h/));
 
-      // Verificar presets
+      // Verificar presets (keys de traducción)
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /last 1h/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /exceptions\.filters\.datePresets\.last1h/ })).toBeInTheDocument();
       });
-      expect(screen.getByRole('button', { name: /last 7d/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /last 30d/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /exceptions\.filters\.datePresets\.last7d/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /exceptions\.filters\.datePresets\.last30d/ })).toBeInTheDocument();
 
       // Verificar opciones personalizadas
-      expect(screen.getByRole('button', { name: /specific day/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /custom range/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /exceptions\.filters\.customRange/ })).toBeInTheDocument();
     });
 
     it('debería abrir el dialog de día específico al hacer click en "Specific day"', async () => {
@@ -199,20 +201,20 @@ describe('ExceptionFilters', () => {
       );
 
       // Abrir popover y click en Specific day
-      await user.click(screen.getByText(/last 24h/i));
+      await user.click(screen.getByText(/exceptions\.filters\.datePresets\.last24h/));
       
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /specific day/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ })).toBeInTheDocument();
       });
       
-      await user.click(screen.getByRole('button', { name: /specific day/i }));
+      await user.click(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ }));
 
       // Verificar que el dialog se abrió con el calendario
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
       // Verificar que hay un botón Apply (indica que el calendario está presente)
-      expect(screen.getByRole('button', { name: /apply/i })).toBeInTheDocument();
+      expect(screen.getByText(/common\.buttons\.apply/)).toBeInTheDocument();
     });
 
     it('debería abrir el dialog de rango personalizado al hacer click en "Custom range"', async () => {
@@ -229,20 +231,20 @@ describe('ExceptionFilters', () => {
       );
 
       // Abrir popover y click en Custom range
-      await user.click(screen.getByText(/last 24h/i));
+      await user.click(screen.getByText(/exceptions\.filters\.datePresets\.last24h/));
       
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /custom range/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /exceptions\.filters\.customRange/ })).toBeInTheDocument();
       });
       
-      await user.click(screen.getByRole('button', { name: /custom range/i }));
+      await user.click(screen.getByRole('button', { name: /exceptions\.filters\.customRange/ }));
 
       // Verificar que el dialog se abrió
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
       // Verificar que hay un botón Apply
-      expect(screen.getByRole('button', { name: /apply/i })).toBeInTheDocument();
+      expect(screen.getByText(/common\.buttons\.apply/)).toBeInTheDocument();
     });
 
     it('debería cerrar el dialog al hacer click en Cancel', async () => {
@@ -259,20 +261,20 @@ describe('ExceptionFilters', () => {
       );
 
       // Abrir dialog
-      await user.click(screen.getByText(/last 24h/i));
+      await user.click(screen.getByText(/exceptions\.filters\.datePresets\.last24h/));
       
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /specific day/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ })).toBeInTheDocument();
       });
       
-      await user.click(screen.getByRole('button', { name: /specific day/i }));
+      await user.click(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ }));
       
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
       // Cerrar con Cancel
-      await user.click(screen.getByRole('button', { name: /cancel/i }));
+      await user.click(screen.getByText(/common\.buttons\.cancel/));
 
       // Dialog debería cerrarse
       await waitFor(() => {
@@ -297,13 +299,13 @@ describe('ExceptionFilters', () => {
       );
 
       // Abrir popover y click en Specific day
-      await user.click(screen.getByText(/last 24h/i));
+      await user.click(screen.getByText(/exceptions\.filters\.datePresets\.last24h/));
       
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /specific day/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ })).toBeInTheDocument();
       });
       
-      await user.click(screen.getByRole('button', { name: /specific day/i }));
+      await user.click(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ }));
 
       // Esperar a que el dialog se abra
       await waitFor(() => {
@@ -316,7 +318,7 @@ describe('ExceptionFilters', () => {
         await user.click(dayButtons[0]);
 
         // Click en Apply
-        await user.click(screen.getByRole('button', { name: /apply/i }));
+        await user.click(screen.getByText(/common\.buttons\.apply/));
 
         // Verificar que onFilterChange fue llamado con startDate y endDate
         expect(onFilterChange).toHaveBeenCalledWith(
@@ -342,20 +344,20 @@ describe('ExceptionFilters', () => {
       );
 
       // Abrir dialog de día específico
-      await user.click(screen.getByText(/last 24h/i));
+      await user.click(screen.getByText(/exceptions\.filters\.datePresets\.last24h/));
       
       await waitFor(() => {
-        expect(screen.getByRole('button', { name: /specific day/i })).toBeInTheDocument();
+        expect(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ })).toBeInTheDocument();
       });
       
-      await user.click(screen.getByRole('button', { name: /specific day/i }));
+      await user.click(screen.getByRole('button', { name: /exceptions\.filters\.specificDay/ }));
 
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
       // El botón Apply debería estar deshabilitado porque no hay fecha seleccionada
-      const applyButton = screen.getByRole('button', { name: /apply/i });
+      const applyButton = screen.getByText(/common\.buttons\.apply/);
       expect(applyButton).toBeDisabled();
     });
   });

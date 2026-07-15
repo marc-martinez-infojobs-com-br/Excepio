@@ -11,8 +11,10 @@ import { useExceptions } from '@/hooks/use-exceptions';
 import { useLevels } from '@/hooks/use-levels';
 import { useProjects } from '@/hooks/use-projects';
 import type { ExceptionFilterDto } from '@excepio/shared';
+import { useTranslations } from 'next-intl';
 
 export default function ExceptionsPage() {
+  const t = useTranslations('exceptions');
   const [filters, setFilters] = useState<ExceptionFilterDto>({});
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
@@ -63,7 +65,7 @@ export default function ExceptionsPage() {
       {!isLoading && data && (
         <div className="flex justify-start">
           <p className="text-sm text-muted-foreground">
-            {data.total.toLocaleString()} issues
+            {data.total.toLocaleString()} {t('pagination.issues')}
           </p>
         </div>
       )}
@@ -76,11 +78,11 @@ export default function ExceptionsPage() {
           </div>
         ) : error ? (
           <div className="text-center py-8 text-destructive">
-            Error loading exceptions
+            {t('errors.loading')}
           </div>
         ) : data?.data.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
-            No exceptions found
+            {t('empty')}
           </div>
         ) : (
           data?.data.map((exception) => (
@@ -101,16 +103,16 @@ export default function ExceptionsPage() {
           <TableHeader>
             <TableRow className="border-b border-border bg-muted/50 hover:bg-muted/50">
               <TableHead className="w-[120px] text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Severity
+                {t('table.severity')}
               </TableHead>
               <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Issue
+                {t('table.issue')}
               </TableHead>
               <TableHead className="w-[80px] text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                Platform
+                {t('table.platform')}
               </TableHead>
               <TableHead className="w-[160px] text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Last Seen
+                {t('table.lastSeen')}
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -126,13 +128,13 @@ export default function ExceptionsPage() {
             ) : error ? (
               <TableRow>
                 <td colSpan={4} className="text-center py-8 text-destructive">
-                  Error loading exceptions
+                  {t('errors.loading')}
                 </td>
               </TableRow>
             ) : data?.data.length === 0 ? (
               <TableRow>
                 <td colSpan={4} className="text-center py-8 text-muted-foreground">
-                  No exceptions found
+                  {t('empty')}
                 </td>
               </TableRow>
             ) : (

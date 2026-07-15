@@ -17,8 +17,10 @@ import {
 import { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export function LoginForm() {
+  const t = useTranslations('auth.login');
   const { login } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
@@ -35,7 +37,7 @@ export function LoginForm() {
       setError(null);
       await login(data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
+      setError(err instanceof Error ? err.message : t('error'));
     }
   };
 
@@ -48,7 +50,7 @@ export function LoginForm() {
           render={({ field }) => (
             <FormItem className="space-y-1">
               <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                Email
+                {t('email')}
               </FormLabel>
               <FormControl>
                 <div className="relative group">
@@ -74,13 +76,13 @@ export function LoginForm() {
             <FormItem className="space-y-1">
               <div className="flex justify-between items-center">
                 <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                  Contraseña
+                  {t('password')}
                 </FormLabel>
                 <Link 
                   href="/forgot-password" 
                   className="text-sm text-primary hover:underline transition-all"
                 >
-                  ¿Olvidaste tu contraseña?
+                  {t('forgotPassword')}
                 </Link>
               </div>
               <FormControl>
@@ -111,7 +113,7 @@ export function LoginForm() {
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-5 mt-6 rounded-lg flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
           disabled={form.formState.isSubmitting}
         >
-          <span>{form.formState.isSubmitting ? 'Iniciando sesión...' : 'Iniciar Sesión'}</span>
+          <span>{form.formState.isSubmitting ? t('submitting') : t('submit')}</span>
           {!form.formState.isSubmitting && <ArrowRight className="h-[18px] w-[18px]" />}
         </Button>
       </form>

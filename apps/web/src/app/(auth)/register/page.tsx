@@ -7,14 +7,17 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export default function RegisterPage() {
+  const t = useTranslations('auth.register');
+  
   return (
     <Card className="w-full border border-border/50 shadow-sm">
       <CardHeader className="pb-4">
-        <CardTitle className="text-xl font-semibold">Crear cuenta</CardTitle>
+        <CardTitle className="text-xl font-semibold">{t('title')}</CardTitle>
         <CardDescription>
-          Crea tu cuenta en Excepio
+          {t('subtitle')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -23,9 +26,9 @@ export default function RegisterPage() {
         {/* Link a Login */}
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
-            ¿Ya tienes una cuenta?{' '}
+            {t('hasAccount')}{' '}
             <Link href="/login" className="text-primary font-semibold hover:underline">
-              Inicia sesión
+              {t('signIn')}
             </Link>
           </p>
         </div>

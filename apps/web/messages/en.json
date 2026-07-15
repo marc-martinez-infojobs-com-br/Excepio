@@ -1,0 +1,145 @@
+{
+  "common": {
+    "buttons": {
+      "cancel": "Cancel",
+      "apply": "Apply"
+    },
+    "loading": "Loading...",
+    "error": "Error",
+    "unknownError": "Unknown error"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome",
+      "subtitle": "Access your monitoring panel",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot your password?",
+      "submit": "Sign In",
+      "submitting": "Signing in...",
+      "error": "Sign in failed",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create account"
+    },
+    "register": {
+      "title": "Create account",
+      "subtitle": "Create your Excepio account",
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@email.com",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "submit": "Create Account",
+      "submitting": "Creating account...",
+      "error": "Failed to create account",
+      "passwordMismatch": "Passwords do not match",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "passwordStrength": {
+      "label": "Strength:",
+      "weak": "Weak",
+      "medium": "Medium",
+      "strong": "Strong",
+      "veryStrong": "Very Strong",
+      "requirements": {
+        "minLength": "Minimum 8 characters",
+        "uppercase": "At least 1 uppercase",
+        "lowercase": "At least 1 lowercase",
+        "number": "At least 1 number",
+        "special": "At least 1 special character"
+      }
+    },
+    "logout": "Sign out"
+  },
+  "exceptions": {
+    "title": "Exceptions",
+    "issuesCount": "{count} issues",
+    "filters": {
+      "searchPlaceholder": "Search...",
+      "platformAll": "Platform: All",
+      "searchFields": {
+        "message": "Message",
+        "stackTrace": "Stack Trace",
+        "userId": "User ID",
+        "userAgent": "User Agent",
+        "appVersion": "App Version",
+        "url": "URL",
+        "metadata": "Metadata"
+      },
+      "datePresets": {
+        "last1h": "Last 1h",
+        "last24h": "Last 24h",
+        "last7d": "Last 7d",
+        "last30d": "Last 30d"
+      },
+      "specificDay": "Specific day...",
+      "customRange": "Custom range..."
+    },
+    "table": {
+      "severity": "Severity",
+      "issue": "Issue",
+      "platform": "Platform",
+      "lastSeen": "Last Seen"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "issues": "issues",
+      "perPage": "per page",
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page",
+      "pageOf": "Page {page} of {total}"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{count}m ago",
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago"
+    },
+    "errors": {
+      "loading": "Error loading exceptions"
+    },
+    "empty": "No exceptions found",
+    "unknownLevel": "UNKNOWN",
+    "unknownProject": "Unknown"
+  },
+  "dashboard": {
+    "title": "Welcome to Excepio",
+    "loggedInAs": "Logged in as",
+    "role": "Role:",
+    "cards": {
+      "exceptions": {
+        "title": "Exceptions",
+        "description": "View and manage all exceptions across your projects",
+        "action": "View Exceptions"
+      }
+    }
+  },
+  "health": {
+    "connecting": "Connecting to API...",
+    "connectionError": "Connection error:",
+    "connected": "API connected - Status:",
+    "lastCheck": "Last check:"
+  },
+  "layout": {
+    "appName": "Excepio",
+    "appVersion": "Exceptions System v1.0",
+    "changeLanguage": "Change language",
+    "footer": {
+      "status": "Status",
+      "support": "Support",
+      "docs": "Docs"
+    }
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode"
+  },
+  "metadata": {
+    "description": "Exception Tracking System"
+  }
+}

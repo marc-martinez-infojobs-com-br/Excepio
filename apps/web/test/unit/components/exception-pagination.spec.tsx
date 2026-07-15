@@ -209,8 +209,10 @@ describe('ExceptionPagination', () => {
       />
     );
 
-    // Mobile muestra "Page X of Y"
-    expect(screen.getByText(/Page/)).toBeInTheDocument();
-    expect(screen.getByText(/of 5/)).toBeInTheDocument();
+    // Mobile muestra "Page X of Y" - con mock devuelve la key de traducción
+    // El componente usa t('page') que con el mock devuelve "exceptions.pagination.page"
+    expect(screen.getByText(/exceptions\.pagination\.page/)).toBeInTheDocument();
+    // "of" aparece múltiples veces (mobile y desktop)
+    expect(screen.getAllByText(/exceptions\.pagination\.of/).length).toBeGreaterThanOrEqual(1);
   });
 });
