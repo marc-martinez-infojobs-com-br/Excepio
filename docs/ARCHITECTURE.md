@@ -20,6 +20,7 @@ Sistema de **Registro y Consumo de Excepciones** implementado como monorepo. El 
 | Documentación API | OpenAPI/Swagger en `/api/swagger` |
 | Testing | Vitest + Testing Library + Playwright (E2E) |
 | Autenticación | JWT (Passport.js) + bcrypt |
+| Internacionalización | next-intl (Català, Español, English) |
 
 ## Autenticación y Autorización
 
@@ -142,3 +143,61 @@ El sistema implementa control de acceso basado en roles (RBAC):
 ### Tipos Compartidos
 
 El paquete `@excepio/shared` contiene todos los tipos TypeScript de la API (DTOs, interfaces de request/response). Ambas apps lo importan para garantizar consistencia de tipos.
+
+## Internacionalización (i18n)
+
+El frontend soporta múltiples idiomas usando `next-intl`.
+
+### Idiomas Soportados
+
+| Código | Idioma | Icono |
+|--------|--------|-------|
+| `ca` | Català | Bola amarilla con barras rojas |
+| `es` | Español | Bola roja-amarilla-roja |
+| `en` | English | Bola con estrellas y barras |
+
+### Estructura de Archivos
+
+```
+apps/web/
+├── src/i18n/
+│   ├── config.ts          # Configuración de locales
+│   └── request.ts         # getRequestConfig para next-intl
+├── messages/
+│   ├── ca.json            # Traducciones en catalán
+│   ├── es.json            # Traducciones en español
+│   └── en.json            # Traducciones en inglés
+└── src/components/
+    └── language-selector.tsx  # Selector de idioma
+```
+
+### Detección de Idioma
+
+El idioma se detecta en el siguiente orden de prioridad:
+1. Cookie `NEXT_LOCALE` (establecida por el selector de idioma)
+2. Header `Accept-Language` del navegador
+3. Idioma por defecto: `es` (Español)
+
+### Uso en Componentes
+
+```tsx
+'use client';
+import { useTranslations } from 'next-intl';
+
+export function MyComponent() {
+  const t = useTranslations('namespace');
+  return <p>{t('key')}</p>;
+}
+```
+
+### Namespaces de Traducción
+
+| Namespace | Descripción |
+|-----------|-------------|
+| `common` | Botones y textos comunes |
+| `auth` | Login, registro, contraseñas |
+| `exceptions` | Listado y filtros de excepciones |
+| `dashboard` | Panel principal |
+| `health` | Estado de conexión API |
+| `layout` | Cabecera, footer, navegación |
+| `theme` | Toggle de tema claro/oscuro |

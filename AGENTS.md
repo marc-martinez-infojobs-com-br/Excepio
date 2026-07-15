@@ -78,3 +78,41 @@ Todos los tipos de request/response viven en `packages/shared/` e importados por
 | Modelo de datos | `docs/DATABASE.md` |
 | Esquema de BD | `apps/api/prisma/schema.prisma` |
 | Config monorepo | `pnpm-workspace.yaml` |
+
+## Internacionalización (i18n)
+
+El frontend usa `next-intl` para internacionalización.
+
+### Idiomas Soportados
+
+- `ca` - Català (primer en el selector)
+- `es` - Español (idioma por defecto)
+- `en` - English
+
+### Archivos Clave
+
+| Archivo | Propósito |
+|---------|-----------|
+| `apps/web/src/i18n/config.ts` | Configuración de locales |
+| `apps/web/src/i18n/request.ts` | getRequestConfig para server |
+| `apps/web/messages/*.json` | Archivos de traducciones |
+| `apps/web/src/components/language-selector.tsx` | Selector de idioma |
+
+### Reglas para Traducciones
+
+1. **Al agregar texto visible:** Añadir la key en TODOS los archivos de mensajes (`ca.json`, `es.json`, `en.json`)
+2. **Usar `useTranslations`:** En componentes cliente usar `useTranslations('namespace')`
+3. **Mantener consistencia:** Los tests de i18n verifican que todos los idiomas tienen las mismas keys
+4. **Cookie de idioma:** El selector guarda el idioma en cookie `NEXT_LOCALE`
+
+### Ejemplo de Uso
+
+```tsx
+'use client';
+import { useTranslations } from 'next-intl';
+
+export function MiComponente() {
+  const t = useTranslations('exceptions');
+  return <h1>{t('title')}</h1>;
+}
+```
