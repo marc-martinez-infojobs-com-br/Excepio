@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ExceptionRow } from '@/components/exceptions/exception-row';
-import type { ExceptionDto } from '@excepio/shared';
+import { ExceptionFilters } from '@/components/exceptions/exception-filters';
+import type { ExceptionDto, ExceptionFilterDto } from '@excepio/shared';
 
 // Datos fake para visualizar el componente
 const fakeExceptions: ExceptionDto[] = [
@@ -105,9 +107,15 @@ const fakeLevels = [
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [filters, setFilters] = useState<ExceptionFilterDto>({});
 
   const handleRowClick = (id: string) => {
     console.log('Navigate to exception:', id);
+  };
+
+  const handleFilterChange = (newFilters: ExceptionFilterDto) => {
+    console.log('Filters changed:', newFilters);
+    setFilters(newFilters);
   };
 
   return (
@@ -126,6 +134,20 @@ export default function DashboardPage() {
           </p>
         </div>
       )}
+
+      {/* Preview de ExceptionFilters */}
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Preview: ExceptionFilters Component</h2>
+        <ExceptionFilters
+          filters={filters}
+          projects={fakeProjects}
+          levels={fakeLevels}
+          onFilterChange={handleFilterChange}
+        />
+        <pre className="mt-4 p-2 bg-muted rounded text-xs">
+          Active filters: {JSON.stringify(filters, null, 2)}
+        </pre>
+      </div>
 
       {/* Preview de ExceptionRow con datos fake */}
       <div className="mt-8">
