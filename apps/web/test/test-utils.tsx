@@ -1,7 +1,7 @@
 import { render, RenderOptions } from '@testing-library/react';
 import { NextIntlClientProvider } from 'next-intl';
 import { ReactElement, ReactNode } from 'react';
-import esMessages from '../messages/es.json';
+import esMessages from '@messages/es.json';
 
 interface WrapperProps {
   children: ReactNode;

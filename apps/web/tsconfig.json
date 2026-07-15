@@ -19,7 +19,15 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@app/*": ["./src/app/*"],
+      "@components/*": ["./src/components/*"],
+      "@contexts/*": ["./src/contexts/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@i18n/*": ["./src/i18n/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@providers/*": ["./src/providers/*"],
+      "@test/*": ["./test/*"],
+      "@messages/*": ["./messages/*"]
     }
   },
   "include": [

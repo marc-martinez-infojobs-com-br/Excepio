@@ -21,7 +21,15 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@app': path.resolve(__dirname, './src/app'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@contexts': path.resolve(__dirname, './src/contexts'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@i18n': path.resolve(__dirname, './src/i18n'),
+      '@lib': path.resolve(__dirname, './src/lib'),
+      '@providers': path.resolve(__dirname, './src/providers'),
+      '@test': path.resolve(__dirname, './test'),
+      '@messages': path.resolve(__dirname, './messages'),
     },
   },
 });

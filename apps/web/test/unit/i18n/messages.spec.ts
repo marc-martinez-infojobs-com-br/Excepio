@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import esMessages from '../../../messages/es.json';
-import enMessages from '../../../messages/en.json';
-import caMessages from '../../../messages/ca.json';
+import esMessages from '@messages/es.json';
+import enMessages from '@messages/en.json';
+import caMessages from '@messages/ca.json';
 
 /**
  * Recursively extracts all keys from a nested object

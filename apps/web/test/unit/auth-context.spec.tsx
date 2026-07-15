@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, renderHook } from '@testing-library/react';
 import { act } from 'react';
-import { AuthProvider, useAuth } from '@/contexts/auth-context';
-import { authStorage } from '@/lib/auth-storage';
-import { apiClient } from '@/lib/api-client';
+import { AuthProvider, useAuth } from '@contexts/auth-context';
+import { authStorage } from '@lib/auth-storage';
+import { apiClient } from '@lib/api-client';
 import type { UserResponseDto } from '@excepio/shared';
 
 // Mock de authStorage
-vi.mock('@/lib/auth-storage', () => ({
+vi.mock('@lib/auth-storage', () => ({
   authStorage: {
     getToken: vi.fn(),
     setToken: vi.fn(),
@@ -19,7 +19,7 @@ vi.mock('@/lib/auth-storage', () => ({
 }));
 
 // Mock de apiClient
-vi.mock('@/lib/api-client', () => ({
+vi.mock('@lib/api-client', () => ({
   apiClient: {
     post: vi.fn(),
   },

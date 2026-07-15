@@ -4,26 +4,26 @@ import { useState } from 'react';
 import { Calendar as CalendarIcon, Search, X } from 'lucide-react';
 import { format, startOfDay, endOfDay } from 'date-fns';
 import { DateRange } from 'react-day-picker';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@components/ui/select';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
+} from '@components/ui/popover';
 import {
   Dialog,
   DialogContent,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Calendar } from '@/components/ui/calendar';
-import { cn } from '@/lib/utils';
+} from '@components/ui/dialog';
+import { Input } from '@components/ui/input';
+import { Calendar } from '@components/ui/calendar';
+import { cn } from '@lib/utils';
 import type { ExceptionFilterDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 

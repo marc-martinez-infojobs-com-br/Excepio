@@ -2,10 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { ReactNode } from 'react';
-import { usePlatforms } from '@/hooks/use-platforms';
-import { apiClient } from '@/lib/api-client';
+import { usePlatforms } from '@hooks/use-platforms';
+import { apiClient } from '@lib/api-client';
 
-vi.mock('@/lib/api-client', () => ({
+vi.mock('@lib/api-client', () => ({
   apiClient: {
     get: vi.fn(),
   },

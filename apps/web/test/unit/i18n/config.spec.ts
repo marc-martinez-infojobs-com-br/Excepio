@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { locales, defaultLocale, type Locale } from '@/i18n/config';
+import { locales, defaultLocale, type Locale } from '@i18n/config';
 
 describe('i18n config', () => {
   describe('locales', () => {

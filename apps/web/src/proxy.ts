@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { locales, defaultLocale, type Locale } from '@/i18n/config';
+import { locales, defaultLocale, type Locale } from '@i18n/config';
 
 // Rutas públicas que no requieren autenticación
 const publicRoutes = ['/login', '/register'];

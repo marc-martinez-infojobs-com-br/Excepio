@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { apiClient } from '@/lib/api-client';
-import { authStorage } from '@/lib/auth-storage';
+import { apiClient } from '@lib/api-client';
+import { authStorage } from '@lib/auth-storage';
 import type { InternalAxiosRequestConfig } from 'axios';
 
 // Mock del authStorage
-vi.mock('@/lib/auth-storage', () => ({
+vi.mock('@lib/auth-storage', () => ({
   authStorage: {
     getToken: vi.fn(),
     clear: vi.fn(),

@@ -3,14 +3,14 @@
 import * as React from 'react';
 import { Globe } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Button } from '@/components/ui/button';
+import { Button } from '@components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { locales, type Locale } from '@/i18n/config';
+} from '@components/ui/dropdown-menu';
+import { locales, type Locale } from '@i18n/config';
 
 const LOCALE_COOKIE = 'NEXT_LOCALE';
 

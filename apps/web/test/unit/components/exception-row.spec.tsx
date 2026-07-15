@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { ExceptionRow } from '@/components/exceptions/exception-row';
+import { ExceptionRow } from '@components/exceptions/exception-row';
 import type { ExceptionDto } from '@excepio/shared';
 
 const mockException: ExceptionDto = {

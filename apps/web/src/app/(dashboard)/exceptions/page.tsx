@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { ExceptionRow } from '@/components/exceptions/exception-row';
-import { ExceptionCard } from '@/components/exceptions/exception-card';
-import { ExceptionFilters } from '@/components/exceptions/exception-filters';
-import { ExceptionPagination } from '@/components/exceptions/exception-pagination';
-import { useExceptions } from '@/hooks/use-exceptions';
-import { useLevels } from '@/hooks/use-levels';
-import { usePlatforms } from '@/hooks/use-platforms';
+import { Table, TableBody, TableHead, TableHeader, TableRow } from '@components/ui/table';
+import { ExceptionRow } from '@components/exceptions/exception-row';
+import { ExceptionCard } from '@components/exceptions/exception-card';
+import { ExceptionFilters } from '@components/exceptions/exception-filters';
+import { ExceptionPagination } from '@components/exceptions/exception-pagination';
+import { useExceptions } from '@hooks/use-exceptions';
+import { useLevels } from '@hooks/use-levels';
+import { usePlatforms } from '@hooks/use-platforms';
 import type { ExceptionFilterDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 

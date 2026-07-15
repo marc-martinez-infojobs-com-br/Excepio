@@ -31,7 +31,7 @@ describe('i18n middleware', () => {
     });
 
     it('should fallback to es for invalid locale in cookie', async () => {
-      const { locales, defaultLocale } = await import('@/i18n/config');
+      const { locales, defaultLocale } = await import('@i18n/config');
       
       const cookieLocale = 'fr'; // Not supported
       const locale = locales.includes(cookieLocale as 'es' | 'en') 

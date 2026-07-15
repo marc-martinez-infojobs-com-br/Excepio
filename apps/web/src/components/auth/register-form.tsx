@@ -3,9 +3,9 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterBaseSchema, type RegisterDto } from '@excepio/shared';
-import { useAuth } from '@/hooks/use-auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { useAuth } from '@hooks/use-auth';
+import { Button } from '@components/ui/button';
+import { Input } from '@components/ui/input';
 import {
   Form,
   FormControl,
@@ -13,7 +13,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from '@components/ui/form';
 import { useState } from 'react';
 import { User, Mail, Lock, ArrowRight } from 'lucide-react';
 import { PasswordStrength } from './password-strength';

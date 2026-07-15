@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { TableCell, TableRow } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
+import { TableCell, TableRow } from '@components/ui/table';
+import { cn } from '@lib/utils';
 import { Monitor, Server, Cpu, Smartphone } from 'lucide-react';
 import type { ExceptionDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
