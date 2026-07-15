@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ExceptionRow } from '@/components/exceptions/exception-row';
+import { ExceptionCard } from '@/components/exceptions/exception-card';
 import { ExceptionFilters } from '@/components/exceptions/exception-filters';
 import { ExceptionPagination } from '@/components/exceptions/exception-pagination';
 import { useExceptions } from '@/hooks/use-exceptions';
@@ -48,25 +50,53 @@ export default function ExceptionsPage() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header con título y filtros */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Exceptions</h1>
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6">
+      {/* Filtros */}
+      <ExceptionFilters
+        filters={filters}
+        projects={projects}
+        levels={levels}
+        onFilterChange={handleFilterChange}
+      />
+
+      {/* Total de registros */}
+      {!isLoading && data && (
+        <div className="flex justify-start">
           <p className="text-sm text-muted-foreground">
-            {isLoading ? 'Loading...' : `${data?.total.toLocaleString() ?? 0} issues`}
+            {data.total.toLocaleString()} issues
           </p>
         </div>
-        <ExceptionFilters
-          filters={filters}
-          projects={projects}
-          levels={levels}
-          onFilterChange={handleFilterChange}
-        />
+      )}
+
+      {/* Mobile: Cards */}
+      <div className="md:hidden space-y-3">
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <Loader2 className="h-10 w-10 animate-spin text-primary" />
+          </div>
+        ) : error ? (
+          <div className="text-center py-8 text-destructive">
+            Error loading exceptions
+          </div>
+        ) : data?.data.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No exceptions found
+          </div>
+        ) : (
+          data?.data.map((exception) => (
+            <ExceptionCard
+              key={exception.id}
+              exception={exception}
+              projects={projects}
+              levels={levels}
+              onClick={handleRowClick}
+            />
+          ))
+        )}
       </div>
 
-      {/* Tabla de excepciones */}
-      <div className="border border-input rounded-lg overflow-hidden">
+      {/* Desktop: Table */}
+      <div className="hidden md:block border border-input rounded-lg overflow-hidden">
         <Table>
           <TableHeader>
             <TableRow className="border-b border-border bg-muted/50 hover:bg-muted/50">
@@ -87,8 +117,10 @@ export default function ExceptionsPage() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <td colSpan={4} className="text-center py-8 text-muted-foreground">
-                  Loading...
+                <td colSpan={4} className="py-12">
+                  <div className="flex justify-center">
+                    <Loader2 className="h-10 w-10 animate-spin text-primary" />
+                  </div>
                 </td>
               </TableRow>
             ) : error ? (

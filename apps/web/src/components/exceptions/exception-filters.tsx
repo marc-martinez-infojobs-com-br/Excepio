@@ -184,9 +184,9 @@ export function ExceptionFilters({
   ].some(Boolean);
 
   return (
-    <div className="flex items-center gap-2 flex-wrap justify-end">
+    <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 md:overflow-visible md:flex-wrap md:justify-end">
       {/* Search Field Select + Input */}
-      <div className="flex items-center">
+      <div className="flex items-center flex-shrink-0">
         <Select
           value={searchField}
           onValueChange={(value) => {
@@ -251,7 +251,7 @@ export function ExceptionFilters({
         value={filters.projectId?.toString() || 'all'}
         onValueChange={handleProjectChange}
       >
-        <SelectTrigger className="w-[160px] h-10 bg-transparent border-input">
+        <SelectTrigger className="w-[160px] h-10 bg-transparent border-input flex-shrink-0">
           <SelectValue placeholder="Platform: All" />
         </SelectTrigger>
         <SelectContent>
@@ -265,7 +265,7 @@ export function ExceptionFilters({
       </Select>
 
       {/* Level Buttons */}
-      <div className="flex items-center border border-input rounded-md h-10">
+      <div className="flex items-center border border-input rounded-md h-10 flex-shrink-0">
         {[5, 4, 3, 2, 1].map((levelId, index) => {
           const isActive = filters.levelId === levelId;
           const styles = LEVEL_TEXT_STYLES[levelId];
@@ -294,7 +294,7 @@ export function ExceptionFilters({
       {/* Date Preset Select */}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="sm" className="gap-2 h-10 border border-input">
+          <Button variant="ghost" size="sm" className="gap-2 h-10 border border-input flex-shrink-0">
             <Calendar className="h-4 w-4" />
             {datePreset}
           </Button>

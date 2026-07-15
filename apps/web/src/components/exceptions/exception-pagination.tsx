@@ -96,8 +96,9 @@ export function ExceptionPagination({
   const visiblePages = getVisiblePages();
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      {/* Info text - hidden on mobile */}
+      <div className="hidden md:flex items-center gap-2 text-sm text-muted-foreground">
         <span>
           Showing <span className="font-semibold text-foreground">{startItem} - {endItem}</span> of {total.toLocaleString()} issues
         </span>
@@ -124,7 +125,37 @@ export function ExceptionPagination({
         )}
       </div>
 
-      <div className="flex items-center gap-1">
+      {/* Mobile pagination: Prev / Page X of Y / Next */}
+      <div className="flex md:hidden items-center justify-between w-full">
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1"
+          onClick={() => onPageChange(page - 1)}
+          disabled={isFirstPage}
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Prev
+        </Button>
+        
+        <span className="text-sm text-muted-foreground">
+          Page <span className="font-semibold text-foreground">{page}</span> of {totalPages}
+        </span>
+        
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1"
+          onClick={() => onPageChange(page + 1)}
+          disabled={isLastPage}
+        >
+          Next
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      </div>
+
+      {/* Desktop pagination: Full page numbers */}
+      <div className="hidden md:flex items-center gap-1">
         <Button
           variant="outline"
           size="icon"
