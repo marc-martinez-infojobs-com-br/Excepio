@@ -1,2 +1,144 @@
 {
+  "common": {
+    "buttons": {
+      "cancel": "Cancelar",
+      "apply": "Aplicar"
+    },
+    "loading": "Cargando...",
+    "error": "Error",
+    "unknownError": "Error desconocido"
+  },
+  "auth": {
+    "login": {
+      "title": "Bienvenido",
+      "subtitle": "Accede a tu panel de monitoreo",
+      "email": "Email",
+      "password": "Contraseña",
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "submit": "Iniciar Sesión",
+      "submitting": "Iniciando sesión...",
+      "error": "Error al iniciar sesión",
+      "noAccount": "¿No tienes una cuenta?",
+      "createAccount": "Crear cuenta"
+    },
+    "register": {
+      "title": "Crear cuenta",
+      "subtitle": "Crea tu cuenta en Excepio",
+      "name": "Nombre",
+      "namePlaceholder": "Tu nombre",
+      "email": "Email",
+      "emailPlaceholder": "tu@email.com",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar Contraseña",
+      "submit": "Crear Cuenta",
+      "submitting": "Creando cuenta...",
+      "error": "Error al crear cuenta",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "signIn": "Inicia sesión"
+    },
+    "passwordStrength": {
+      "label": "Fortaleza:",
+      "weak": "Débil",
+      "medium": "Media",
+      "strong": "Fuerte",
+      "veryStrong": "Muy Fuerte",
+      "requirements": {
+        "minLength": "Mínimo 8 caracteres",
+        "uppercase": "Al menos 1 mayúscula",
+        "lowercase": "Al menos 1 minúscula",
+        "number": "Al menos 1 número",
+        "special": "Al menos 1 carácter especial"
+      }
+    },
+    "logout": "Cerrar sesión"
+  },
+  "exceptions": {
+    "title": "Excepciones",
+    "issuesCount": "{count} issues",
+    "filters": {
+      "searchPlaceholder": "Buscar...",
+      "platformAll": "Plataforma: Todas",
+      "searchFields": {
+        "message": "Mensaje",
+        "stackTrace": "Stack Trace",
+        "userId": "User ID",
+        "userAgent": "User Agent",
+        "appVersion": "App Version",
+        "url": "URL",
+        "metadata": "Metadata"
+      },
+      "datePresets": {
+        "last1h": "Última 1h",
+        "last24h": "Últimas 24h",
+        "last7d": "Últimos 7d",
+        "last30d": "Últimos 30d"
+      },
+      "specificDay": "Día específico...",
+      "customRange": "Rango personalizado..."
+    },
+    "table": {
+      "severity": "Severidad",
+      "issue": "Issue",
+      "platform": "Plataforma",
+      "lastSeen": "Última vez"
+    },
+    "pagination": {
+      "showing": "Mostrando",
+      "of": "de",
+      "issues": "issues",
+      "perPage": "por página",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página",
+      "pageOf": "Página {page} de {total}"
+    },
+    "time": {
+      "justNow": "Ahora",
+      "minutesAgo": "hace {count} min",
+      "hoursAgo": "hace {count} h",
+      "daysAgo": "hace {count} d"
+    },
+    "errors": {
+      "loading": "Error al cargar excepciones"
+    },
+    "empty": "No se encontraron excepciones",
+    "unknownLevel": "DESCONOCIDO",
+    "unknownProject": "Desconocido"
+  },
+  "dashboard": {
+    "title": "Bienvenido a Excepio",
+    "loggedInAs": "Conectado como",
+    "role": "Rol:",
+    "cards": {
+      "exceptions": {
+        "title": "Excepciones",
+        "description": "Ver y gestionar todas las excepciones de tus proyectos",
+        "action": "Ver Excepciones"
+      }
+    }
+  },
+  "health": {
+    "connecting": "Conectando con la API...",
+    "connectionError": "Error de conexión:",
+    "connected": "API conectada - Estado:",
+    "lastCheck": "Última verificación:"
+  },
+  "layout": {
+    "appName": "Excepio",
+    "appVersion": "Sistema de Excepciones v1.0",
+    "footer": {
+      "status": "Estado",
+      "support": "Soporte",
+      "docs": "Docs"
+    }
+  },
+  "theme": {
+    "toggle": "Cambiar tema",
+    "switchToLight": "Cambiar a modo claro",
+    "switchToDark": "Cambiar a modo oscuro"
+  },
+  "metadata": {
+    "description": "Sistema de Registro de Excepciones"
+  }
 }
