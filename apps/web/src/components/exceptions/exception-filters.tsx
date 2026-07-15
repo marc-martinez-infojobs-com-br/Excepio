@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Search, X } from 'lucide-react';
+import { Calendar as CalendarIcon, Search, X } from 'lucide-react';
+import { format, startOfDay, endOfDay } from 'date-fns';
+import { DateRange } from 'react-day-picker';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -15,7 +17,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Dialog,
+  DialogContent,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
+import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import type { ExceptionFilterDto } from '@excepio/shared';
 
@@ -96,9 +103,18 @@ export function ExceptionFilters({
   levels,
   onFilterChange,
 }: ExceptionFiltersProps) {
-  const [datePreset, setDatePreset] = useState<string>('Last 24h');
+  const [dateLabel, setDateLabel] = useState<string>('Last 24h');
   const [searchField, setSearchField] = useState<string>('message');
   const [searchText, setSearchText] = useState<string>('');
+  const [datePopoverOpen, setDatePopoverOpen] = useState(false);
+  
+  // Estado para los dialogs de calendario
+  const [dayDialogOpen, setDayDialogOpen] = useState(false);
+  const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
+  const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined);
+  const [selectedRange, setSelectedRange] = useState<DateRange | undefined>(undefined);
+
+  const today = new Date();
 
   const handleProjectChange = (value: string) => {
     const projectId = value === 'all' ? undefined : parseInt(value, 10);
@@ -111,7 +127,8 @@ export function ExceptionFilters({
   };
 
   const handleDatePresetChange = (preset: { label: string; hours: number }) => {
-    setDatePreset(preset.label);
+    setDateLabel(preset.label);
+    setDatePopoverOpen(false);
     const now = new Date();
     const startDate = new Date(now.getTime() - preset.hours * 60 * 60 * 1000);
     onFilterChange({
@@ -119,6 +136,52 @@ export function ExceptionFilters({
       startDate: startDate.toISOString(),
       endDate: now.toISOString(),
     });
+  };
+
+  const handleOpenDayDialog = () => {
+    setDatePopoverOpen(false);
+    setSelectedDay(undefined);
+    setDayDialogOpen(true);
+  };
+
+  const handleOpenRangeDialog = () => {
+    setDatePopoverOpen(false);
+    setSelectedRange(undefined);
+    setRangeDialogOpen(true);
+  };
+
+  const handleApplyDay = () => {
+    if (selectedDay) {
+      const start = startOfDay(selectedDay);
+      const end = endOfDay(selectedDay);
+      setDateLabel(format(selectedDay, 'MMM d, yyyy'));
+      onFilterChange({
+        ...filters,
+        startDate: start.toISOString(),
+        endDate: end.toISOString(),
+      });
+    }
+    setDayDialogOpen(false);
+  };
+
+  const handleApplyRange = () => {
+    if (selectedRange?.from) {
+      const start = startOfDay(selectedRange.from);
+      const end = selectedRange.to ? endOfDay(selectedRange.to) : endOfDay(selectedRange.from);
+      
+      if (selectedRange.to) {
+        setDateLabel(`${format(selectedRange.from, 'MMM d')} - ${format(selectedRange.to, 'MMM d')}`);
+      } else {
+        setDateLabel(format(selectedRange.from, 'MMM d, yyyy'));
+      }
+      
+      onFilterChange({
+        ...filters,
+        startDate: start.toISOString(),
+        endDate: end.toISOString(),
+      });
+    }
+    setRangeDialogOpen(false);
   };
 
   const handleSearch = () => {
@@ -184,135 +247,222 @@ export function ExceptionFilters({
   ].some(Boolean);
 
   return (
-    <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 md:overflow-visible md:flex-wrap md:justify-end">
-      {/* Search Field Select + Input */}
-      <div className="flex items-center flex-shrink-0">
-        <Select
-          value={searchField}
-          onValueChange={(value) => {
-            setSearchField(value);
-            // Si hay texto de búsqueda, disparar búsqueda con el nuevo campo
-            if (searchText.trim()) {
-              const clearedFilters: Partial<ExceptionFilterDto> = {
-                messageSearch: undefined,
-                stackTraceSearch: undefined,
-                userId: undefined,
-                userAgentSearch: undefined,
-                appVersionSearch: undefined,
-                urlSearch: undefined,
-                metadataSearch: undefined,
-              };
-              const field = SEARCH_FIELDS.find((f) => f.value === value);
-              if (field) {
-                clearedFilters[field.filterKey as SearchFieldKey] = searchText.trim();
+    <>
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 md:overflow-visible md:flex-wrap md:justify-end">
+        {/* Search Field Select + Input */}
+        <div className="flex items-center flex-shrink-0">
+          <Select
+            value={searchField}
+            onValueChange={(value) => {
+              setSearchField(value);
+              // Si hay texto de búsqueda, disparar búsqueda con el nuevo campo
+              if (searchText.trim()) {
+                const clearedFilters: Partial<ExceptionFilterDto> = {
+                  messageSearch: undefined,
+                  stackTraceSearch: undefined,
+                  userId: undefined,
+                  userAgentSearch: undefined,
+                  appVersionSearch: undefined,
+                  urlSearch: undefined,
+                  metadataSearch: undefined,
+                };
+                const field = SEARCH_FIELDS.find((f) => f.value === value);
+                if (field) {
+                  clearedFilters[field.filterKey as SearchFieldKey] = searchText.trim();
+                }
+                onFilterChange({ ...filters, ...clearedFilters });
               }
-              onFilterChange({ ...filters, ...clearedFilters });
-            }
-          }}
+            }}
+          >
+            <SelectTrigger className="w-[120px] h-10 rounded-r-none border-r-0 bg-transparent">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {SEARCH_FIELDS.map((field) => (
+                <SelectItem key={field.value} value={field.value}>
+                  {field.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <div className="relative">
+            <Input
+              placeholder="Search..."
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              className="h-10 w-40 rounded-l-none pr-8 bg-transparent"
+            />
+            {searchText ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="absolute right-0 top-0 h-10 w-8 hover:bg-transparent"
+                onClick={handleClearSearch}
+              >
+                <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+              </Button>
+            ) : (
+              <div className="absolute right-0 top-0 h-10 w-8 flex items-center justify-center pointer-events-none">
+                <Search className="h-4 w-4 text-muted-foreground" />
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Platform Select */}
+        <Select
+          value={filters.projectId?.toString() || 'all'}
+          onValueChange={handleProjectChange}
         >
-          <SelectTrigger className="w-[120px] h-10 rounded-r-none border-r-0 bg-transparent">
-            <SelectValue />
+          <SelectTrigger className="w-[160px] h-10 bg-transparent border-input flex-shrink-0">
+            <SelectValue placeholder="Platform: All" />
           </SelectTrigger>
           <SelectContent>
-            {SEARCH_FIELDS.map((field) => (
-              <SelectItem key={field.value} value={field.value}>
-                {field.label}
+            <SelectItem value="all">Platform: All</SelectItem>
+            {projects.map((project) => (
+              <SelectItem key={project.id} value={project.id.toString()}>
+                {project.name}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-        <div className="relative">
-          <Input
-            placeholder="Search..."
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            onKeyDown={handleSearchKeyDown}
-            className="h-10 w-40 rounded-l-none pr-8 bg-transparent"
-          />
-          {searchText ? (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute right-0 top-0 h-10 w-8 hover:bg-transparent"
-              onClick={handleClearSearch}
-            >
-              <X className="h-4 w-4 text-muted-foreground hover:text-foreground" />
-            </Button>
-          ) : (
-            <div className="absolute right-0 top-0 h-10 w-8 flex items-center justify-center pointer-events-none">
-              <Search className="h-4 w-4 text-muted-foreground" />
-            </div>
-          )}
+
+        {/* Level Buttons */}
+        <div className="flex items-center border border-input rounded-md h-10 flex-shrink-0">
+          {[5, 4, 3, 2, 1].map((levelId, index) => {
+            const isActive = filters.levelId === levelId;
+            const styles = LEVEL_TEXT_STYLES[levelId];
+            return (
+              <Button
+                key={levelId}
+                variant="ghost"
+                size="sm"
+                data-active={isActive}
+                className={cn(
+                  'rounded-none h-full px-3 font-bold',
+                  index === 0 && 'rounded-l-md',
+                  index === 4 && 'rounded-r-md',
+                  index < 4 && 'border-r border-input',
+                  styles.base,
+                  isActive && styles.active
+                )}
+                onClick={() => handleLevelToggle(levelId)}
+              >
+                {LEVEL_DISPLAY[levelId]}
+              </Button>
+            );
+          })}
         </div>
-      </div>
 
-      {/* Platform Select */}
-      <Select
-        value={filters.projectId?.toString() || 'all'}
-        onValueChange={handleProjectChange}
-      >
-        <SelectTrigger className="w-[160px] h-10 bg-transparent border-input flex-shrink-0">
-          <SelectValue placeholder="Platform: All" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="all">Platform: All</SelectItem>
-          {projects.map((project) => (
-            <SelectItem key={project.id} value={project.id.toString()}>
-              {project.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-
-      {/* Level Buttons */}
-      <div className="flex items-center border border-input rounded-md h-10 flex-shrink-0">
-        {[5, 4, 3, 2, 1].map((levelId, index) => {
-          const isActive = filters.levelId === levelId;
-          const styles = LEVEL_TEXT_STYLES[levelId];
-          return (
-            <Button
-              key={levelId}
-              variant="ghost"
-              size="sm"
-              data-active={isActive}
-              className={cn(
-                'rounded-none h-full px-3 font-bold',
-                index === 0 && 'rounded-l-md',
-                index === 4 && 'rounded-r-md',
-                index < 4 && 'border-r border-input',
-                styles.base,
-                isActive && styles.active
-              )}
-              onClick={() => handleLevelToggle(levelId)}
-            >
-              {LEVEL_DISPLAY[levelId]}
+        {/* Date Preset Select */}
+        <Popover open={datePopoverOpen} onOpenChange={setDatePopoverOpen}>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="sm" className="gap-2 h-10 border border-input flex-shrink-0">
+              <CalendarIcon className="h-4 w-4" />
+              {dateLabel}
             </Button>
-          );
-        })}
-      </div>
-
-      {/* Date Preset Select */}
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button variant="ghost" size="sm" className="gap-2 h-10 border border-input flex-shrink-0">
-            <Calendar className="h-4 w-4" />
-            {datePreset}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-40 p-1" align="end">
-          {DATE_PRESETS.map((preset) => (
+          </PopoverTrigger>
+          <PopoverContent className="w-44 p-1" align="end">
+            {DATE_PRESETS.map((preset) => (
+              <Button
+                key={preset.label}
+                variant="ghost"
+                size="sm"
+                className="w-full justify-start"
+                onClick={() => handleDatePresetChange(preset)}
+              >
+                {preset.label}
+              </Button>
+            ))}
+            <div className="my-1 border-t border-border" />
             <Button
-              key={preset.label}
               variant="ghost"
               size="sm"
               className="w-full justify-start"
-              onClick={() => handleDatePresetChange(preset)}
+              onClick={handleOpenDayDialog}
             >
-              {preset.label}
+              Specific day...
             </Button>
-          ))}
-        </PopoverContent>
-      </Popover>
-    </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="w-full justify-start"
+              onClick={handleOpenRangeDialog}
+            >
+              Custom range...
+            </Button>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      {/* Dialog para selección de día específico */}
+      <Dialog open={dayDialogOpen} onOpenChange={setDayDialogOpen}>
+        <DialogContent className="sm:max-w-fit p-0 gap-0">
+          <div className="p-4 pt-10">
+            <Calendar
+              mode="single"
+              selected={selectedDay}
+              onSelect={setSelectedDay}
+              disabled={{ after: today }}
+              className="[--cell-size:2.5rem]"
+              classNames={{
+                month_caption: "flex h-10 w-full items-center justify-center",
+                caption_label: "text-base font-semibold text-foreground",
+                weekday: "text-muted-foreground font-medium text-sm w-10",
+                day: "h-10 w-10 text-sm font-medium",
+                today: "bg-primary/10 text-primary font-bold rounded-md",
+                selected: "bg-primary text-primary-foreground",
+                outside: "text-muted-foreground/50",
+                disabled: "text-muted-foreground/30",
+              }}
+            />
+          </div>
+          <div className="flex justify-end gap-2 border-t border-border px-4 py-3 bg-muted/30">
+            <Button variant="ghost" size="sm" onClick={() => setDayDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button size="sm" onClick={handleApplyDay} disabled={!selectedDay}>
+              Apply
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog para selección de rango personalizado */}
+      <Dialog open={rangeDialogOpen} onOpenChange={setRangeDialogOpen}>
+        <DialogContent className="sm:max-w-fit p-0 gap-0">
+          <div className="p-4 pt-10">
+            <Calendar
+              mode="range"
+              selected={selectedRange}
+              onSelect={setSelectedRange}
+              disabled={{ after: today }}
+              className="[--cell-size:2.5rem]"
+              classNames={{
+                month_caption: "flex h-10 w-full items-center justify-center",
+                caption_label: "text-base font-semibold text-foreground",
+                weekday: "text-muted-foreground font-medium text-sm w-10",
+                day: "h-10 w-10 text-sm font-medium",
+                today: "bg-primary/10 text-primary font-bold rounded-md data-[selected=true]:rounded-none",
+                range_start: "bg-primary text-primary-foreground rounded-l-md",
+                range_end: "bg-primary text-primary-foreground rounded-r-md",
+                range_middle: "bg-primary/20 text-foreground rounded-none",
+                outside: "text-muted-foreground/50",
+                disabled: "text-muted-foreground/30",
+              }}
+            />
+          </div>
+          <div className="flex justify-end gap-2 border-t border-border px-4 py-3 bg-muted/30">
+            <Button variant="ghost" size="sm" onClick={() => setRangeDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button size="sm" onClick={handleApplyRange} disabled={!selectedRange?.from}>
+              Apply
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
