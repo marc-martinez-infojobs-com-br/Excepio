@@ -9,7 +9,7 @@ export enum StatusName {
 
 /**
  * IDs de Status según DATABASE.md
- * Tabla compartida para borrado lógico en Level y Project.
+ * Tabla compartida para borrado lógico en Level y Platform.
  */
 export const STATUS_ID = {
   PENDING: 1,

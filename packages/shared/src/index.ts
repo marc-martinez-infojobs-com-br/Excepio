@@ -22,7 +22,7 @@ export interface ApiErrorResponse {
 // DTOs
 export * from './status.dto';
 export * from './level.dto';
-export * from './project.dto';
+export * from './platform.dto';
 export * from './exception.dto';
 export * from './user.dto';
 export * from './auth.dto';
