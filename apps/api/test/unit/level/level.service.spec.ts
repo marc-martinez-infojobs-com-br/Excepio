@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { LevelService } from '../../../src/level/level.service';
-import { LevelMemoryRepository } from '../../../src/level/repository';
+import { LevelService } from '@level/level.service';
+import { LevelMemoryRepository } from '@level/repository';
 import { LevelResponseDto } from '@excepio/shared';
 
 describe('LevelService', () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
-import { ApiKeyAuthGuard } from '../../../src/auth/guards/api-key-auth.guard';
-import { PlatformMemoryRepository } from '../../../src/platform/repository';
+import { ApiKeyAuthGuard } from '@auth/guards/api-key-auth.guard';
+import { PlatformMemoryRepository } from '@platform/repository';
 import { PlatformDto } from '@excepio/shared';
 
 describe('ApiKeyAuthGuard', () => {

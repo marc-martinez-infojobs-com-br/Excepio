@@ -4,8 +4,8 @@ import { Module, INestApplication, Controller, Get, Post, Patch, Delete, Param, 
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { UserResponseDto, CreateUserDto, UpdateUserDto, UserRole, STATUS_ID } from '@excepio/shared';
-import { UserMemoryRepository, USER_REPOSITORY } from '../../../src/user/repository';
-import type { UserRepository } from '../../../src/user/repository';
+import { UserMemoryRepository, USER_REPOSITORY } from '@user/repository';
+import type { UserRepository } from '@user/repository';
 import * as bcrypt from 'bcrypt';
 
 const TEST_USER_SERVICE = Symbol('TEST_USER_SERVICE');

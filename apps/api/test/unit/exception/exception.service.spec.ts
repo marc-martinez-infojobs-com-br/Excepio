@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
-import { ExceptionService } from '../../../src/exception/exception.service';
-import { ExceptionMemoryRepository } from '../../../src/exception/repository';
-import { PlatformMemoryRepository } from '../../../src/platform/repository';
+import { ExceptionService } from '@exception/exception.service';
+import { ExceptionMemoryRepository } from '@exception/repository';
+import { PlatformMemoryRepository } from '@platform/repository';
 import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto } from '@excepio/shared';
 
 describe('ExceptionService', () => {

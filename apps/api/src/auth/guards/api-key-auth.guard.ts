@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
-import type { PlatformRepository } from '../../platform/repository';
-import { PLATFORM_REPOSITORY } from '../../platform/repository';
+import type { PlatformRepository } from '@platform/repository';
+import { PLATFORM_REPOSITORY } from '@platform/repository';
 
 /**
  * Guard de autenticación por API Key.

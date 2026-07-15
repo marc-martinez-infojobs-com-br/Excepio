@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { PlatformController } from '../../../src/platform/platform.controller';
-import { PlatformService } from '../../../src/platform/platform.service';
+import { PlatformController } from '@platform/platform.controller';
+import { PlatformService } from '@platform/platform.service';
 import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
 
 describe('PlatformController', () => {

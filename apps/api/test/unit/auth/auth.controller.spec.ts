@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { AuthController } from '../../../src/auth/auth.controller';
-import { AuthService } from '../../../src/auth/auth.service';
+import { AuthController } from '@auth/auth.controller';
+import { AuthService } from '@auth/auth.service';
 import { RegisterBackendDto, LoginDto, LoginResponseDto, UserRole } from '@excepio/shared';
 
 describe('AuthController', () => {

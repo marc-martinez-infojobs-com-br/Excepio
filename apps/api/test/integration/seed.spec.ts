@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { PrismaClient } from '@prisma/client';
-import { createPrismaClient } from '../helpers/prisma';
+import { createPrismaClient } from '@test/helpers/prisma';
 
 describe('Database Seed', () => {
   let prisma: PrismaClient;

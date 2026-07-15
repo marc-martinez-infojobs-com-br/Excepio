@@ -4,8 +4,8 @@ import { Module, INestApplication, Controller, Get, Param, ParseIntPipe, Injecta
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { StatusResponseDto } from '@excepio/shared';
-import { StatusMemoryRepository, STATUS_REPOSITORY } from '../../../src/status/repository';
-import type { StatusRepository } from '../../../src/status/repository';
+import { StatusMemoryRepository, STATUS_REPOSITORY } from '@status/repository';
+import type { StatusRepository } from '@status/repository';
 
 // Datos de seed que simulan la BD real
 const seedStatuses: StatusResponseDto[] = [

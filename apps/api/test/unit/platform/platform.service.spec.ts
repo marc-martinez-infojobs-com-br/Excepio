@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { NotFoundException, ConflictException } from '@nestjs/common';
-import { PlatformService } from '../../../src/platform/platform.service';
-import { PlatformMemoryRepository } from '../../../src/platform/repository';
+import { PlatformService } from '@platform/platform.service';
+import { PlatformMemoryRepository } from '@platform/repository';
 import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
 
 describe('PlatformService', () => {

@@ -4,8 +4,8 @@ import { Module, INestApplication, Controller, Get, Post, Patch, Delete, Param, 
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { PlatformDto, CreatePlatformDto, UpdatePlatformDto, STATUS_ID } from '@excepio/shared';
-import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '../../../src/platform/repository';
-import type { PlatformRepository } from '../../../src/platform/repository';
+import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '@platform/repository';
+import type { PlatformRepository } from '@platform/repository';
 
 const TEST_PROJECT_SERVICE = Symbol('TEST_PROJECT_SERVICE');
 

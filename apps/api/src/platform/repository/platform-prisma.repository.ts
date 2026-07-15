@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from '@app/prisma/prisma.service';
 import { PlatformRepository } from './platform.repository.interface';
 import { randomBytes } from 'crypto';
 

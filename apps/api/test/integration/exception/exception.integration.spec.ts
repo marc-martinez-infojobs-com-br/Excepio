@@ -4,10 +4,10 @@ import { Module, INestApplication, Controller, Get, Post, Param, Body, Query, In
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, PlatformDto } from '@excepio/shared';
-import { ExceptionMemoryRepository, EXCEPTION_REPOSITORY } from '../../../src/exception/repository';
-import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '../../../src/platform/repository';
-import type { ExceptionRepository } from '../../../src/exception/repository';
-import type { PlatformRepository } from '../../../src/platform/repository';
+import { ExceptionMemoryRepository, EXCEPTION_REPOSITORY } from '@exception/repository';
+import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '@platform/repository';
+import type { ExceptionRepository } from '@exception/repository';
+import type { PlatformRepository } from '@platform/repository';
 
 const TEST_EXCEPTION_SERVICE = Symbol('TEST_EXCEPTION_SERVICE');
 
