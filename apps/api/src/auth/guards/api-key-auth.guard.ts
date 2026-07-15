@@ -1,10 +1,10 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
-import type { ProjectRepository } from '../../project/repository';
-import { PROJECT_REPOSITORY } from '../../project/repository';
+import type { PlatformRepository } from '../../platform/repository';
+import { PLATFORM_REPOSITORY } from '../../platform/repository';
 
 /**
  * Guard de autenticación por API Key.
- * Valida el header X-API-Key y adjunta el proyecto al request.
+ * Valida el header X-API-Key y adjunta la plataforma al request.
  *
  * Uso:
  * @UseGuards(ApiKeyAuthGuard)
@@ -12,8 +12,8 @@ import { PROJECT_REPOSITORY } from '../../project/repository';
 @Injectable()
 export class ApiKeyAuthGuard implements CanActivate {
   constructor(
-    @Inject(PROJECT_REPOSITORY)
-    private readonly projectRepository: ProjectRepository,
+    @Inject(PLATFORM_REPOSITORY)
+    private readonly platformRepository: PlatformRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -24,14 +24,14 @@ export class ApiKeyAuthGuard implements CanActivate {
       throw new UnauthorizedException('API Key is required');
     }
 
-    const project = await this.projectRepository.findByApiKey(apiKey);
+    const platform = await this.platformRepository.findByApiKey(apiKey);
 
-    if (!project) {
+    if (!platform) {
       throw new UnauthorizedException('Invalid API Key');
     }
 
-    // Adjuntar proyecto al request para uso posterior
-    request.project = project;
+    // Adjuntar plataforma al request para uso posterior
+    request.platform = platform;
 
     return true;
   }

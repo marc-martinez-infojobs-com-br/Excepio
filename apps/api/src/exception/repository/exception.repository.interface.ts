@@ -7,11 +7,11 @@ import type { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ExceptionLis
 export interface ExceptionRepository {
   /**
    * Crea una nueva excepción.
-   * @param projectId - ID del proyecto que reporta la excepción
+   * @param platformId - ID de la plataforma que reporta la excepción
    * @param data - Datos de la excepción (levelId, message, stackTrace, etc.)
    * @returns La excepción creada con su ID generado
    */
-  create(projectId: number, data: CreateExceptionDto): Promise<ExceptionDto>;
+  create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto>;
 
   /**
    * Busca una excepción por su ID.

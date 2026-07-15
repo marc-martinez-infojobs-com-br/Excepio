@@ -1,13 +1,13 @@
 import { Controller, Get, Post, Param, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth, ApiHeader, ApiQuery } from '@nestjs/swagger';
 import { ExceptionDto, ExceptionListResponseDto, UserRole } from '@excepio/shared';
-import type { ProjectDto } from '@excepio/shared';
+import type { PlatformDto } from '@excepio/shared';
 import { ExceptionService } from './exception.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ApiKeyAuthGuard } from '../auth/guards/api-key-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
-import { CurrentProject } from '../auth/decorators/current-project.decorator';
+import { CurrentPlatform } from '../auth/decorators/current-platform.decorator';
 import { CreateExceptionDto, ExceptionFilterDto } from './dto';
 
 @ApiTags('Exceptions')
@@ -18,14 +18,14 @@ export class ExceptionController {
   @Post()
   @UseGuards(ApiKeyAuthGuard)
   @ApiOperation({ summary: 'Reportar una excepción (requiere API Key)' })
-  @ApiHeader({ name: 'X-API-Key', description: 'API Key del proyecto', required: true })
+  @ApiHeader({ name: 'X-API-Key', description: 'API Key de la plataforma', required: true })
   @ApiResponse({ status: 201, description: 'Excepción creada' })
   @ApiResponse({ status: 401, description: 'API Key inválida o faltante' })
   async create(
-    @CurrentProject() project: ProjectDto,
+    @CurrentPlatform() platform: PlatformDto,
     @Body() createExceptionDto: CreateExceptionDto,
   ): Promise<ExceptionDto> {
-    return this.exceptionService.create(project.id, createExceptionDto);
+    return this.exceptionService.create(platform.id, createExceptionDto);
   }
 
   @Get()
@@ -33,7 +33,7 @@ export class ExceptionController {
   @Roles(UserRole.USUARIO, UserRole.ADMINISTRADOR)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Obtener excepciones con filtros (requiere JWT)' })
-  @ApiQuery({ name: 'projectId', required: false, type: Number })
+  @ApiQuery({ name: 'platformId', required: false, type: Number })
   @ApiQuery({ name: 'levelId', required: false, type: Number })
   @ApiQuery({ name: 'userId', required: false, type: String })
   @ApiQuery({ name: 'startDate', required: false, type: String })

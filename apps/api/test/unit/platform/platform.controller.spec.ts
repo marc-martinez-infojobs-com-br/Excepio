@@ -1,15 +1,15 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { ProjectController } from '../../../src/project/project.controller';
-import { ProjectService } from '../../../src/project/project.service';
-import { ProjectDto, CreateProjectDto, UpdateProjectDto } from '@excepio/shared';
+import { PlatformController } from '../../../src/platform/platform.controller';
+import { PlatformService } from '../../../src/platform/platform.service';
+import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
 
-describe('ProjectController', () => {
-  let controller: ProjectController;
-  let service: ProjectService;
+describe('PlatformController', () => {
+  let controller: PlatformController;
+  let service: PlatformService;
 
-  const mockProject: ProjectDto = {
+  const mockPlatform: PlatformDto = {
     id: 1,
-    name: 'Test Project',
+    name: 'Test Platform',
     apiKey: 'exc_abc123def456',
     statusId: 2,
     createdAt: new Date().toISOString(),
@@ -25,13 +25,13 @@ describe('ProjectController', () => {
       regenerate: vi.fn(),
     } as any;
 
-    controller = new ProjectController(service);
+    controller = new PlatformController(service);
   });
 
   describe('findAll', () => {
-    it('Given_ProjectsExist_When_FindAll_Then_ReturnsAllProjects', async () => {
+    it('Given_PlatformsExist_When_FindAll_Then_ReturnsAllProjects', async () => {
       // Arrange
-      const projects = [mockProject];
+      const projects = [mockPlatform];
       vi.mocked(service.findAll).mockResolvedValue(projects);
 
       // Act
@@ -46,26 +46,26 @@ describe('ProjectController', () => {
   describe('findById', () => {
     it('Given_ExistingId_When_FindById_Then_ReturnsProject', async () => {
       // Arrange
-      vi.mocked(service.findById).mockResolvedValue(mockProject);
+      vi.mocked(service.findById).mockResolvedValue(mockPlatform);
 
       // Act
-      const result = await controller.findById(mockProject.id);
+      const result = await controller.findById(mockPlatform.id);
 
       // Assert
-      expect(service.findById).toHaveBeenCalledWith(mockProject.id);
-      expect(result).toEqual(mockProject);
+      expect(service.findById).toHaveBeenCalledWith(mockPlatform.id);
+      expect(result).toEqual(mockPlatform);
     });
   });
 
   describe('create', () => {
     it('Given_ValidData_When_Create_Then_CreatesProject', async () => {
       // Arrange
-      const createDto: CreateProjectDto = {
+      const createDto: CreatePlatformDto = {
         id: 10,
         name: 'New Project',
       };
-      const createdProject: ProjectDto = {
-        ...mockProject,
+      const createdProject: PlatformDto = {
+        ...mockPlatform,
         id: createDto.id,
         name: createDto.name,
       };
@@ -83,17 +83,17 @@ describe('ProjectController', () => {
   describe('update', () => {
     it('Given_ValidData_When_Update_Then_UpdatesProject', async () => {
       // Arrange
-      const updateDto: UpdateProjectDto = {
+      const updateDto: UpdatePlatformDto = {
         name: 'Updated Project Name',
       };
-      const updatedProject: ProjectDto = { ...mockProject, ...updateDto };
+      const updatedProject: PlatformDto = { ...mockPlatform, ...updateDto };
       vi.mocked(service.update).mockResolvedValue(updatedProject);
 
       // Act
-      const result = await controller.update(mockProject.id, updateDto);
+      const result = await controller.update(mockPlatform.id, updateDto);
 
       // Assert
-      expect(service.update).toHaveBeenCalledWith(mockProject.id, updateDto);
+      expect(service.update).toHaveBeenCalledWith(mockPlatform.id, updateDto);
       expect(result).toEqual(updatedProject);
     });
   });
@@ -101,14 +101,14 @@ describe('ProjectController', () => {
   describe('delete', () => {
     it('Given_ExistingId_When_Delete_Then_DeletesProject', async () => {
       // Arrange
-      const deletedProject: ProjectDto = { ...mockProject, statusId: 4 };
+      const deletedProject: PlatformDto = { ...mockPlatform, statusId: 4 };
       vi.mocked(service.delete).mockResolvedValue(deletedProject);
 
       // Act
-      const result = await controller.delete(mockProject.id);
+      const result = await controller.delete(mockPlatform.id);
 
       // Assert
-      expect(service.delete).toHaveBeenCalledWith(mockProject.id);
+      expect(service.delete).toHaveBeenCalledWith(mockPlatform.id);
       expect(result).toEqual(deletedProject);
     });
   });
@@ -116,17 +116,17 @@ describe('ProjectController', () => {
   describe('regenerate', () => {
     it('Given_ExistingId_When_Regenerate_Then_ReturnsNewApiKey', async () => {
       // Arrange
-      const regeneratedProject: ProjectDto = {
-        ...mockProject,
+      const regeneratedProject: PlatformDto = {
+        ...mockPlatform,
         apiKey: 'exc_newkey789',
       };
       vi.mocked(service.regenerate).mockResolvedValue(regeneratedProject);
 
       // Act
-      const result = await controller.regenerate(mockProject.id);
+      const result = await controller.regenerate(mockPlatform.id);
 
       // Assert
-      expect(service.regenerate).toHaveBeenCalledWith(mockProject.id);
+      expect(service.regenerate).toHaveBeenCalledWith(mockPlatform.id);
       expect(result).toEqual(regeneratedProject);
     });
   });

@@ -2,17 +2,17 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { NotFoundException } from '@nestjs/common';
 import { ExceptionService } from '../../../src/exception/exception.service';
 import { ExceptionMemoryRepository } from '../../../src/exception/repository';
-import { ProjectMemoryRepository } from '../../../src/project/repository';
+import { PlatformMemoryRepository } from '../../../src/platform/repository';
 import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto } from '@excepio/shared';
 
 describe('ExceptionService', () => {
   let service: ExceptionService;
   let exceptionRepository: ExceptionMemoryRepository;
-  let projectRepository: ProjectMemoryRepository;
+  let projectRepository: PlatformMemoryRepository;
 
   const mockException: ExceptionDto = {
     id: '123e4567-e89b-12d3-a456-426614174000',
-    projectId: 1,
+    platformId: 1,
     levelId: 4,
     message: 'NullPointerException: Cannot read property of undefined',
     stackTrace: 'at getUserData (app.js:45:12)',
@@ -26,7 +26,7 @@ describe('ExceptionService', () => {
 
   beforeEach(() => {
     exceptionRepository = new ExceptionMemoryRepository();
-    projectRepository = new ProjectMemoryRepository();
+    projectRepository = new PlatformMemoryRepository();
     service = new ExceptionService(exceptionRepository, projectRepository);
   });
 
@@ -49,7 +49,7 @@ describe('ExceptionService', () => {
       // Assert
       expect(result).toBeDefined();
       expect(result.id).toBeDefined();
-      expect(result.projectId).toBe(1);
+      expect(result.platformId).toBe(1);
       expect(result.levelId).toBe(4);
       expect(result.message).toBe(createExceptionDto.message);
       expect(result.stackTrace).toBe(createExceptionDto.stackTrace);
@@ -124,7 +124,7 @@ describe('ExceptionService', () => {
       expect(result).toEqual(expect.objectContaining({
         id: mockException.id,
         message: mockException.message,
-        projectId: mockException.projectId,
+        platformId: mockException.platformId,
       }));
     });
 
@@ -142,7 +142,7 @@ describe('ExceptionService', () => {
     const exception1: ExceptionDto = {
       ...mockException,
       id: '111e4567-e89b-12d3-a456-426614174111',
-      projectId: 1,
+      platformId: 1,
       levelId: 4,
       message: 'Error 1',
       userId: 'user_1',
@@ -152,7 +152,7 @@ describe('ExceptionService', () => {
     const exception2: ExceptionDto = {
       ...mockException,
       id: '222e4567-e89b-12d3-a456-426614174222',
-      projectId: 2,
+      platformId: 2,
       levelId: 3,
       message: 'Warning 2',
       userId: 'user_2',
@@ -162,7 +162,7 @@ describe('ExceptionService', () => {
     const exception3: ExceptionDto = {
       ...mockException,
       id: '333e4567-e89b-12d3-a456-426614174333',
-      projectId: 1,
+      platformId: 1,
       levelId: 5,
       message: 'Fatal error 3',
       userId: 'user_1',
@@ -189,14 +189,14 @@ describe('ExceptionService', () => {
 
     it('Given_ProjectIdFilter_When_FindAll_Then_ReturnsFilteredExceptions', async () => {
       // Arrange
-      const filters: ExceptionFilterDto = { projectId: 1 };
+      const filters: ExceptionFilterDto = { platformId: 1 };
 
       // Act
       const result = await service.findAll(filters);
 
       // Assert
       expect(result.data).toHaveLength(2);
-      expect(result.data.every((e) => e.projectId === 1)).toBe(true);
+      expect(result.data.every((e) => e.platformId === 1)).toBe(true);
     });
 
     it('Given_LevelIdFilter_When_FindAll_Then_ReturnsFilteredExceptions', async () => {

@@ -28,10 +28,10 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
     data.forEach((exception) => this.exceptions.set(exception.id, { ...exception }));
   }
 
-  async create(projectId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
     const exception: ExceptionDto = {
       id: randomUUID(),
-      projectId,
+      platformId,
       levelId: data.levelId,
       message: data.message,
       stackTrace: data.stackTrace || null,
@@ -56,8 +56,8 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
     let exceptions = Array.from(this.exceptions.values());
 
     // Filtros exactos
-    if (filters.projectId !== undefined) {
-      exceptions = exceptions.filter((e) => e.projectId === filters.projectId);
+    if (filters.platformId !== undefined) {
+      exceptions = exceptions.filter((e) => e.platformId === filters.platformId);
     }
     if (filters.levelId !== undefined) {
       exceptions = exceptions.filter((e) => e.levelId === filters.levelId);

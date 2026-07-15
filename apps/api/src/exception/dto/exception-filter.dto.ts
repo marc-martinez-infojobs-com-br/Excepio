@@ -4,13 +4,13 @@ import { Type } from 'class-transformer';
 
 export class ExceptionFilterDto {
   @ApiPropertyOptional({
-    description: 'Filtrar por ID de proyecto',
+    description: 'Filtrar por ID de plataforma',
     example: 1,
   })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
-  projectId?: number;
+  platformId?: number;
 
   @ApiPropertyOptional({
     description: 'Filtrar por nivel de severidad',

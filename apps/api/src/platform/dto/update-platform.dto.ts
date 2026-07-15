@@ -1,9 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsString, MinLength, MaxLength, IsInt, IsOptional } from 'class-validator';
 
-export class UpdateProjectDto {
+export class UpdatePlatformDto {
   @ApiPropertyOptional({
-    description: 'Nombre del proyecto',
+    description: 'Nombre de la plataforma',
     example: 'Mi Aplicación Actualizada',
     minLength: 1,
     maxLength: 100,

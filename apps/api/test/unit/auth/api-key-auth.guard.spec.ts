@@ -1,24 +1,24 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { ApiKeyAuthGuard } from '../../../src/auth/guards/api-key-auth.guard';
-import { ProjectMemoryRepository } from '../../../src/project/repository';
-import { ProjectDto } from '@excepio/shared';
+import { PlatformMemoryRepository } from '../../../src/platform/repository';
+import { PlatformDto } from '@excepio/shared';
 
 describe('ApiKeyAuthGuard', () => {
   let guard: ApiKeyAuthGuard;
-  let projectRepository: ProjectMemoryRepository;
+  let platformRepository: PlatformMemoryRepository;
 
-  const mockActiveProject: ProjectDto = {
+  const mockActivePlatform: PlatformDto = {
     id: 1,
-    name: 'Test Project',
+    name: 'Test Platform',
     apiKey: 'exc_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
     statusId: 2, // ACTIVE
     createdAt: new Date().toISOString(),
   };
 
-  const mockDeletedProject: ProjectDto = {
+  const mockDeletedPlatform: PlatformDto = {
     id: 2,
-    name: 'Deleted Project',
+    name: 'Deleted Platform',
     apiKey: 'exc_deleted1234567890abcdef1234567890abcdef1234567890abcdef12345678',
     statusId: 4, // DELETED
     createdAt: new Date().toISOString(),
@@ -27,7 +27,7 @@ describe('ApiKeyAuthGuard', () => {
   const createMockExecutionContext = (apiKey?: string): ExecutionContext => {
     const mockRequest = {
       headers: apiKey ? { 'x-api-key': apiKey } : {},
-      project: undefined,
+      platform: undefined,
     };
 
     return {
@@ -38,9 +38,9 @@ describe('ApiKeyAuthGuard', () => {
   };
 
   beforeEach(() => {
-    projectRepository = new ProjectMemoryRepository();
-    projectRepository.seed([mockActiveProject, mockDeletedProject]);
-    guard = new ApiKeyAuthGuard(projectRepository);
+    platformRepository = new PlatformMemoryRepository();
+    platformRepository.seed([mockActivePlatform, mockDeletedPlatform]);
+    guard = new ApiKeyAuthGuard(platformRepository);
   });
 
   describe('canActivate', () => {
@@ -73,7 +73,7 @@ describe('ApiKeyAuthGuard', () => {
 
     it('Given_ApiKeyOfDeletedProject_When_CanActivate_Then_ThrowsUnauthorizedException', async () => {
       // Arrange
-      const context = createMockExecutionContext(mockDeletedProject.apiKey);
+      const context = createMockExecutionContext(mockDeletedPlatform.apiKey);
 
       // Act & Assert
       await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
@@ -82,7 +82,7 @@ describe('ApiKeyAuthGuard', () => {
 
     it('Given_ValidApiKey_When_CanActivate_Then_ReturnsTrue', async () => {
       // Arrange
-      const context = createMockExecutionContext(mockActiveProject.apiKey);
+      const context = createMockExecutionContext(mockActivePlatform.apiKey);
 
       // Act
       const result = await guard.canActivate(context);
@@ -94,8 +94,8 @@ describe('ApiKeyAuthGuard', () => {
     it('Given_ValidApiKey_When_CanActivate_Then_AttachesProjectToRequest', async () => {
       // Arrange
       const mockRequest = {
-        headers: { 'x-api-key': mockActiveProject.apiKey },
-        project: undefined as ProjectDto | undefined,
+        headers: { 'x-api-key': mockActivePlatform.apiKey },
+        platform: undefined as PlatformDto | undefined,
       };
 
       const context = {
@@ -108,10 +108,10 @@ describe('ApiKeyAuthGuard', () => {
       await guard.canActivate(context);
 
       // Assert
-      expect(mockRequest.project).toBeDefined();
-      expect(mockRequest.project?.id).toBe(mockActiveProject.id);
-      expect(mockRequest.project?.name).toBe(mockActiveProject.name);
-      expect(mockRequest.project?.apiKey).toBe(mockActiveProject.apiKey);
+      expect(mockRequest.platform).toBeDefined();
+      expect(mockRequest.platform?.id).toBe(mockActivePlatform.id);
+      expect(mockRequest.platform?.name).toBe(mockActivePlatform.name);
+      expect(mockRequest.platform?.apiKey).toBe(mockActivePlatform.apiKey);
     });
   });
 });

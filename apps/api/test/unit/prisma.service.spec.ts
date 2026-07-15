@@ -40,8 +40,8 @@ describe('PrismaService', () => {
     expect(service.level).toBeDefined();
   });
 
-  it('should have project model', () => {
-    expect(service.project).toBeDefined();
+  it('should have platform model', () => {
+    expect(service.platform).toBeDefined();
   });
 
   it('should have exception model', () => {

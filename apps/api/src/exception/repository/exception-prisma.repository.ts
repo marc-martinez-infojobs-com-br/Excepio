@@ -17,7 +17,7 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
   private mapToDto(exception: any): ExceptionDto {
     return {
       id: exception.id,
-      projectId: exception.projectId,
+      platformId: exception.platformId,
       levelId: exception.levelId,
       message: exception.message,
       stackTrace: exception.stackTrace,
@@ -30,10 +30,10 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     };
   }
 
-  async create(projectId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
     const exception = await this.prisma.exception.create({
       data: {
-        projectId,
+        platformId,
         levelId: data.levelId,
         message: data.message,
         stackTrace: data.stackTrace,
@@ -71,8 +71,8 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     const where: Prisma.ExceptionWhereInput = {};
 
     // Filtros exactos
-    if (filters.projectId !== undefined) {
-      where.projectId = filters.projectId;
+    if (filters.platformId !== undefined) {
+      where.platformId = filters.platformId;
     }
     if (filters.levelId !== undefined) {
       where.levelId = filters.levelId;
@@ -142,9 +142,9 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     const params: (string | number | Date)[] = [`%${filters.metadataSearch}%`];
     let paramIndex = 2;
 
-    if (filters.projectId !== undefined) {
-      conditions.push(`"projectId" = $${paramIndex}`);
-      params.push(filters.projectId);
+    if (filters.platformId !== undefined) {
+      conditions.push(`"platformId" = $${paramIndex}`);
+      params.push(filters.platformId);
       paramIndex++;
     }
     if (filters.levelId !== undefined) {

@@ -64,37 +64,37 @@ describe('Database Seed', () => {
     });
   });
 
-  describe('Project', () => {
-    it('should have 5 project records', async () => {
-      const projects = await prisma.project.findMany();
-      expect(projects).toHaveLength(5);
+  describe('Platform', () => {
+    it('should have 5 platform records', async () => {
+      const platforms = await prisma.platform.findMany();
+      expect(platforms).toHaveLength(5);
     });
 
-    it('should have correct project names', async () => {
-      const projects = await prisma.project.findMany({
+    it('should have correct platform names', async () => {
+      const platforms = await prisma.platform.findMany({
         orderBy: { name: 'asc' },
       });
-      const projectNames = projects.map((p) => p.name).sort();
-      expect(projectNames).toEqual(['API', 'Android', 'WM', 'Web', 'iOS'].sort());
+      const platformNames = platforms.map((p) => p.name).sort();
+      expect(platformNames).toEqual(['API', 'Android', 'WM', 'Web', 'iOS'].sort());
     });
 
-    it('should have all projects with ACTIVE status', async () => {
-      const projects = await prisma.project.findMany({
+    it('should have all platforms with ACTIVE status', async () => {
+      const platforms = await prisma.platform.findMany({
         include: { status: true },
       });
-      expect(projects.every((p) => p.status.name === 'ACTIVE')).toBe(true);
+      expect(platforms.every((p) => p.status.name === 'ACTIVE')).toBe(true);
     });
 
-    it('should have unique apiKey for each project', async () => {
-      const projects = await prisma.project.findMany();
-      const apiKeys = projects.map((p) => p.apiKey);
+    it('should have unique apiKey for each platform', async () => {
+      const platforms = await prisma.platform.findMany();
+      const apiKeys = platforms.map((p) => p.apiKey);
       const uniqueApiKeys = new Set(apiKeys);
       expect(uniqueApiKeys.size).toBe(apiKeys.length);
     });
 
     it('should have apiKey with 64 characters (hex)', async () => {
-      const projects = await prisma.project.findMany();
-      expect(projects.every((p) => p.apiKey.length === 64)).toBe(true);
+      const platforms = await prisma.platform.findMany();
+      expect(platforms.every((p) => p.apiKey.length === 64)).toBe(true);
     });
   });
 });
