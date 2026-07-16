@@ -103,7 +103,7 @@ export function PlatformCard({
       </div>
 
       {/* Created Date */}
-      <div className="text-xs text-muted-foreground mb-3">
+      <div className="text-xs text-muted-foreground mb-3 text-right">
         {t('table.createdAt')}: {new Date(platform.createdAt).toLocaleDateString()}
       </div>
 

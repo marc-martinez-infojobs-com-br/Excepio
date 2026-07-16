@@ -237,6 +237,11 @@
       "createdAt": "Created",
       "actions": "Actions"
     },
+    "timeAgo": {
+      "minutes": "{count}m ago",
+      "hours": "{count}h ago",
+      "days": "{count}d ago"
+    },
     "roles": {
       "ADMINISTRADOR": "Administrator",
       "USUARIO": "User"
