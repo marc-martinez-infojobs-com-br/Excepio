@@ -11,6 +11,7 @@ import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import {
   PlatformsTable,
+  PlatformCard,
   PlatformFormModal,
   DeletePlatformDialog,
   RegenerateKeyDialog,
@@ -184,13 +185,32 @@ export default function PlatformsPage() {
       ) : error ? (
         <div className="text-center py-8 text-destructive">{t('errors.loading')}</div>
       ) : platforms && platforms.length > 0 ? (
-        <PlatformsTable
-          platforms={platforms}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onRegenerateKey={handleRegenerateKey}
-          onActivate={handleActivate}
-        />
+        <>
+          {/* Mobile: Cards */}
+          <div className="md:hidden space-y-3">
+            {platforms.map((platform) => (
+              <PlatformCard
+                key={platform.id}
+                platform={platform}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onRegenerateKey={handleRegenerateKey}
+                onActivate={handleActivate}
+              />
+            ))}
+          </div>
+
+          {/* Desktop: Table */}
+          <div className="hidden md:block">
+            <PlatformsTable
+              platforms={platforms}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onRegenerateKey={handleRegenerateKey}
+              onActivate={handleActivate}
+            />
+          </div>
+        </>
       ) : (
         <div className="text-muted-foreground text-center py-12 border border-input rounded-lg">
           {t('empty')}

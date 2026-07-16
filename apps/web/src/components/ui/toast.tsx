@@ -14,7 +14,7 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
+      "fixed top-16 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
       className
     )}
     {...props}
@@ -29,15 +29,15 @@ const toastVariants = cva(
       variant: {
         default: "border bg-background text-foreground",
         destructive:
-          "destructive group border-red-500/50 bg-red-500/10 text-red-600 dark:border-red-400/50 dark:bg-red-400/10 dark:text-red-400",
+          "destructive group border-red-500 bg-red-50 text-red-600 dark:border-red-400 dark:bg-red-950 dark:text-red-400",
         error:
-          "error group border-red-500/50 bg-red-500/10 text-red-600 dark:border-red-400/50 dark:bg-red-400/10 dark:text-red-400",
+          "error group border-red-500 bg-red-50 text-red-600 dark:border-red-400 dark:bg-red-950 dark:text-red-400",
         warning:
-          "warning group border-amber-500/50 bg-amber-500/10 text-amber-600 dark:border-amber-400/50 dark:bg-amber-400/10 dark:text-amber-400",
+          "warning group border-amber-500 bg-amber-50 text-amber-600 dark:border-amber-400 dark:bg-amber-950 dark:text-amber-400",
         success:
-          "success group border-green-500/50 bg-green-500/10 text-green-600 dark:border-green-400/50 dark:bg-green-400/10 dark:text-green-400",
+          "success group border-green-500 bg-green-50 text-green-600 dark:border-green-400 dark:bg-green-950 dark:text-green-400",
         info:
-          "info group border-blue-500/50 bg-blue-500/10 text-blue-600 dark:border-blue-400/50 dark:bg-blue-400/10 dark:text-blue-400",
+          "info group border-blue-500 bg-blue-50 text-blue-600 dark:border-blue-400 dark:bg-blue-950 dark:text-blue-400",
       },
     },
     defaultVariants: {

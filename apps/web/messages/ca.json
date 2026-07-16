@@ -237,6 +237,11 @@
       "createdAt": "Creat",
       "actions": "Accions"
     },
+    "timeAgo": {
+      "minutes": "fa {count}m",
+      "hours": "fa {count}h",
+      "days": "fa {count}d"
+    },
     "roles": {
       "ADMINISTRADOR": "Administrador",
       "USUARIO": "Usuari"

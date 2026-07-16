@@ -29,7 +29,7 @@ export default function ExceptionsPage() {
   });
 
   // Mapear los datos a la estructura esperada por los componentes
-  const levels = levelsData?.map((l) => ({ id: l.id, name: l.name })) ?? [];
+  const levels = levelsData ?? [];
   const platforms = platformsData ?? [];
 
   const handleFilterChange = (newFilters: ExceptionFilterDto) => {

@@ -12,6 +12,7 @@ import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import {
   UsersTable,
+  UserCard,
   UserFormModal,
   DeleteUserDialog,
 } from '@components/users';
@@ -162,13 +163,32 @@ export default function UsersPage() {
       ) : error ? (
         <div className="text-center py-8 text-destructive">{t('errors.loading')}</div>
       ) : users && users.length > 0 ? (
-        <UsersTable
-          users={users}
-          currentUserId={currentUser?.id}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onActivate={handleActivate}
-        />
+        <>
+          {/* Mobile: Cards */}
+          <div className="md:hidden space-y-3">
+            {users.map((user) => (
+              <UserCard
+                key={user.id}
+                user={user}
+                currentUserId={currentUser?.id}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onActivate={handleActivate}
+              />
+            ))}
+          </div>
+
+          {/* Desktop: Table */}
+          <div className="hidden md:block">
+            <UsersTable
+              users={users}
+              currentUserId={currentUser?.id}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onActivate={handleActivate}
+            />
+          </div>
+        </>
       ) : (
         <div className="text-muted-foreground text-center py-12 border border-input rounded-lg">
           {t('empty')}

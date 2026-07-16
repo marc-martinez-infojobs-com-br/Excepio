@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { MainNav } from '@components/main-nav';
+import { WebNav } from '@components/navigation/web-nav';
 import { UserRole } from '@excepio/shared';
 
 // Mock de next-intl
@@ -30,7 +30,7 @@ vi.mock('@hooks/use-auth', () => ({
   }),
 }));
 
-describe('MainNav', () => {
+describe('WebNav', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockPathname.mockReturnValue('/dashboard');
@@ -48,21 +48,21 @@ describe('MainNav', () => {
     });
 
     it('debería mostrar Dashboard e Incidencias', () => {
-      render(<MainNav />);
+      render(<WebNav />);
 
       expect(screen.getByText('Dashboard')).toBeInTheDocument();
       expect(screen.getByText('Incidencias')).toBeInTheDocument();
     });
 
     it('NO debería mostrar Plataformas ni Usuarios', () => {
-      render(<MainNav />);
+      render(<WebNav />);
 
       expect(screen.queryByText('Plataformas')).not.toBeInTheDocument();
       expect(screen.queryByText('Usuarios')).not.toBeInTheDocument();
     });
 
     it('debería renderizar links con las rutas correctas', () => {
-      render(<MainNav />);
+      render(<WebNav />);
 
       expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute(
         'href',
@@ -87,7 +87,7 @@ describe('MainNav', () => {
     });
 
     it('debería mostrar todas las opciones de navegación', () => {
-      render(<MainNav />);
+      render(<WebNav />);
 
       expect(screen.getByText('Dashboard')).toBeInTheDocument();
       expect(screen.getByText('Incidencias')).toBeInTheDocument();
@@ -96,7 +96,7 @@ describe('MainNav', () => {
     });
 
     it('debería renderizar links con las rutas correctas para admin', () => {
-      render(<MainNav />);
+      render(<WebNav />);
 
       expect(screen.getByRole('link', { name: 'Dashboard' })).toHaveAttribute(
         'href',
@@ -130,7 +130,7 @@ describe('MainNav', () => {
 
     it('debería marcar Dashboard como activo cuando está en /dashboard', () => {
       mockPathname.mockReturnValue('/dashboard');
-      render(<MainNav />);
+      render(<WebNav />);
 
       const dashboardLink = screen.getByRole('link', { name: 'Dashboard' });
       expect(dashboardLink).toHaveAttribute('aria-current', 'page');
@@ -138,7 +138,7 @@ describe('MainNav', () => {
 
     it('debería marcar Incidencias como activo cuando está en /issues', () => {
       mockPathname.mockReturnValue('/issues');
-      render(<MainNav />);
+      render(<WebNav />);
 
       const issuesLink = screen.getByRole('link', { name: 'Incidencias' });
       expect(issuesLink).toHaveAttribute('aria-current', 'page');
@@ -146,7 +146,7 @@ describe('MainNav', () => {
 
     it('debería marcar Plataformas como activo cuando está en /platforms', () => {
       mockPathname.mockReturnValue('/platforms');
-      render(<MainNav />);
+      render(<WebNav />);
 
       const platformsLink = screen.getByRole('link', { name: 'Plataformas' });
       expect(platformsLink).toHaveAttribute('aria-current', 'page');
@@ -154,7 +154,7 @@ describe('MainNav', () => {
 
     it('no debería marcar ningún link cuando la ruta no coincide', () => {
       mockPathname.mockReturnValue('/other-route');
-      render(<MainNav />);
+      render(<WebNav />);
 
       const links = screen.getAllByRole('link');
       links.forEach((link) => {
@@ -166,7 +166,7 @@ describe('MainNav', () => {
   describe('cuando no hay usuario autenticado', () => {
     it('debería mostrar solo las opciones básicas', () => {
       mockUser.mockReturnValue(null);
-      render(<MainNav />);
+      render(<WebNav />);
 
       expect(screen.getByText('Dashboard')).toBeInTheDocument();
       expect(screen.getByText('Incidencias')).toBeInTheDocument();

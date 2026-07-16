@@ -7,7 +7,8 @@ import { ThemeToggle } from '@components/theme/theme-toggle';
 import { ThemeLogo } from '@components/theme/theme-logo';
 import { ThemeAvatar } from '@components/theme/theme-avatar';
 import { LanguageSelector } from '@components/language-selector';
-import { MainNav } from '@components/main-nav';
+import { WebNav } from '@components/navigation/web-nav';
+import { MobileNav } from '@components/navigation/mobile-nav';
 import { LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
@@ -28,8 +29,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
               <span className="text-2xl font-bold text-primary tracking-tight">{tLayout('appName')}</span>
             </div>
             
-            {/* Navigation */}
-            <MainNav />
+            {/* Navigation - Solo en desktop */}
+            <div className="hidden md:block">
+              <WebNav />
+            </div>
           </div>
           
           {/* Right side actions */}
@@ -58,9 +61,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       </header>
 
       {/* Contenido */}
-      <main className="container mx-auto">
+      <main className="container mx-auto pb-20 md:pb-0">
         {children}
       </main>
+
+      {/* Mobile Navigation - Solo en móvil */}
+      <MobileNav />
     </div>
   );
 }
