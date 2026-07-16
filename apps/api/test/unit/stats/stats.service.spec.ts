@@ -420,3 +420,190 @@ describe('StatsService - getByPlatform', () => {
     });
   });
 });
+
+describe('StatsService - getGroupedByMessage', () => {
+  let service: StatsService;
+  let mockPrisma: {
+    exception: {
+      count: ReturnType<typeof vi.fn>;
+      groupBy: ReturnType<typeof vi.fn>;
+      findMany: ReturnType<typeof vi.fn>;
+    };
+    $queryRawUnsafe: ReturnType<typeof vi.fn>;
+  };
+
+  beforeEach(() => {
+    mockPrisma = {
+      exception: {
+        count: vi.fn(),
+        groupBy: vi.fn(),
+        findMany: vi.fn(),
+      },
+      $queryRawUnsafe: vi.fn(),
+    };
+
+    service = new StatsService(mockPrisma as unknown as PrismaService);
+  });
+
+  describe('estructura de respuesta', () => {
+    it('debería retornar estructura correcta con data, total, page y limit', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+        {
+          message: 'Error: Connection failed',
+          levelId: 4,
+          platformId: 1,
+          count: BigInt(15),
+          lastSeen: new Date('2024-01-15T10:00:00Z'),
+          firstSeen: new Date('2024-01-01T08:00:00Z'),
+        },
+      ]);
+      mockPrisma.exception.count.mockResolvedValueOnce(1);
+
+      const result = await service.getGroupedByMessage({});
+
+      expect(result).toHaveProperty('data');
+      expect(result).toHaveProperty('total');
+      expect(result).toHaveProperty('page');
+      expect(result).toHaveProperty('limit');
+      expect(Array.isArray(result.data)).toBe(true);
+    });
+
+    it('debería incluir message, levelId, platformId, count, lastSeen, firstSeen en cada item', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+        {
+          message: 'Error: Connection failed',
+          levelId: 4,
+          platformId: 1,
+          count: BigInt(15),
+          lastSeen: new Date('2024-01-15T10:00:00Z'),
+          firstSeen: new Date('2024-01-01T08:00:00Z'),
+        },
+      ]);
+      mockPrisma.exception.count.mockResolvedValueOnce(1);
+
+      const result = await service.getGroupedByMessage({});
+
+      expect(result.data.length).toBe(1);
+      const item = result.data[0];
+      expect(item).toHaveProperty('message');
+      expect(item).toHaveProperty('levelId');
+      expect(item).toHaveProperty('platformId');
+      expect(item).toHaveProperty('count');
+      expect(item).toHaveProperty('lastSeen');
+      expect(item).toHaveProperty('firstSeen');
+    });
+
+    it('debería convertir BigInt count a number', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+        {
+          message: 'Error: Connection failed',
+          levelId: 4,
+          platformId: 1,
+          count: BigInt(150),
+          lastSeen: new Date('2024-01-15T10:00:00Z'),
+          firstSeen: new Date('2024-01-01T08:00:00Z'),
+        },
+      ]);
+      mockPrisma.exception.count.mockResolvedValueOnce(1);
+
+      const result = await service.getGroupedByMessage({});
+
+      expect(typeof result.data[0].count).toBe('number');
+      expect(result.data[0].count).toBe(150);
+    });
+  });
+
+  describe('paginación', () => {
+    it('debería usar valores por defecto (page=1, limit=10)', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      const result = await service.getGroupedByMessage({});
+
+      expect(result.page).toBe(1);
+      expect(result.limit).toBe(10);
+    });
+
+    it('debería respetar los valores de paginación proporcionados', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      const result = await service.getGroupedByMessage({ page: 2, limit: 25 });
+
+      expect(result.page).toBe(2);
+      expect(result.limit).toBe(25);
+    });
+
+    it('debería calcular OFFSET correctamente', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      await service.getGroupedByMessage({ page: 3, limit: 10 });
+
+      // page 3 con limit 10 = OFFSET 20
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining('OFFSET 20'),
+      );
+    });
+  });
+
+  describe('filtros', () => {
+    it('debería usar las últimas 24h si no se especifican fechas', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      await service.getGroupedByMessage({});
+
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining('"createdAt" >='),
+      );
+    });
+
+    it('debería filtrar por platformId si se proporciona', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      await service.getGroupedByMessage({ platformId: 1 });
+
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining('"platformId" = 1'),
+      );
+    });
+
+    it('debería filtrar por levelId si se proporciona', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      await service.getGroupedByMessage({ levelId: 4 });
+
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining('"levelId" = 4'),
+      );
+    });
+  });
+
+  describe('ordenamiento', () => {
+    it('debería ordenar por count DESC (más frecuentes primero)', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      await service.getGroupedByMessage({});
+
+      expect(mockPrisma.$queryRawUnsafe).toHaveBeenCalledWith(
+        expect.stringContaining('ORDER BY count DESC'),
+      );
+    });
+  });
+
+  describe('casos especiales', () => {
+    it('debería retornar array vacío si no hay datos', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+      mockPrisma.exception.count.mockResolvedValueOnce(0);
+
+      const result = await service.getGroupedByMessage({});
+
+      expect(result.data).toEqual([]);
+      expect(result.total).toBe(0);
+    });
+  });
+});

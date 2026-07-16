@@ -128,9 +128,9 @@ export class StatsController {
   @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
   @ApiResponse({ status: 200, description: 'Excepciones agrupadas' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  getGroupedByMessage(
+  async getGroupedByMessage(
     @Query() filters: GroupedExceptionsFilterDto,
-  ): GroupedExceptionsResponseDto {
+  ): Promise<GroupedExceptionsResponseDto> {
     return this.statsService.getGroupedByMessage(filters);
   }
 }

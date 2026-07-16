@@ -124,7 +124,12 @@
       "error": "Error en carregar estadístiques",
       "timeSeriesTitle": "Excepcions per temps",
       "platformTitle": "Distribució per plataforma",
-      "noData": "No hi ha dades per al període seleccionat"
+      "groupedTitle": "Errors més freqüents",
+      "lastSeen": "fa",
+      "noData": "No hi ha dades per al període seleccionat",
+      "count": "Total",
+      "occurrences": "{count, plural, one {# ocurrència} other {# ocurrències}}",
+      "viewAllIssues": "Veure totes les incidències"
     }
   },
   "health": {

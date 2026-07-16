@@ -124,7 +124,12 @@
       "error": "Error loading stats",
       "timeSeriesTitle": "Exceptions over time",
       "platformTitle": "Distribution by platform",
-      "noData": "No data for selected period"
+      "groupedTitle": "Most frequent errors",
+      "lastSeen": "ago",
+      "noData": "No data for selected period",
+      "count": "Total",
+      "occurrences": "{count, plural, one {# occurrence} other {# occurrences}}",
+      "viewAllIssues": "View all issues"
     }
   },
   "health": {

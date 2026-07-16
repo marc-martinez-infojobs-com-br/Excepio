@@ -93,6 +93,7 @@ export type GroupedExceptionsFilterDto = z.infer<typeof GroupedExceptionsFilterS
 export const GroupedExceptionSchema = z.object({
   message: z.string(),
   levelId: z.number().int(),
+  platformId: z.number().int(),
   count: z.number().int(),
   lastSeen: z.string().datetime(),
   firstSeen: z.string().datetime(),

@@ -4,6 +4,7 @@ import {
   TotalExceptionsCard,
   TimeSeriesChart,
   PlatformPieChart,
+  GroupedExceptionsList,
 } from '@components/dashboard';
 
 export default function DashboardPage() {
@@ -22,6 +23,9 @@ export default function DashboardPage() {
         {/* Platform Pie Chart */}
         <PlatformPieChart />
       </div>
+
+      {/* Grouped Exceptions List */}
+      <GroupedExceptionsList />
     </div>
   );
 }

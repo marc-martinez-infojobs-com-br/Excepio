@@ -124,7 +124,12 @@
       "error": "Error al cargar estadísticas",
       "timeSeriesTitle": "Excepciones por tiempo",
       "platformTitle": "Distribución por plataforma",
-      "noData": "No hay datos para el período seleccionado"
+      "groupedTitle": "Errores más frecuentes",
+      "lastSeen": "hace",
+      "noData": "No hay datos para el período seleccionado",
+      "count": "Total",
+      "occurrences": "{count, plural, one {# ocurrencia} other {# ocurrencias}}",
+      "viewAllIssues": "Ver todas las incidencias"
     }
   },
   "health": {

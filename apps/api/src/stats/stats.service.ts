@@ -20,6 +20,16 @@ interface TimeGroupRawResult {
   count: bigint;
 }
 
+// Tipo para los resultados de la query raw de agrupación por mensaje
+interface GroupedExceptionRawResult {
+  message: string;
+  levelId: number;
+  platformId: number;
+  count: bigint;
+  lastSeen: Date;
+  firstSeen: Date;
+}
+
 @Injectable()
 export class StatsService {
   constructor(private readonly prisma: PrismaService) {}
@@ -240,11 +250,86 @@ export class StatsService {
     return { data, total };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getGroupedByMessage(
-    _filters: GroupedExceptionsFilterDto,
-  ): GroupedExceptionsResponseDto {
-    // TODO: Implementar en Fase 4
-    throw new Error('Not implemented');
+  /**
+   * Obtiene excepciones agrupadas por mensaje.
+   * Útil para identificar los errores más frecuentes.
+   */
+  async getGroupedByMessage(
+    filters: GroupedExceptionsFilterDto,
+  ): Promise<GroupedExceptionsResponseDto> {
+    const now = new Date();
+
+    // Calcular período
+    const endDate = filters.endDate ? new Date(filters.endDate) : now;
+    const startDate = filters.startDate
+      ? new Date(filters.startDate)
+      : new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // 24h antes
+
+    // Paginación con valores por defecto
+    const page = filters.page ?? 1;
+    const limit = filters.limit ?? 10;
+    const offset = (page - 1) * limit;
+
+    // Construir condiciones WHERE
+    const conditions: string[] = [
+      `"createdAt" >= '${startDate.toISOString()}'`,
+      `"createdAt" <= '${endDate.toISOString()}'`,
+    ];
+
+    if (filters.platformId) {
+      conditions.push(`"platformId" = ${filters.platformId}`);
+    }
+
+    if (filters.levelId) {
+      conditions.push(`"levelId" = ${filters.levelId}`);
+    }
+
+    const whereClause = conditions.join(' AND ');
+
+    // Query para obtener excepciones agrupadas por mensaje, level y plataforma
+    const rawResults = await this.prisma.$queryRawUnsafe<GroupedExceptionRawResult[]>(`
+      SELECT 
+        "message",
+        "levelId",
+        "platformId",
+        COUNT(*)::bigint as count,
+        MAX("createdAt") as "lastSeen",
+        MIN("createdAt") as "firstSeen"
+      FROM "Exception"
+      WHERE ${whereClause}
+      GROUP BY "message", "levelId", "platformId"
+      ORDER BY count DESC
+      LIMIT ${limit}
+      OFFSET ${offset}
+    `);
+
+    // Query para contar el total de grupos distintos
+    const totalCount = await this.prisma.exception.count({
+      where: {
+        createdAt: {
+          gte: startDate,
+          lte: endDate,
+        },
+        ...(filters.platformId && { platformId: filters.platformId }),
+        ...(filters.levelId && { levelId: filters.levelId }),
+      },
+    });
+
+    // Transformar resultados
+    const data = rawResults.map((row) => ({
+      message: row.message,
+      levelId: row.levelId,
+      platformId: row.platformId,
+      count: Number(row.count),
+      lastSeen: row.lastSeen.toISOString(),
+      firstSeen: row.firstSeen.toISOString(),
+    }));
+
+    return {
+      data,
+      total: totalCount,
+      page,
+      limit,
+    };
   }
 }
