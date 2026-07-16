@@ -123,6 +123,7 @@
       "noChange": "No change",
       "error": "Error loading stats",
       "timeSeriesTitle": "Exceptions over time",
+      "platformTitle": "Distribution by platform",
       "noData": "No data for selected period"
     }
   },

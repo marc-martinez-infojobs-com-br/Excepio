@@ -172,10 +172,72 @@ export class StatsService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getByPlatform(_filters: StatsFilterDto): PlatformStatsResponseDto {
-    // TODO: Implementar en Fase 3
-    throw new Error('Not implemented');
+  /**
+   * Obtiene la distribución de excepciones por plataforma.
+   * Retorna el count y porcentaje para cada plataforma.
+   */
+  async getByPlatform(
+    filters: StatsFilterDto,
+  ): Promise<PlatformStatsResponseDto> {
+    const now = new Date();
+
+    // Calcular período
+    const endDate = filters.endDate ? new Date(filters.endDate) : now;
+    const startDate = filters.startDate
+      ? new Date(filters.startDate)
+      : new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // 24h antes
+
+    // Agrupar excepciones por plataforma
+    const groupedData = await this.prisma.exception.groupBy({
+      by: ['platformId'],
+      _count: {
+        id: true,
+      },
+      where: {
+        createdAt: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+
+    // Si no hay datos, retornar vacío
+    if (groupedData.length === 0) {
+      return { data: [], total: 0 };
+    }
+
+    // Obtener los IDs de las plataformas
+    const platformIds = groupedData.map((g) => g.platformId);
+
+    // Obtener nombres de plataformas
+    const platforms = await this.prisma.platform.findMany({
+      where: {
+        id: { in: platformIds },
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    // Crear mapa de nombres
+    const platformNameMap = new Map<number, string>();
+    for (const platform of platforms) {
+      platformNameMap.set(platform.id, platform.name);
+    }
+
+    // Calcular total
+    const total = groupedData.reduce((sum, g) => sum + g._count.id, 0);
+
+    // Construir respuesta con porcentajes
+    const data = groupedData.map((g) => ({
+      platformId: g.platformId,
+      platformName: platformNameMap.get(g.platformId) || 'Unknown',
+      count: g._count.id,
+      percent: total > 0 ? Math.round((g._count.id / total) * 100) : 0,
+    }));
+
+    return { data, total };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

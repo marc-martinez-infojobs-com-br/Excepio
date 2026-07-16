@@ -123,6 +123,7 @@
       "noChange": "Sin cambios",
       "error": "Error al cargar estadísticas",
       "timeSeriesTitle": "Excepciones por tiempo",
+      "platformTitle": "Distribución por plataforma",
       "noData": "No hay datos para el período seleccionado"
     }
   },

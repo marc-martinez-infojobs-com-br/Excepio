@@ -102,7 +102,9 @@ export class StatsController {
   })
   @ApiResponse({ status: 200, description: 'Distribución por plataforma' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  getByPlatform(@Query() filters: StatsFilterDto): PlatformStatsResponseDto {
+  async getByPlatform(
+    @Query() filters: StatsFilterDto,
+  ): Promise<PlatformStatsResponseDto> {
     return this.statsService.getByPlatform(filters);
   }
 
