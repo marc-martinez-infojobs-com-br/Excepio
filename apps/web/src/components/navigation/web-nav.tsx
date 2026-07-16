@@ -20,7 +20,7 @@ const navItems: NavItem[] = [
   { href: '/users', labelKey: 'users', adminOnly: true },
 ];
 
-export function MainNav() {
+export function WebNav() {
   const t = useTranslations('navigation');
   const pathname = usePathname();
   const { user } = useAuth();

@@ -95,7 +95,6 @@ export function LostAstronautIllustration({ className }: { className?: string })
           opacity="0.15"
           stroke="currentColor"
           strokeWidth="2"
-          opacity="0.6"
         />
 
         {/* Casco */}

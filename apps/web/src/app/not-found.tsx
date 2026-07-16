@@ -8,7 +8,8 @@ import { ThemeToggle } from '@components/theme/theme-toggle';
 import { ThemeLogo } from '@components/theme/theme-logo';
 import { ThemeAvatar } from '@components/theme/theme-avatar';
 import { LanguageSelector } from '@components/language-selector';
-import { MainNav } from '@components/main-nav';
+import { WebNav } from '@components/navigation/web-nav';
+import { MobileNav } from '@components/navigation/mobile-nav';
 import { LostAstronautIllustration } from '@components/illustrations/lost-astronaut';
 import { useAuth } from '@hooks/use-auth';
 
@@ -32,8 +33,10 @@ export default function NotFound() {
               </span>
             </div>
 
-            {/* Navigation */}
-            <MainNav />
+            {/* Navigation - Solo en desktop */}
+            <div className="hidden md:block">
+              <WebNav />
+            </div>
           </div>
 
           {/* Right side actions */}
@@ -62,7 +65,7 @@ export default function NotFound() {
       </header>
 
       {/* Content - Centered */}
-      <main className="flex-1 flex items-center justify-center">
+      <main className="flex-1 flex items-center justify-center pb-20 md:pb-0">
         <div className="flex flex-col items-center text-center px-4">
           <LostAstronautIllustration className="w-72 h-72 text-primary mb-6" />
           <h1 className="text-4xl font-bold text-foreground mb-4">
@@ -76,6 +79,9 @@ export default function NotFound() {
           </Button>
         </div>
       </main>
+
+      {/* Mobile Navigation - Solo en móvil */}
+      <MobileNav />
     </div>
   );
 }
