@@ -1,5 +1,14 @@
-import { Injectable, Inject, NotFoundException, ConflictException } from '@nestjs/common';
-import type { UserResponseDto, CreateUserDto, UpdateUserDto } from '@excepio/shared';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import type {
+  UserResponseDto,
+  CreateUserDto,
+  UpdateUserDto,
+} from '@excepio/shared';
 import type { UserRepository } from './repository';
 import { USER_REPOSITORY } from './repository';
 import * as bcrypt from 'bcrypt';
@@ -58,9 +67,13 @@ export class UserService {
    */
   async create(createUserDto: CreateUserDto): Promise<UserResponseDto> {
     // Verificar que el email no exista
-    const existingUser = await this.userRepository.findByEmail(createUserDto.email);
+    const existingUser = await this.userRepository.findByEmail(
+      createUserDto.email,
+    );
     if (existingUser) {
-      throw new ConflictException(`User with email ${createUserDto.email} already exists`);
+      throw new ConflictException(
+        `User with email ${createUserDto.email} already exists`,
+      );
     }
 
     // Hashear la contraseña
@@ -82,7 +95,10 @@ export class UserService {
    * @returns El usuario actualizado
    * @throws NotFoundException si el usuario no existe
    */
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserResponseDto> {
     const user = await this.userRepository.update(id, updateUserDto);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -125,7 +141,10 @@ export class UserService {
    * @returns El usuario actualizado
    * @throws NotFoundException si el usuario no existe
    */
-  async resetPassword(id: string, newPassword: string): Promise<UserResponseDto> {
+  async resetPassword(
+    id: string,
+    newPassword: string,
+  ): Promise<UserResponseDto> {
     // Verificar que el usuario existe
     const user = await this.userRepository.findById(id);
     if (!user) {
@@ -136,7 +155,10 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     // Actualizar la contraseña
-    const updatedUser = await this.userRepository.updatePassword(id, hashedPassword);
+    const updatedUser = await this.userRepository.updatePassword(
+      id,
+      hashedPassword,
+    );
     if (!updatedUser) {
       throw new NotFoundException(`User with id ${id} not found`);
     }

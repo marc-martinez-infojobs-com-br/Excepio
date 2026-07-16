@@ -26,3 +26,4 @@ export * from './platform.dto';
 export * from './exception.dto';
 export * from './user.dto';
 export * from './auth.dto';
+export * from './stats.dto';

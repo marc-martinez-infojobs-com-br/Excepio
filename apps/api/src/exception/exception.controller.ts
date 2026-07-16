@@ -1,6 +1,26 @@
-import { Controller, Get, Post, Param, Body, Query, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth, ApiHeader, ApiQuery } from '@nestjs/swagger';
-import { ExceptionDto, ExceptionListResponseDto, UserRole } from '@excepio/shared';
+import {
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+  ApiHeader,
+  ApiQuery,
+} from '@nestjs/swagger';
+import {
+  ExceptionDto,
+  ExceptionListResponseDto,
+  UserRole,
+} from '@excepio/shared';
 import type { PlatformDto } from '@excepio/shared';
 import { ExceptionService } from './exception.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -18,7 +38,11 @@ export class ExceptionController {
   @Post()
   @UseGuards(ApiKeyAuthGuard)
   @ApiOperation({ summary: 'Reportar una excepción (requiere API Key)' })
-  @ApiHeader({ name: 'X-API-Key', description: 'API Key de la plataforma', required: true })
+  @ApiHeader({
+    name: 'X-API-Key',
+    description: 'API Key de la plataforma',
+    required: true,
+  })
   @ApiResponse({ status: 201, description: 'Excepción creada' })
   @ApiResponse({ status: 401, description: 'API Key inválida o faltante' })
   async create(
@@ -49,7 +73,9 @@ export class ExceptionController {
   @ApiResponse({ status: 200, description: 'Lista paginada de excepciones' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 403, description: 'Acceso denegado' })
-  async findAll(@Query() filters: ExceptionFilterDto): Promise<ExceptionListResponseDto> {
+  async findAll(
+    @Query() filters: ExceptionFilterDto,
+  ): Promise<ExceptionListResponseDto> {
     return this.exceptionService.findAll(filters);
   }
 
@@ -58,7 +84,11 @@ export class ExceptionController {
   @Roles(UserRole.USUARIO, UserRole.ADMINISTRADOR)
   @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Obtener una excepción por ID (requiere JWT)' })
-  @ApiParam({ name: 'id', type: 'string', description: 'ID de la excepción (UUID)' })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'ID de la excepción (UUID)',
+  })
   @ApiResponse({ status: 200, description: 'Excepción encontrada' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 403, description: 'Acceso denegado' })

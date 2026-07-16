@@ -1,4 +1,8 @@
-import type { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
+import type {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+} from '@excepio/shared';
 
 /**
  * Interfaz del repositorio de Platform.

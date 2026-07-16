@@ -1,4 +1,9 @@
-import type { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ExceptionListResponseDto } from '@excepio/shared';
+import type {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+  ExceptionListResponseDto,
+} from '@excepio/shared';
 
 /**
  * Interfaz del repositorio de Exception.

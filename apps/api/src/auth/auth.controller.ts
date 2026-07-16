@@ -1,5 +1,17 @@
-import { Controller, Post, Get, Body, Request, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Post,
+  Get,
+  Body,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import type { LoginResponseDto, UserResponseDto } from '@excepio/shared';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards';

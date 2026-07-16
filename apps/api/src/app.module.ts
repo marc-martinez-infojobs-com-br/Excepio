@@ -8,6 +8,7 @@ import { UserModule } from './user';
 import { AuthModule } from './auth';
 import { PlatformModule } from './platform';
 import { ExceptionModule } from './exception';
+import { StatsModule } from './stats';
 import { validate } from './config/env.validation';
 
 @Module({
@@ -24,6 +25,7 @@ import { validate } from './config/env.validation';
     StatusModule,
     PlatformModule,
     ExceptionModule,
+    StatsModule,
   ],
   controllers: [HealthController],
 })

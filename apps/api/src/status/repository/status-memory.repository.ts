@@ -16,7 +16,9 @@ export class StatusMemoryRepository implements StatusRepository {
    */
   constructor(initialData?: StatusResponseDto[]) {
     if (initialData) {
-      initialData.forEach((status) => this.statuses.set(status.id, { ...status }));
+      initialData.forEach((status) =>
+        this.statuses.set(status.id, { ...status }),
+      );
     }
   }
 

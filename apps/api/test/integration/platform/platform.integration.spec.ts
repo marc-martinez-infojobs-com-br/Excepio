@@ -1,10 +1,31 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { NestFactory } from '@nestjs/core';
-import { Module, INestApplication, Controller, Get, Post, Patch, Delete, Param, Body, Injectable, Inject, ParseIntPipe } from '@nestjs/common';
+import {
+  Module,
+  INestApplication,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  Injectable,
+  Inject,
+  ParseIntPipe,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { PlatformDto, CreatePlatformDto, UpdatePlatformDto, STATUS_ID } from '@excepio/shared';
-import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '@platform/repository';
+import {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+  STATUS_ID,
+} from '@excepio/shared';
+import {
+  PlatformMemoryRepository,
+  PLATFORM_REPOSITORY,
+} from '@platform/repository';
 import type { PlatformRepository } from '@platform/repository';
 
 const TEST_PROJECT_SERVICE = Symbol('TEST_PROJECT_SERVICE');
@@ -12,7 +33,9 @@ const TEST_PROJECT_SERVICE = Symbol('TEST_PROJECT_SERVICE');
 // Recreamos el servicio y controller inline para evitar problemas con metadata
 @Injectable()
 class TestPlatformService {
-  constructor(@Inject(PLATFORM_REPOSITORY) private readonly repo: PlatformRepository) {}
+  constructor(
+    @Inject(PLATFORM_REPOSITORY) private readonly repo: PlatformRepository,
+  ) {}
 
   async findAll(): Promise<PlatformDto[]> {
     return this.repo.findAll();
@@ -31,12 +54,17 @@ class TestPlatformService {
     const exists = await this.repo.existsById(createPlatformDto.id);
     if (exists) {
       const { ConflictException } = await import('@nestjs/common');
-      throw new ConflictException(`Project with id ${createPlatformDto.id} already exists`);
+      throw new ConflictException(
+        `Project with id ${createPlatformDto.id} already exists`,
+      );
     }
     return this.repo.create(createPlatformDto);
   }
 
-  async update(id: number, updatePlatformDto: UpdatePlatformDto): Promise<PlatformDto> {
+  async update(
+    id: number,
+    updatePlatformDto: UpdatePlatformDto,
+  ): Promise<PlatformDto> {
     const project = await this.repo.update(id, updatePlatformDto);
     if (!project) {
       const { NotFoundException } = await import('@nestjs/common');
@@ -66,7 +94,10 @@ class TestPlatformService {
 
 @Controller('projects')
 class TestPlatformController {
-  constructor(@Inject(TEST_PROJECT_SERVICE) private readonly projectService: TestPlatformService) {}
+  constructor(
+    @Inject(TEST_PROJECT_SERVICE)
+    private readonly projectService: TestPlatformService,
+  ) {}
 
   @Get()
   async findAll(): Promise<PlatformDto[]> {
@@ -79,12 +110,17 @@ class TestPlatformController {
   }
 
   @Post()
-  async create(@Body() createPlatformDto: CreatePlatformDto): Promise<PlatformDto> {
+  async create(
+    @Body() createPlatformDto: CreatePlatformDto,
+  ): Promise<PlatformDto> {
     return this.projectService.create(createPlatformDto);
   }
 
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updatePlatformDto: UpdatePlatformDto): Promise<PlatformDto> {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePlatformDto: UpdatePlatformDto,
+  ): Promise<PlatformDto> {
     return this.projectService.update(id, updatePlatformDto);
   }
 
@@ -94,7 +130,9 @@ class TestPlatformController {
   }
 
   @Post(':id/regenerate')
-  async regenerate(@Param('id', ParseIntPipe) id: number): Promise<PlatformDto> {
+  async regenerate(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<PlatformDto> {
     return this.projectService.regenerate(id);
   }
 }
@@ -210,8 +248,22 @@ describe('Project CRUD (integration)', () => {
     it('Given_ProjectsExist_When_GetAllProjects_Then_ReturnsAllProjects', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project 1', icon: 'Monitor', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
-        { id: 2, name: 'Project 2', icon: null, apiKey: 'exc_key2', statusId: 2, createdAt: new Date().toISOString() },
+        {
+          id: 1,
+          name: 'Project 1',
+          icon: 'Monitor',
+          apiKey: 'exc_key1',
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: 2,
+          name: 'Project 2',
+          icon: null,
+          apiKey: 'exc_key2',
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
       ]);
 
       // Act
@@ -242,7 +294,14 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingId_When_GetProjectById_Then_ReturnsProject', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project 1', icon: 'Monitor', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        {
+          id: 1,
+          name: 'Project 1',
+          icon: 'Monitor',
+          apiKey: 'exc_key1',
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
       ]);
 
       // Act
@@ -258,9 +317,7 @@ describe('Project CRUD (integration)', () => {
 
     it('Given_NonExistingId_When_GetProjectById_Then_Returns404', async () => {
       // Act & Assert
-      await request(app.getHttpServer())
-        .get('/api/projects/999')
-        .expect(404);
+      await request(app.getHttpServer()).get('/api/projects/999').expect(404);
     });
   });
 
@@ -268,7 +325,14 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingProject_When_UpdateProject_Then_ReturnsUpdatedProject', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Original Name', icon: null, apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        {
+          id: 1,
+          name: 'Original Name',
+          icon: null,
+          apiKey: 'exc_key1',
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
       ]);
       const updateDto: UpdatePlatformDto = { name: 'Updated Name' };
 
@@ -286,7 +350,14 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingProject_When_UpdateIcon_Then_ReturnsUpdatedIcon', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project', icon: null, apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        {
+          id: 1,
+          name: 'Project',
+          icon: null,
+          apiKey: 'exc_key1',
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
       ]);
       const updateDto: UpdatePlatformDto = { icon: 'Globe' };
 
@@ -313,7 +384,14 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingProject_When_DeleteProject_Then_SetsStatusToDeleted', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project to Delete', icon: 'Monitor', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        {
+          id: 1,
+          name: 'Project to Delete',
+          icon: 'Monitor',
+          apiKey: 'exc_key1',
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
       ]);
 
       // Act
@@ -338,7 +416,14 @@ describe('Project CRUD (integration)', () => {
       // Arrange
       const originalApiKey = 'exc_originalkey123';
       sharedRepository.seed([
-        { id: 1, name: 'Project', icon: 'Server', apiKey: originalApiKey, statusId: 2, createdAt: new Date().toISOString() },
+        {
+          id: 1,
+          name: 'Project',
+          icon: 'Server',
+          apiKey: originalApiKey,
+          statusId: 2,
+          createdAt: new Date().toISOString(),
+        },
       ]);
 
       // Act

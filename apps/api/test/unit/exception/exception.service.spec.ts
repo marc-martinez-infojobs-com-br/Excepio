@@ -3,7 +3,11 @@ import { NotFoundException } from '@nestjs/common';
 import { ExceptionService } from '@exception/exception.service';
 import { ExceptionMemoryRepository } from '@exception/repository';
 import { PlatformMemoryRepository } from '@platform/repository';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto } from '@excepio/shared';
+import {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+} from '@excepio/shared';
 
 describe('ExceptionService', () => {
   let service: ExceptionService;
@@ -121,11 +125,13 @@ describe('ExceptionService', () => {
       const result = await service.findById(mockException.id);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockException.id,
-        message: mockException.message,
-        platformId: mockException.platformId,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockException.id,
+          message: mockException.message,
+          platformId: mockException.platformId,
+        }),
+      );
     });
 
     it('Given_NonExistingId_When_FindById_Then_ThrowsNotFoundException', async () => {
@@ -133,8 +139,12 @@ describe('ExceptionService', () => {
       const nonExistingId = '999e4567-e89b-12d3-a456-426614174999';
 
       // Act & Assert
-      await expect(service.findById(nonExistingId)).rejects.toThrow(NotFoundException);
-      await expect(service.findById(nonExistingId)).rejects.toThrow(`Exception with id ${nonExistingId} not found`);
+      await expect(service.findById(nonExistingId)).rejects.toThrow(
+        NotFoundException,
+      );
+      await expect(service.findById(nonExistingId)).rejects.toThrow(
+        `Exception with id ${nonExistingId} not found`,
+      );
     });
   });
 
@@ -232,7 +242,9 @@ describe('ExceptionService', () => {
 
       // Assert
       expect(result.data).toHaveLength(2);
-      expect(result.data.every((e) => e.message.toLowerCase().includes('error'))).toBe(true);
+      expect(
+        result.data.every((e) => e.message.toLowerCase().includes('error')),
+      ).toBe(true);
     });
 
     it('Given_DateRange_When_FindAll_Then_ReturnsFilteredExceptions', async () => {

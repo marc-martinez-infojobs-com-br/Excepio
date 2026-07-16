@@ -1,5 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, BadRequestException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import type { UserResponseDto } from '@excepio/shared';
 import { UserRole } from '@excepio/shared';
 import { UserService } from './user.service';
@@ -38,7 +54,11 @@ export class UserController {
   @Get(':id')
   @Roles(UserRole.USUARIO, UserRole.ADMINISTRADOR)
   @ApiOperation({ summary: 'Obtener un usuario por ID' })
-  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'ID del usuario (UUID)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Usuario encontrado',
@@ -85,7 +105,11 @@ export class UserController {
   @Patch(':id')
   @Roles(UserRole.ADMINISTRADOR)
   @ApiOperation({ summary: 'Actualizar un usuario (solo ADMINISTRADOR)' })
-  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'ID del usuario (UUID)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Usuario actualizado exitosamente',
@@ -111,8 +135,14 @@ export class UserController {
 
   @Delete(':id')
   @Roles(UserRole.ADMINISTRADOR)
-  @ApiOperation({ summary: 'Eliminar un usuario - solo ADMINISTRADOR (borrado lógico)' })
-  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiOperation({
+    summary: 'Eliminar un usuario - solo ADMINISTRADOR (borrado lógico)',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'ID del usuario (UUID)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Usuario eliminado exitosamente',
@@ -133,7 +163,10 @@ export class UserController {
     status: 404,
     description: 'Usuario no encontrado',
   })
-  async delete(@CurrentUser() currentUser: UserResponseDto, @Param('id') id: string): Promise<UserResponseDto> {
+  async delete(
+    @CurrentUser() currentUser: UserResponseDto,
+    @Param('id') id: string,
+  ): Promise<UserResponseDto> {
     // Validar que el usuario no se elimine a sí mismo
     if (currentUser.id === id) {
       throw new BadRequestException('You cannot delete yourself');
@@ -143,8 +176,14 @@ export class UserController {
 
   @Post(':id/activate')
   @Roles(UserRole.ADMINISTRADOR)
-  @ApiOperation({ summary: 'Activar un usuario eliminado - solo ADMINISTRADOR' })
-  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiOperation({
+    summary: 'Activar un usuario eliminado - solo ADMINISTRADOR',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'ID del usuario (UUID)',
+  })
   @ApiResponse({
     status: 201,
     description: 'Usuario activado exitosamente',
@@ -167,8 +206,14 @@ export class UserController {
 
   @Post(':id/reset-password')
   @Roles(UserRole.ADMINISTRADOR)
-  @ApiOperation({ summary: 'Resetear contraseña de un usuario - solo ADMINISTRADOR' })
-  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiOperation({
+    summary: 'Resetear contraseña de un usuario - solo ADMINISTRADOR',
+  })
+  @ApiParam({
+    name: 'id',
+    type: 'string',
+    description: 'ID del usuario (UUID)',
+  })
   @ApiResponse({
     status: 201,
     description: 'Contraseña reseteada exitosamente',

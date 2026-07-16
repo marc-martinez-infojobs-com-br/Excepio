@@ -23,6 +23,7 @@
       "@user/*": ["src/user/*"],
       "@level/*": ["src/level/*"],
       "@status/*": ["src/status/*"],
+      "@stats/*": ["src/stats/*"],
       "@config/*": ["src/config/*"],
       "@test/*": ["test/*"]
     },

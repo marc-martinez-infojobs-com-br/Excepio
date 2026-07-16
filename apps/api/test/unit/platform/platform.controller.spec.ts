@@ -1,7 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { PlatformController } from '@platform/platform.controller';
 import { PlatformService } from '@platform/platform.service';
-import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
+import {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+} from '@excepio/shared';
 
 describe('PlatformController', () => {
   let controller: PlatformController;

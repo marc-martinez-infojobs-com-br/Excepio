@@ -1,6 +1,15 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { NestFactory } from '@nestjs/core';
-import { Module, INestApplication, Controller, Get, Param, ParseIntPipe, Injectable, Inject } from '@nestjs/common';
+import {
+  Module,
+  INestApplication,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Injectable,
+  Inject,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { LevelResponseDto, STATUS_ID } from '@excepio/shared';
@@ -21,7 +30,9 @@ const TEST_LEVEL_SERVICE = Symbol('TEST_LEVEL_SERVICE');
 // Recreamos el servicio y controller inline para evitar problemas con metadata
 @Injectable()
 class TestLevelService {
-  constructor(@Inject(LEVEL_REPOSITORY) private readonly repo: LevelRepository) {}
+  constructor(
+    @Inject(LEVEL_REPOSITORY) private readonly repo: LevelRepository,
+  ) {}
 
   async findAll(): Promise<LevelResponseDto[]> {
     return this.repo.findAllActive();
@@ -39,7 +50,9 @@ class TestLevelService {
 
 @Controller('levels')
 class TestLevelController {
-  constructor(@Inject(TEST_LEVEL_SERVICE) private readonly levelService: TestLevelService) {}
+  constructor(
+    @Inject(TEST_LEVEL_SERVICE) private readonly levelService: TestLevelService,
+  ) {}
 
   @Get()
   async findAll(): Promise<LevelResponseDto[]> {
@@ -47,7 +60,9 @@ class TestLevelController {
   }
 
   @Get(':id')
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<LevelResponseDto> {
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<LevelResponseDto> {
     return this.levelService.findById(id);
   }
 }

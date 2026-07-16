@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
+import {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+} from '@excepio/shared';
 import { PlatformRepository } from './platform.repository.interface';
 import { randomBytes } from 'crypto';
 
@@ -25,7 +29,9 @@ export class PlatformMemoryRepository implements PlatformRepository {
    */
   seed(data: PlatformDto[]): void {
     this.clear();
-    data.forEach((platform) => this.platforms.set(platform.id, { ...platform }));
+    data.forEach((platform) =>
+      this.platforms.set(platform.id, { ...platform }),
+    );
   }
 
   /**
@@ -36,8 +42,7 @@ export class PlatformMemoryRepository implements PlatformRepository {
   }
 
   async findAll(): Promise<PlatformDto[]> {
-    return Array.from(this.platforms.values())
-      .sort((a, b) => a.id - b.id);
+    return Array.from(this.platforms.values()).sort((a, b) => a.id - b.id);
   }
 
   async findById(id: number): Promise<PlatformDto | null> {
@@ -71,7 +76,10 @@ export class PlatformMemoryRepository implements PlatformRepository {
     return { ...platform };
   }
 
-  async update(id: number, data: UpdatePlatformDto): Promise<PlatformDto | null> {
+  async update(
+    id: number,
+    data: UpdatePlatformDto,
+  ): Promise<PlatformDto | null> {
     const platform = this.platforms.get(id);
     if (!platform) return null;
 

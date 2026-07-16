@@ -1,5 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
+import {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+} from '@excepio/shared';
 import { PrismaService } from '@app/prisma/prisma.service';
 import { PlatformRepository } from './platform.repository.interface';
 import { randomBytes } from 'crypto';
@@ -82,7 +86,10 @@ export class PlatformPrismaRepository implements PlatformRepository {
     return this.mapToDto(platform);
   }
 
-  async update(id: number, data: UpdatePlatformDto): Promise<PlatformDto | null> {
+  async update(
+    id: number,
+    data: UpdatePlatformDto,
+  ): Promise<PlatformDto | null> {
     try {
       const platform = await this.prisma.platform.update({
         where: { id },

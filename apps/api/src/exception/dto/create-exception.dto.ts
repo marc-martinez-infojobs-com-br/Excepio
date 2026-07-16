@@ -1,9 +1,18 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsInt, Min, Max, MinLength, IsOptional, IsObject } from 'class-validator';
+import {
+  IsString,
+  IsInt,
+  Min,
+  Max,
+  MinLength,
+  IsOptional,
+  IsObject,
+} from 'class-validator';
 
 export class CreateExceptionDto {
   @ApiProperty({
-    description: 'Nivel de severidad (1=DEBUG, 2=INFO, 3=WARNING, 4=ERROR, 5=FATAL)',
+    description:
+      'Nivel de severidad (1=DEBUG, 2=INFO, 3=WARNING, 4=ERROR, 5=FATAL)',
     example: 4,
     minimum: 1,
     maximum: 5,

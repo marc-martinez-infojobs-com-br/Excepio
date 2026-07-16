@@ -1,11 +1,34 @@
 import { describe, it, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { NestFactory } from '@nestjs/core';
-import { Module, INestApplication, Controller, Get, Post, Param, Body, Query, Injectable, Inject, UseGuards } from '@nestjs/common';
+import {
+  Module,
+  INestApplication,
+  Controller,
+  Get,
+  Post,
+  Param,
+  Body,
+  Query,
+  Injectable,
+  Inject,
+  UseGuards,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, PlatformDto } from '@excepio/shared';
-import { ExceptionMemoryRepository, EXCEPTION_REPOSITORY } from '@exception/repository';
-import { PlatformMemoryRepository, PLATFORM_REPOSITORY } from '@platform/repository';
+import {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+  PlatformDto,
+} from '@excepio/shared';
+import {
+  ExceptionMemoryRepository,
+  EXCEPTION_REPOSITORY,
+} from '@exception/repository';
+import {
+  PlatformMemoryRepository,
+  PLATFORM_REPOSITORY,
+} from '@platform/repository';
 import type { ExceptionRepository } from '@exception/repository';
 import type { PlatformRepository } from '@platform/repository';
 
@@ -15,11 +38,16 @@ const TEST_EXCEPTION_SERVICE = Symbol('TEST_EXCEPTION_SERVICE');
 @Injectable()
 class TestExceptionService {
   constructor(
-    @Inject(EXCEPTION_REPOSITORY) private readonly exceptionRepo: ExceptionRepository,
-    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository,
+    @Inject(EXCEPTION_REPOSITORY)
+    private readonly exceptionRepo: ExceptionRepository,
+    @Inject(PLATFORM_REPOSITORY)
+    private readonly projectRepo: PlatformRepository,
   ) {}
 
-  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(
+    platformId: number,
+    data: CreateExceptionDto,
+  ): Promise<ExceptionDto> {
     let levelId = data.levelId;
     if (levelId < 1 || levelId > 5) {
       levelId = 2; // INFO por defecto
@@ -51,7 +79,10 @@ class TestExceptionService {
 // Mock guards para tests
 @Injectable()
 class MockApiKeyAuthGuard {
-  constructor(@Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository) {}
+  constructor(
+    @Inject(PLATFORM_REPOSITORY)
+    private readonly projectRepo: PlatformRepository,
+  ) {}
 
   async canActivate(context: any): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -91,13 +122,18 @@ const CurrentProject = () => {
 @Controller('exceptions')
 class TestExceptionController {
   constructor(
-    @Inject(TEST_EXCEPTION_SERVICE) private readonly service: TestExceptionService,
-    @Inject(PLATFORM_REPOSITORY) private readonly projectRepo: PlatformRepository,
+    @Inject(TEST_EXCEPTION_SERVICE)
+    private readonly service: TestExceptionService,
+    @Inject(PLATFORM_REPOSITORY)
+    private readonly projectRepo: PlatformRepository,
   ) {}
 
   @Post()
   @UseGuards(MockApiKeyAuthGuard)
-  async create(@Body() dto: CreateExceptionDto, @Inject('REQUEST') req?: any): Promise<ExceptionDto> {
+  async create(
+    @Body() dto: CreateExceptionDto,
+    @Inject('REQUEST') req?: any,
+  ): Promise<ExceptionDto> {
     // Simular extracción del proyecto del request
     const apiKey = req?.headers?.['x-api-key'];
     const project = apiKey ? await this.projectRepo.findByApiKey(apiKey) : null;
@@ -366,7 +402,9 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data.every((e: any) => e.platformId === 1)).toBe(true);
+      expect(response.body.data.every((e: any) => e.platformId === 1)).toBe(
+        true,
+      );
     });
 
     it('Given_LevelIdFilter_When_GetExceptions_Then_ReturnsFilteredExceptions', async () => {
@@ -390,7 +428,9 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data.every((e: any) => e.userId === 'user_1')).toBe(true);
+      expect(response.body.data.every((e: any) => e.userId === 'user_1')).toBe(
+        true,
+      );
     });
 
     it('Given_MessageSearch_When_GetExceptions_Then_ReturnsMatchingExceptions', async () => {
@@ -402,7 +442,11 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data.every((e: any) => e.message.toLowerCase().includes('error'))).toBe(true);
+      expect(
+        response.body.data.every((e: any) =>
+          e.message.toLowerCase().includes('error'),
+        ),
+      ).toBe(true);
     });
 
     it('Given_UrlSearch_When_GetExceptions_Then_ReturnsMatchingExceptions', async () => {
@@ -426,7 +470,9 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       expect(response.body.data).toHaveLength(2);
-      expect(response.body.data.every((e: any) => e.userAgent?.includes('Chrome'))).toBe(true);
+      expect(
+        response.body.data.every((e: any) => e.userAgent?.includes('Chrome')),
+      ).toBe(true);
     });
 
     it('Given_AppVersionSearch_When_GetExceptions_Then_ReturnsMatchingExceptions', async () => {
@@ -450,7 +496,10 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       expect(response.body.data).toHaveLength(1);
-      expect(response.body.data[0].metadata).toHaveProperty('action', 'getData');
+      expect(response.body.data[0].metadata).toHaveProperty(
+        'action',
+        'getData',
+      );
     });
 
     it('Given_DateRange_When_GetExceptions_Then_ReturnsFilteredExceptions', async () => {
@@ -465,7 +514,9 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       expect(response.body.data).toHaveLength(1);
-      expect(response.body.data[0].id).toBe('222e4567-e89b-12d3-a456-426614174222');
+      expect(response.body.data[0].id).toBe(
+        '222e4567-e89b-12d3-a456-426614174222',
+      );
     });
 
     it('Given_PaginationParams_When_GetExceptions_Then_ReturnsPaginatedResults', async () => {
@@ -504,9 +555,15 @@ describe('Exception CRUD (integration)', () => {
 
       // Assert
       // Más reciente primero
-      expect(response.body.data[0].id).toBe('333e4567-e89b-12d3-a456-426614174333');
-      expect(response.body.data[1].id).toBe('222e4567-e89b-12d3-a456-426614174222');
-      expect(response.body.data[2].id).toBe('111e4567-e89b-12d3-a456-426614174111');
+      expect(response.body.data[0].id).toBe(
+        '333e4567-e89b-12d3-a456-426614174333',
+      );
+      expect(response.body.data[1].id).toBe(
+        '222e4567-e89b-12d3-a456-426614174222',
+      );
+      expect(response.body.data[2].id).toBe(
+        '111e4567-e89b-12d3-a456-426614174111',
+      );
     });
 
     it('Given_MultipleFilters_When_GetExceptions_Then_ReturnsFilteredResults', async () => {

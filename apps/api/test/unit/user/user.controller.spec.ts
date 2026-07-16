@@ -2,7 +2,12 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { BadRequestException } from '@nestjs/common';
 import { UserController } from '@user/user.controller';
 import { UserService } from '@user/user.service';
-import { UserResponseDto, UserRole, CreateUserDto, UpdateUserDto } from '@excepio/shared';
+import {
+  UserResponseDto,
+  UserRole,
+  CreateUserDto,
+  UpdateUserDto,
+} from '@excepio/shared';
 import { ResetPasswordDto } from '@user/dto';
 
 describe('UserController', () => {
@@ -125,7 +130,7 @@ describe('UserController', () => {
 
       // Act & Assert
       await expect(controller.delete(currentUser, mockUser.id)).rejects.toThrow(
-        'You cannot delete yourself'
+        'You cannot delete yourself',
       );
       expect(service.delete).not.toHaveBeenCalled();
     });
@@ -145,7 +150,10 @@ describe('UserController', () => {
       const result = await controller.resetPassword(mockUser.id, resetDto);
 
       // Assert
-      expect(service.resetPassword).toHaveBeenCalledWith(mockUser.id, resetDto.newPassword);
+      expect(service.resetPassword).toHaveBeenCalledWith(
+        mockUser.id,
+        resetDto.newPassword,
+      );
       expect(result).toEqual(updatedUser);
     });
 
@@ -157,12 +165,12 @@ describe('UserController', () => {
       };
 
       // Act & Assert
-      await expect(controller.resetPassword(mockUser.id, resetDto)).rejects.toThrow(
-        BadRequestException
-      );
-      await expect(controller.resetPassword(mockUser.id, resetDto)).rejects.toThrow(
-        'Passwords do not match'
-      );
+      await expect(
+        controller.resetPassword(mockUser.id, resetDto),
+      ).rejects.toThrow(BadRequestException);
+      await expect(
+        controller.resetPassword(mockUser.id, resetDto),
+      ).rejects.toThrow('Passwords do not match');
       expect(service.resetPassword).not.toHaveBeenCalled();
     });
   });

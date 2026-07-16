@@ -1,9 +1,27 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { NestFactory } from '@nestjs/core';
-import { Module, INestApplication, Controller, Get, Post, Patch, Delete, Param, Body, Injectable, Inject } from '@nestjs/common';
+import {
+  Module,
+  INestApplication,
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  Injectable,
+  Inject,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { UserResponseDto, CreateUserDto, UpdateUserDto, UserRole, STATUS_ID } from '@excepio/shared';
+import {
+  UserResponseDto,
+  CreateUserDto,
+  UpdateUserDto,
+  UserRole,
+  STATUS_ID,
+} from '@excepio/shared';
 import { UserMemoryRepository, USER_REPOSITORY } from '@user/repository';
 import type { UserRepository } from '@user/repository';
 import * as bcrypt from 'bcrypt';
@@ -32,7 +50,9 @@ class TestUserService {
     const existingUser = await this.repo.findByEmail(createUserDto.email);
     if (existingUser) {
       const { ConflictException } = await import('@nestjs/common');
-      throw new ConflictException(`User with email ${createUserDto.email} already exists`);
+      throw new ConflictException(
+        `User with email ${createUserDto.email} already exists`,
+      );
     }
 
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -44,7 +64,10 @@ class TestUserService {
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserResponseDto> {
     const user = await this.repo.update(id, updateUserDto);
     if (!user) {
       const { NotFoundException } = await import('@nestjs/common');
@@ -71,7 +94,10 @@ class TestUserService {
     return user;
   }
 
-  async resetPassword(id: string, newPassword: string): Promise<UserResponseDto> {
+  async resetPassword(
+    id: string,
+    newPassword: string,
+  ): Promise<UserResponseDto> {
     const user = await this.repo.findById(id);
     if (!user) {
       const { NotFoundException } = await import('@nestjs/common');
@@ -91,7 +117,9 @@ class TestUserService {
 
 @Controller('users')
 class TestUserController {
-  constructor(@Inject(TEST_USER_SERVICE) private readonly userService: TestUserService) {}
+  constructor(
+    @Inject(TEST_USER_SERVICE) private readonly userService: TestUserService,
+  ) {}
 
   @Get()
   async findAll(): Promise<UserResponseDto[]> {
@@ -109,7 +137,10 @@ class TestUserController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<UserResponseDto> {
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<UserResponseDto> {
     return this.userService.update(id, updateUserDto);
   }
 
@@ -124,7 +155,10 @@ class TestUserController {
   }
 
   @Post(':id/reset-password')
-  async resetPassword(@Param('id') id: string, @Body() body: { newPassword: string; confirmPassword: string }): Promise<UserResponseDto> {
+  async resetPassword(
+    @Param('id') id: string,
+    @Body() body: { newPassword: string; confirmPassword: string },
+  ): Promise<UserResponseDto> {
     const { BadRequestException } = await import('@nestjs/common');
     if (body.newPassword !== body.confirmPassword) {
       throw new BadRequestException('Passwords do not match');

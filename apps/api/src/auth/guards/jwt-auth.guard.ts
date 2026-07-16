@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 /**
  * Guard de autenticación JWT.
  * Protege rutas que requieren autenticación.
- * 
+ *
  * Uso:
  * @UseGuards(JwtAuthGuard)
  */

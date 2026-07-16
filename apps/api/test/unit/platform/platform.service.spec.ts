@@ -2,7 +2,11 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { NotFoundException, ConflictException } from '@nestjs/common';
 import { PlatformService } from '@platform/platform.service';
 import { PlatformMemoryRepository } from '@platform/repository';
-import { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
+import {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+} from '@excepio/shared';
 
 describe('PlatformService', () => {
   let service: PlatformService;
@@ -32,10 +36,12 @@ describe('PlatformService', () => {
 
       // Assert
       expect(result).toHaveLength(1);
-      expect(result[0]).toEqual(expect.objectContaining({
-        id: mockPlatform.id,
-        name: mockPlatform.name,
-      }));
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          id: mockPlatform.id,
+          name: mockPlatform.name,
+        }),
+      );
     });
 
     it('Given_NoProjects_When_FindAll_Then_ReturnsEmptyArray', async () => {
@@ -56,16 +62,20 @@ describe('PlatformService', () => {
       const result = await service.findById(mockPlatform.id);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockPlatform.id,
-        name: mockPlatform.name,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockPlatform.id,
+          name: mockPlatform.name,
+        }),
+      );
     });
 
     it('Given_NonExistingId_When_FindById_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
       await expect(service.findById(999)).rejects.toThrow(NotFoundException);
-      await expect(service.findById(999)).rejects.toThrow('Platform with id 999 not found');
+      await expect(service.findById(999)).rejects.toThrow(
+        'Platform with id 999 not found',
+      );
     });
   });
 
@@ -80,11 +90,13 @@ describe('PlatformService', () => {
       const result = await service.create(createPlatformDto);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: createPlatformDto.id,
-        name: createPlatformDto.name,
-        statusId: 2, // ACTIVE por defecto
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: createPlatformDto.id,
+          name: createPlatformDto.name,
+          statusId: 2, // ACTIVE por defecto
+        }),
+      );
       expect(result.apiKey).toBeDefined();
       expect(result.apiKey).toMatch(/^exc_[a-f0-9]{64}$/);
     });
@@ -101,12 +113,14 @@ describe('PlatformService', () => {
       const result = await service.create(createWithIcon);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: createWithIcon.id,
-        name: createWithIcon.name,
-        icon: 'Server',
-        statusId: 2,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: createWithIcon.id,
+          name: createWithIcon.name,
+          icon: 'Server',
+          statusId: 2,
+        }),
+      );
     });
 
     it('Given_DuplicateId_When_Create_Then_ThrowsConflictException', async () => {
@@ -114,10 +128,12 @@ describe('PlatformService', () => {
       repository.seed([mockPlatform]);
 
       // Act & Assert
-      await expect(service.create({ id: mockPlatform.id, name: 'Another Platform' }))
-        .rejects.toThrow(ConflictException);
-      await expect(service.create({ id: mockPlatform.id, name: 'Another Platform' }))
-        .rejects.toThrow(`Platform with id ${mockPlatform.id} already exists`);
+      await expect(
+        service.create({ id: mockPlatform.id, name: 'Another Platform' }),
+      ).rejects.toThrow(ConflictException);
+      await expect(
+        service.create({ id: mockPlatform.id, name: 'Another Platform' }),
+      ).rejects.toThrow(`Platform with id ${mockPlatform.id} already exists`);
     });
   });
 
@@ -134,16 +150,22 @@ describe('PlatformService', () => {
       const result = await service.update(mockPlatform.id, updateDto);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockPlatform.id,
-        name: updateDto.name,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockPlatform.id,
+          name: updateDto.name,
+        }),
+      );
     });
 
     it('Given_NonExistingId_When_Update_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
-      await expect(service.update(999, updateDto)).rejects.toThrow(NotFoundException);
-      await expect(service.update(999, updateDto)).rejects.toThrow('Platform with id 999 not found');
+      await expect(service.update(999, updateDto)).rejects.toThrow(
+        NotFoundException,
+      );
+      await expect(service.update(999, updateDto)).rejects.toThrow(
+        'Platform with id 999 not found',
+      );
     });
 
     it('Given_StatusIdUpdate_When_Update_Then_UpdatesStatusId', async () => {
@@ -192,16 +214,20 @@ describe('PlatformService', () => {
       const result = await service.delete(mockPlatform.id);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockPlatform.id,
-        statusId: 4, // DELETED
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockPlatform.id,
+          statusId: 4, // DELETED
+        }),
+      );
     });
 
     it('Given_NonExistingId_When_Delete_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
       await expect(service.delete(999)).rejects.toThrow(NotFoundException);
-      await expect(service.delete(999)).rejects.toThrow('Platform with id 999 not found');
+      await expect(service.delete(999)).rejects.toThrow(
+        'Platform with id 999 not found',
+      );
     });
   });
 
@@ -223,7 +249,9 @@ describe('PlatformService', () => {
     it('Given_NonExistingId_When_Regenerate_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
       await expect(service.regenerate(999)).rejects.toThrow(NotFoundException);
-      await expect(service.regenerate(999)).rejects.toThrow('Platform with id 999 not found');
+      await expect(service.regenerate(999)).rejects.toThrow(
+        'Platform with id 999 not found',
+      );
     });
   });
 });

@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { UserResponseDto, CreateUserDto, UpdateUserDto, UserRole } from '@excepio/shared';
+import {
+  UserResponseDto,
+  CreateUserDto,
+  UpdateUserDto,
+  UserRole,
+} from '@excepio/shared';
 import { UserRepository } from './user.repository.interface';
 
 /**
@@ -8,7 +13,8 @@ import { UserRepository } from './user.repository.interface';
  */
 @Injectable()
 export class UserMemoryRepository implements UserRepository {
-  private users: Map<string, UserResponseDto & { password: string }> = new Map();
+  private users: Map<string, UserResponseDto & { password: string }> =
+    new Map();
 
   /**
    * Limpia todos los datos del repositorio.
@@ -30,7 +36,10 @@ export class UserMemoryRepository implements UserRepository {
   async findAll(): Promise<UserResponseDto[]> {
     return Array.from(this.users.values())
       .map(({ password, ...user }) => ({ ...user }))
-      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
   }
 
   async findById(id: string): Promise<UserResponseDto | null> {
@@ -47,7 +56,9 @@ export class UserMemoryRepository implements UserRepository {
     return { ...userWithoutPassword };
   }
 
-  async create(data: CreateUserDto & { password: string }): Promise<UserResponseDto> {
+  async create(
+    data: CreateUserDto & { password: string },
+  ): Promise<UserResponseDto> {
     const now = new Date().toISOString();
     const user: UserResponseDto & { password: string } = {
       id: crypto.randomUUID(),
@@ -67,7 +78,10 @@ export class UserMemoryRepository implements UserRepository {
     return { ...userWithoutPassword };
   }
 
-  async update(id: string, data: UpdateUserDto): Promise<UserResponseDto | null> {
+  async update(
+    id: string,
+    data: UpdateUserDto,
+  ): Promise<UserResponseDto | null> {
     const user = this.users.get(id);
     if (!user) return null;
 
@@ -128,7 +142,10 @@ export class UserMemoryRepository implements UserRepository {
     }
   }
 
-  async updatePassword(id: string, hashedPassword: string): Promise<UserResponseDto | null> {
+  async updatePassword(
+    id: string,
+    hashedPassword: string,
+  ): Promise<UserResponseDto | null> {
     const user = this.users.get(id);
     if (!user) return null;
 

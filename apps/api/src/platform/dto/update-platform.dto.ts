@@ -1,5 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, MinLength, MaxLength, IsInt, IsOptional, ValidateIf } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  MaxLength,
+  IsInt,
+  IsOptional,
+  ValidateIf,
+} from 'class-validator';
 
 export class UpdatePlatformDto {
   @ApiPropertyOptional({
@@ -15,7 +22,8 @@ export class UpdatePlatformDto {
   name?: string;
 
   @ApiPropertyOptional({
-    description: 'Nombre del icono de la plataforma (de la galería predefinida). Enviar null para eliminar.',
+    description:
+      'Nombre del icono de la plataforma (de la galería predefinida). Enviar null para eliminar.',
     example: 'Monitor',
     maxLength: 50,
     nullable: true,
