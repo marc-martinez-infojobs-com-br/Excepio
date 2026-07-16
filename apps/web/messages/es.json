@@ -273,6 +273,15 @@
       "button": "Activar",
       "success": "Usuario activado correctamente"
     },
+    "resetPassword": {
+      "title": "Resetear Contraseña",
+      "button": "Resetear contraseña",
+      "buttonShort": "Regenerar password",
+      "description": "Establece una nueva contraseña para {name}",
+      "newPassword": "Nueva contraseña",
+      "confirmPassword": "Confirmar contraseña",
+      "success": "Contraseña reseteada correctamente"
+    },
     "form": {
       "name": "Nombre",
       "namePlaceholder": "Ej: Juan Pérez",
@@ -295,6 +304,7 @@
       "update": "Error al actualizar usuario",
       "delete": "Error al eliminar usuario",
       "activate": "Error al activar usuario",
+      "resetPassword": "Error al resetear contraseña",
       "emailExists": "El email ya está registrado"
     }
   }

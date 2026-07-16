@@ -273,6 +273,15 @@
       "button": "Activar",
       "success": "Usuari activat correctament"
     },
+    "resetPassword": {
+      "title": "Restablir Contrasenya",
+      "button": "Restablir contrasenya",
+      "buttonShort": "Regenerar password",
+      "description": "Estableix una nova contrasenya per a {name}",
+      "newPassword": "Nova contrasenya",
+      "confirmPassword": "Confirmar contrasenya",
+      "success": "Contrasenya restablerta correctament"
+    },
     "form": {
       "name": "Nom",
       "namePlaceholder": "Ex: Joan Pérez",
@@ -295,6 +304,7 @@
       "update": "Error en actualitzar usuari",
       "delete": "Error en eliminar usuari",
       "activate": "Error en activar usuari",
+      "resetPassword": "Error en restablir contrasenya",
       "emailExists": "L'email ja està registrat"
     }
   }

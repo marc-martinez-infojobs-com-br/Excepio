@@ -48,6 +48,14 @@ vi.mock('@hooks/use-user-mutations', () => ({
   }),
 }));
 
+// Mock de useResetPassword
+vi.mock('@hooks/use-reset-password', () => ({
+  useResetPassword: () => ({
+    mutateAsync: vi.fn(),
+    isPending: false,
+  }),
+}));
+
 // Mock de next-intl
 vi.mock('next-intl', () => ({
   useTranslations: vi.fn((namespace: string) => (key: string) => {
