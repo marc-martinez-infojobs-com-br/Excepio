@@ -173,7 +173,7 @@ export function ExceptionRow({ exception, platforms, levels, onClick }: Exceptio
     <TableRow
       className="cursor-pointer hover:bg-muted/50 border-b border-border"
       onClick={handleClick}
-      data-href={`/exceptions/${exception.id}`}
+      data-href={`/issues/${exception.id}`}
       role="link"
     >
       {/* Severity Badge */}

@@ -6,13 +6,18 @@ import type {
 } from "@components/ui/toast"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_DEFAULT_DURATION = 5000
+
+type ToastVariant = "default" | "destructive" | "error" | "warning" | "success" | "info"
 
 type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  variant?: ToastVariant
+  duration?: number
+  showCloseButton?: boolean
 }
 
 const actionTypes = {
@@ -55,7 +60,7 @@ interface State {
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 
-const addToRemoveQueue = (toastId: string) => {
+const addToRemoveQueue = (toastId: string, duration: number = TOAST_DEFAULT_DURATION) => {
   if (toastTimeouts.has(toastId)) {
     return
   }
@@ -66,7 +71,7 @@ const addToRemoveQueue = (toastId: string) => {
       type: "REMOVE_TOAST",
       toastId: toastId,
     })
-  }, TOAST_REMOVE_DELAY)
+  }, duration)
 
   toastTimeouts.set(toastId, timeout)
 }
@@ -137,7 +142,7 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, "id">
 
-function toast({ ...props }: Toast) {
+function toast({ duration = TOAST_DEFAULT_DURATION, showCloseButton = true, ...props }: Toast) {
   const id = genId()
 
   const update = (props: ToasterToast) =>
@@ -152,12 +157,19 @@ function toast({ ...props }: Toast) {
     toast: {
       ...props,
       id,
+      duration,
+      showCloseButton,
       open: true,
       onOpenChange: (open) => {
         if (!open) dismiss()
       },
     },
   })
+
+  // Auto-dismiss after duration
+  if (duration > 0) {
+    addToRemoveQueue(id, duration)
+  }
 
   return {
     id: id,

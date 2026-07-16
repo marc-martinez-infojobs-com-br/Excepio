@@ -141,5 +141,19 @@
   },
   "metadata": {
     "description": "Sistema de Registro de Excepciones"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "issues": "Incidencias",
+    "platforms": "Plataformas",
+    "users": "Usuarios"
+  },
+  "errors": {
+    "accessDenied": "No tienes permisos para acceder a esta sección"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "Lo sentimos, la página que buscas no existe o ha sido movida.",
+    "backHome": "Volver al inicio"
   }
 }

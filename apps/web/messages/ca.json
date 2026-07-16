@@ -141,5 +141,19 @@
   },
   "metadata": {
     "description": "Sistema de Registre d'Excepcions"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "issues": "Incidències",
+    "platforms": "Plataformes",
+    "users": "Usuaris"
+  },
+  "errors": {
+    "accessDenied": "No tens permisos per accedir a aquesta secció"
+  },
+  "notFound": {
+    "title": "Pàgina no trobada",
+    "description": "Ho sentim, la pàgina que busques no existeix o ha estat moguda.",
+    "backHome": "Tornar a l'inici"
   }
 }

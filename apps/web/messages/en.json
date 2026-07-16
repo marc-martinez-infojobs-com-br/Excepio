@@ -141,5 +141,19 @@
   },
   "metadata": {
     "description": "Exception Tracking System"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "issues": "Issues",
+    "platforms": "Platforms",
+    "users": "Users"
+  },
+  "errors": {
+    "accessDenied": "You don't have permission to access this section"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you're looking for doesn't exist or has been moved.",
+    "backHome": "Back to home"
   }
 }

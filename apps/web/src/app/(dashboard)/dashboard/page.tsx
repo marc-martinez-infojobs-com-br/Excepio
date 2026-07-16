@@ -26,7 +26,7 @@ export default function DashboardPage() {
 
       {/* Quick actions */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Link href="/exceptions" className="block">
+        <Link href="/issues" className="block">
           <div className="border border-input rounded-lg p-6 hover:bg-muted/50 transition-colors">
             <div className="flex items-center gap-3 mb-3">
               <AlertTriangle className="h-8 w-8 text-amber-500" />
