@@ -100,6 +100,12 @@ export class AuthService {
 
     // Retornar usuario sin password
     const user = await this.userRepository.findByEmail(email);
+    
+    // Verificar que el usuario esté activo (statusId = 2)
+    if (!user || user.statusId !== 2) {
+      return null;
+    }
+
     return user;
   }
 }

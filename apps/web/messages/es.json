@@ -223,5 +223,74 @@
       "regenerate": "Error al regenerar API Key",
       "activate": "Error al activar plataforma"
     }
+  },
+  "users": {
+    "title": "Usuarios",
+    "empty": "No hay usuarios registrados",
+    "loading": "Cargando usuarios...",
+    "table": {
+      "name": "Nombre",
+      "email": "Email",
+      "role": "Rol",
+      "status": "Estado",
+      "lastLogin": "Último acceso",
+      "createdAt": "Creado",
+      "actions": "Acciones"
+    },
+    "roles": {
+      "ADMINISTRADOR": "Administrador",
+      "USUARIO": "Usuario"
+    },
+    "status": {
+      "active": "Activo",
+      "pending": "Pendiente",
+      "expired": "Expirado",
+      "deleted": "Eliminado"
+    },
+    "create": {
+      "title": "Nuevo Usuario",
+      "button": "Nuevo usuario",
+      "success": "Usuario creado correctamente"
+    },
+    "edit": {
+      "title": "Editar Usuario",
+      "button": "Editar",
+      "success": "Usuario actualizado correctamente"
+    },
+    "delete": {
+      "title": "Eliminar Usuario",
+      "button": "Eliminar",
+      "confirm": "¿Estás seguro de eliminar al usuario \"{name}\"? Esta acción no se puede deshacer.",
+      "success": "Usuario eliminado correctamente",
+      "cannotDeleteSelf": "No puedes eliminarte a ti mismo"
+    },
+    "activate": {
+      "button": "Activar",
+      "success": "Usuario activado correctamente"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Ej: Juan Pérez",
+      "email": "Email",
+      "emailPlaceholder": "Ej: juan@ejemplo.com",
+      "password": "Contraseña",
+      "passwordPlaceholder": "Mínimo 8 caracteres",
+      "passwordHelp": "Solo requerida al crear usuario",
+      "confirmPassword": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Repite la contraseña",
+      "passwordMismatch": "Las contraseñas no coinciden",
+      "role": "Rol",
+      "rolePlaceholder": "Selecciona un rol",
+      "submit": "Guardar",
+      "submitting": "Guardando..."
+    },
+    "errors": {
+      "loading": "Error al cargar usuarios",
+      "create": "Error al crear usuario",
+      "update": "Error al actualizar usuario",
+      "delete": "Error al eliminar usuario",
+      "activate": "Error al activar usuario",
+      "emailExists": "El email ya está registrado"
+    }
   }
 }

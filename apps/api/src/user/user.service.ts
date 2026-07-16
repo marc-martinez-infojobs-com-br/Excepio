@@ -103,4 +103,18 @@ export class UserService {
     }
     return user;
   }
+
+  /**
+   * Activa un usuario (cambia su estado a ACTIVE).
+   * @param id - ID del usuario a activar
+   * @returns El usuario activado
+   * @throws NotFoundException si el usuario no existe
+   */
+  async activate(id: string): Promise<UserResponseDto> {
+    const user = await this.userRepository.activate(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
 }

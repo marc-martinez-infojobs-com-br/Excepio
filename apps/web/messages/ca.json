@@ -223,5 +223,74 @@
       "regenerate": "Error en regenerar API Key",
       "activate": "Error en activar plataforma"
     }
+  },
+  "users": {
+    "title": "Usuaris",
+    "empty": "No hi ha usuaris registrats",
+    "loading": "Carregant usuaris...",
+    "table": {
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rol",
+      "status": "Estat",
+      "lastLogin": "Últim accés",
+      "createdAt": "Creat",
+      "actions": "Accions"
+    },
+    "roles": {
+      "ADMINISTRADOR": "Administrador",
+      "USUARIO": "Usuari"
+    },
+    "status": {
+      "active": "Actiu",
+      "pending": "Pendent",
+      "expired": "Expirat",
+      "deleted": "Eliminat"
+    },
+    "create": {
+      "title": "Nou Usuari",
+      "button": "Nou usuari",
+      "success": "Usuari creat correctament"
+    },
+    "edit": {
+      "title": "Editar Usuari",
+      "button": "Editar",
+      "success": "Usuari actualitzat correctament"
+    },
+    "delete": {
+      "title": "Eliminar Usuari",
+      "button": "Eliminar",
+      "confirm": "Estàs segur d'eliminar l'usuari \"{name}\"? Aquesta acció no es pot desfer.",
+      "success": "Usuari eliminat correctament",
+      "cannotDeleteSelf": "No pots eliminar-te a tu mateix"
+    },
+    "activate": {
+      "button": "Activar",
+      "success": "Usuari activat correctament"
+    },
+    "form": {
+      "name": "Nom",
+      "namePlaceholder": "Ex: Joan Pérez",
+      "email": "Email",
+      "emailPlaceholder": "Ex: joan@exemple.cat",
+      "password": "Contrasenya",
+      "passwordPlaceholder": "Mínim 8 caràcters",
+      "passwordHelp": "Només requerida en crear usuari",
+      "confirmPassword": "Confirmar Contrasenya",
+      "confirmPasswordPlaceholder": "Repeteix la contrasenya",
+      "passwordMismatch": "Les contrasenyes no coincideixen",
+      "role": "Rol",
+      "rolePlaceholder": "Selecciona un rol",
+      "submit": "Desar",
+      "submitting": "Desant..."
+    },
+    "errors": {
+      "loading": "Error en carregar usuaris",
+      "create": "Error en crear usuari",
+      "update": "Error en actualitzar usuari",
+      "delete": "Error en eliminar usuari",
+      "activate": "Error en activar usuari",
+      "emailExists": "L'email ja està registrat"
+    }
   }
 }

@@ -47,6 +47,13 @@ export interface UserRepository {
   delete(id: string): Promise<UserResponseDto | null>;
 
   /**
+   * Activa un usuario (cambia statusId a ACTIVE).
+   * @param id - ID del usuario a activar
+   * @returns El usuario activado o null si no existe
+   */
+  activate(id: string): Promise<UserResponseDto | null>;
+
+  /**
    * Obtiene el password hasheado de un usuario por email.
    * Usado solo para autenticación.
    * @param email - Email del usuario

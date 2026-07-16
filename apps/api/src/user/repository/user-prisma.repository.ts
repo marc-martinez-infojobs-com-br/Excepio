@@ -12,7 +12,7 @@ export class UserPrismaRepository implements UserRepository {
 
   async findAll(): Promise<UserResponseDto[]> {
     const users = await this.prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'asc' },
     });
 
     return users.map((user) => this.mapToDto(user));
@@ -67,6 +67,21 @@ export class UserPrismaRepository implements UserRepository {
         where: { id },
         data: {
           statusId: 4, // DELETED
+        },
+      });
+
+      return this.mapToDto(user);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  async activate(id: string): Promise<UserResponseDto | null> {
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data: {
+          statusId: 2, // ACTIVE
         },
       });
 

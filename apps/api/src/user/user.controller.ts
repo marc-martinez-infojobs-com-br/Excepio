@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, BadRequestException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 import type { UserResponseDto } from '@excepio/shared';
 import { UserRole } from '@excepio/shared';
@@ -6,6 +6,7 @@ import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { CreateUserDto, UpdateUserDto } from './dto';
 
 @ApiTags('Users')
@@ -117,6 +118,10 @@ export class UserController {
     description: 'Usuario eliminado exitosamente',
   })
   @ApiResponse({
+    status: 400,
+    description: 'No puedes eliminarte a ti mismo',
+  })
+  @ApiResponse({
     status: 401,
     description: 'No autenticado',
   })
@@ -128,7 +133,35 @@ export class UserController {
     status: 404,
     description: 'Usuario no encontrado',
   })
-  async delete(@Param('id') id: string): Promise<UserResponseDto> {
+  async delete(@CurrentUser() currentUser: UserResponseDto, @Param('id') id: string): Promise<UserResponseDto> {
+    // Validar que el usuario no se elimine a sí mismo
+    if (currentUser.id === id) {
+      throw new BadRequestException('You cannot delete yourself');
+    }
     return this.userService.delete(id);
+  }
+
+  @Post(':id/activate')
+  @Roles(UserRole.ADMINISTRADOR)
+  @ApiOperation({ summary: 'Activar un usuario eliminado - solo ADMINISTRADOR' })
+  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiResponse({
+    status: 201,
+    description: 'Usuario activado exitosamente',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'No autenticado',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuario no encontrado',
+  })
+  async activate(@Param('id') id: string): Promise<UserResponseDto> {
+    return this.userService.activate(id);
   }
 }
