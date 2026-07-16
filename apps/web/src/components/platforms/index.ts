@@ -1,5 +1,6 @@
 export { PlatformIcon, availableIcons } from './platform-icon';
 export { PlatformsTable } from './platforms-table';
+export { PlatformCard } from './platform-card';
 export { IconSelector } from './icon-selector';
 export { PlatformFormModal } from './platform-form-modal';
 export { DeletePlatformDialog } from './delete-platform-dialog';
