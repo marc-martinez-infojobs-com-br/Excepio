@@ -37,6 +37,7 @@ export class StatsService {
   /**
    * Obtiene el total de excepciones con comparación al período anterior.
    * Si no se especifican fechas, usa las últimas 24 horas.
+   * Incluye desglose por nivel de severidad.
    */
   async getTotal(filters: StatsFilterDto): Promise<TotalStatsResponseDto> {
     const now = new Date();
@@ -81,6 +82,27 @@ export class StatsService {
       },
     });
 
+    // Contar por nivel de severidad (período actual)
+    const byLevelData = await this.prisma.exception.groupBy({
+      by: ['levelId'],
+      _count: {
+        id: true,
+      },
+      where: {
+        ...baseWhere,
+        createdAt: {
+          gte: currentStart,
+          lte: currentEnd,
+        },
+      },
+    });
+
+    // Convertir a objeto { levelId: count }
+    const byLevel: Record<string, number> = {};
+    for (const item of byLevelData) {
+      byLevel[item.levelId.toString()] = item._count.id;
+    }
+
     // Calcular porcentaje de cambio
     let changePercent = 0;
     if (previousTotal > 0) {
@@ -94,6 +116,7 @@ export class StatsService {
         total: currentTotal,
         startDate: currentStart.toISOString(),
         endDate: currentEnd.toISOString(),
+        byLevel,
       },
       previous: {
         total: previousTotal,

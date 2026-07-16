@@ -20,6 +20,7 @@ export const PeriodStatsSchema = z.object({
   total: z.number().int(),
   startDate: z.string().datetime(),
   endDate: z.string().datetime(),
+  byLevel: z.record(z.string(), z.number().int()).optional(),
 });
 
 export type PeriodStatsDto = z.infer<typeof PeriodStatsSchema>;

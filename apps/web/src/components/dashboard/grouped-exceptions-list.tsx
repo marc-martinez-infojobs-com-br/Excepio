@@ -165,52 +165,141 @@ export function GroupedExceptionsList({
 
   return (
     <Card className={cn('border-input', className)}>
-      <CardHeader className="flex flex-row items-center justify-between">
+      {/* Desktop header: sin fondo, link a la derecha */}
+      <CardHeader className="hidden md:flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-semibold">
           {t('groupedTitle')}
         </CardTitle>
         <a
           href="/issues"
-          className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400 uppercase tracking-wide"
+          className="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400 uppercase tracking-wide"
         >
           {t('viewAllIssues')}
         </a>
       </CardHeader>
-      <CardContent className="p-0">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-b border-border bg-muted/50 hover:bg-muted/50">
-              <TableHead className="w-[120px] text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {tExceptions('table.severity')}
-              </TableHead>
-              <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {tExceptions('table.issue')}
-              </TableHead>
-              <TableHead className="w-[100px] text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                {t('count')}
-              </TableHead>
-              <TableHead className="w-[80px] text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
-                {tExceptions('table.platform')}
-              </TableHead>
-              <TableHead className="w-[160px] text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                {tExceptions('table.lastSeen')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.data.map((item, index) => {
-              const level = levels.find((l) => l.id === item.levelId);
-              const platform = platforms.find((p) => p.id === item.platformId);
-              const absolute = formatDate(item.lastSeen);
-              const relative = relativeTimes[index] || absolute;
 
-              return (
-                <TableRow
-                  key={`${item.message}-${item.levelId}-${item.platformId}-${index}`}
-                  className="border-b border-border hover:bg-muted/50"
-                >
-                  {/* Severity Badge */}
-                  <TableCell className="w-[120px] py-4">
+      {/* Móvil header: con fondo, link debajo */}
+      <CardHeader className="md:hidden bg-muted/50">
+        <CardTitle className="text-lg font-semibold">
+          {t('groupedTitle')}
+        </CardTitle>
+        <a
+          href="/issues"
+          className="text-xs font-medium text-blue-600 hover:text-blue-700 dark:text-blue-500 dark:hover:text-blue-400 uppercase tracking-wide"
+        >
+          {t('viewAllIssues')}
+        </a>
+      </CardHeader>
+
+      <CardContent className="p-0">
+        {/* Vista desktop: tabla */}
+        <div className="hidden md:block">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-b border-border bg-muted/50 hover:bg-muted/50">
+                <TableHead className="w-[120px] text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  {tExceptions('table.severity')}
+                </TableHead>
+                <TableHead className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  {tExceptions('table.issue')}
+                </TableHead>
+                <TableHead className="w-[100px] text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+                  {t('count')}
+                </TableHead>
+                <TableHead className="w-[80px] text-xs font-semibold text-muted-foreground uppercase tracking-wider text-center">
+                  {tExceptions('table.platform')}
+                </TableHead>
+                <TableHead className="w-[160px] text-right text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  {tExceptions('table.lastSeen')}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.data.map((item, index) => {
+                const level = levels.find((l) => l.id === item.levelId);
+                const platform = platforms.find((p) => p.id === item.platformId);
+                const absolute = formatDate(item.lastSeen);
+                const relative = relativeTimes[index] || absolute;
+
+                return (
+                  <TableRow
+                    key={`${item.message}-${item.levelId}-${item.platformId}-${index}`}
+                    className="border-b border-border hover:bg-muted/50"
+                  >
+                    {/* Severity Badge */}
+                    <TableCell className="w-[120px] py-4">
+                      <span
+                        className={cn(
+                          'inline-flex items-center rounded px-2 py-1 text-xs font-semibold border',
+                          getLevelBadgeClasses(item.levelId)
+                        )}
+                      >
+                        {getLevelDisplayName(
+                          item.levelId,
+                          level?.name ?? tExceptions('unknownLevel')
+                        )}
+                      </span>
+                    </TableCell>
+
+                    {/* Message */}
+                    <TableCell className="py-4">
+                      <p className="text-lg font-semibold text-primary">
+                        {item.message}
+                      </p>
+                    </TableCell>
+
+                    {/* Count */}
+                    <TableCell className="w-[100px] py-4 text-center">
+                      <span className="text-sm font-semibold">
+                        {item.count.toLocaleString()}
+                      </span>
+                    </TableCell>
+
+                    {/* Platform Icon */}
+                    <TableCell className="w-[80px] py-4">
+                      <div
+                        className="flex justify-center"
+                        title={platform?.name ?? tExceptions('unknownPlatform')}
+                      >
+                        <PlatformIcon
+                          iconName={platform?.icon}
+                          className="text-muted-foreground"
+                        />
+                      </div>
+                    </TableCell>
+
+                    {/* Date */}
+                    <TableCell className="w-[160px] text-right py-4">
+                      <div className="space-y-0.5">
+                        <p className="text-sm font-medium text-foreground">
+                          {relative}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{absolute}</p>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* Vista móvil: cards */}
+        <div className="md:hidden divide-y divide-border">
+          {data.data.map((item, index) => {
+            const level = levels.find((l) => l.id === item.levelId);
+            const platform = platforms.find((p) => p.id === item.platformId);
+            const absolute = formatDate(item.lastSeen);
+            const relative = relativeTimes[index] || absolute;
+
+            return (
+              <div
+                key={`card-${item.message}-${item.levelId}-${item.platformId}-${index}`}
+                className="p-4 space-y-3"
+              >
+                {/* Header: Badge + Platform + Count */}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
                     <span
                       className={cn(
                         'inline-flex items-center rounded px-2 py-1 text-xs font-semibold border',
@@ -222,49 +311,35 @@ export function GroupedExceptionsList({
                         level?.name ?? tExceptions('unknownLevel')
                       )}
                     </span>
-                  </TableCell>
-
-                  {/* Message */}
-                  <TableCell className="py-4">
-                    <p className="text-lg font-semibold text-primary">
-                      {item.message}
-                    </p>
-                  </TableCell>
-
-                  {/* Count */}
-                  <TableCell className="w-[100px] py-4 text-center">
-                    <span className="text-sm font-semibold">
-                      {item.count.toLocaleString()}
-                    </span>
-                  </TableCell>
-
-                  {/* Platform Icon */}
-                  <TableCell className="w-[80px] py-4">
                     <div
-                      className="flex justify-center"
+                      className="flex items-center gap-1 text-muted-foreground"
                       title={platform?.name ?? tExceptions('unknownPlatform')}
                     >
                       <PlatformIcon
                         iconName={platform?.icon}
-                        className="text-muted-foreground"
+                        className="h-4 w-4"
                       />
                     </div>
-                  </TableCell>
+                  </div>
+                  <span className="text-sm font-semibold">
+                    {item.count.toLocaleString()}x
+                  </span>
+                </div>
 
-                  {/* Date */}
-                  <TableCell className="w-[160px] text-right py-4">
-                    <div className="space-y-0.5">
-                      <p className="text-sm font-medium text-foreground">
-                        {relative}
-                      </p>
-                      <p className="text-xs text-muted-foreground">{absolute}</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+                {/* Message */}
+                <p className="text-base font-semibold text-primary line-clamp-2">
+                  {item.message}
+                </p>
+
+                {/* Date */}
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{relative}</span>
+                  <span>{absolute}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </CardContent>
     </Card>
   );

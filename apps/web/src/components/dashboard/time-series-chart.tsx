@@ -149,12 +149,12 @@ export function TimeSeriesChart({ filters, className }: TimeSeriesChartProps) {
   return (
     <Card className={cn('border-input', className)}>
       <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <CardTitle className="text-base font-semibold">
             {t('timeSeriesTitle')}
           </CardTitle>
-          {/* Leyenda de colores inline - de mayor a menor criticidad */}
-          <div className="flex items-center gap-3">
+          {/* Leyenda de colores - debajo en móvil, inline en desktop */}
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
             {[...levelIds].reverse().map((levelId) => (
               <div key={levelId} className="flex items-center gap-1">
                 <div

@@ -103,8 +103,8 @@ export function PlatformPieChart({ filters, className }: PlatformPieChartProps) 
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col items-center">
-          {/* Pie Chart */}
+        {/* Desktop: pie centrado, leyenda debajo en 2 columnas */}
+        <div className="hidden lg:flex flex-col items-center">
           <div className="outline-none" tabIndex={-1}>
             <ResponsiveContainer width={120} height={120}>
               <PieChart>
@@ -125,19 +125,55 @@ export function PlatformPieChart({ filters, className }: PlatformPieChartProps) 
               </PieChart>
             </ResponsiveContainer>
           </div>
-
-          {/* Leyenda en 2 columnas */}
           <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 w-full">
             {chartData.map((item, index) => (
-              <div key={index} className="flex items-center gap-2 text-sm min-w-0">
+              <div key={index} className="flex items-center gap-2 text-xs min-w-0">
                 <div
                   className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
                   style={{ backgroundColor: item.color }}
                 />
-                <span className="truncate text-muted-foreground text-xs">
+                <span className="truncate text-muted-foreground">
                   {item.name}
                 </span>
-                <span className="font-medium text-xs ml-auto">{item.percent}%</span>
+                <span className="font-medium ml-auto">{item.percent}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Móvil: pie a la izquierda, leyenda a la derecha */}
+        <div className="flex lg:hidden items-center justify-between gap-6">
+          <div className="outline-none flex-shrink-0" tabIndex={-1}>
+            <ResponsiveContainer width={120} height={120}>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={55}
+                  innerRadius={30}
+                  fill="#8884d8"
+                  dataKey="value"
+                  strokeWidth={0}
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex flex-col gap-1.5">
+            {chartData.map((item, index) => (
+              <div key={index} className="flex items-center gap-2 text-xs">
+                <div
+                  className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-muted-foreground">
+                  {item.name}
+                </span>
+                <span className="font-medium">{item.percent}%</span>
               </div>
             ))}
           </div>
