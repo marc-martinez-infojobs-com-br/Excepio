@@ -205,6 +205,26 @@ describe('AuthService', () => {
         })
       );
     });
+
+    it('Given_DeletedUser_When_Login_Then_ThrowsUnauthorizedException', async () => {
+      // Arrange
+      const deletedUser = {
+        ...mockUser,
+        statusId: 4, // DELETED
+      };
+      const hashedPassword = await bcrypt.hash('Password123!', 10);
+      userRepository.seed([
+        {
+          ...deletedUser,
+          password: hashedPassword as string,
+        },
+      ]);
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      // Act & Assert
+      await expect(authService.login(loginDto)).rejects.toThrow(UnauthorizedException);
+      await expect(authService.login(loginDto)).rejects.toThrow('Invalid credentials');
+    });
   });
 
   describe('validateUser', () => {
@@ -246,6 +266,28 @@ describe('AuthService', () => {
 
       // Act
       const result = await authService.validateUser('test@example.com', 'WrongPassword');
+
+      // Assert
+      expect(result).toBeNull();
+    });
+
+    it('Given_DeletedUser_When_ValidateUser_Then_ReturnsNull', async () => {
+      // Arrange
+      const deletedUser = {
+        ...mockUser,
+        statusId: 4, // DELETED
+      };
+      const hashedPassword = await bcrypt.hash('Password123!', 10);
+      userRepository.seed([
+        {
+          ...deletedUser,
+          password: hashedPassword as string,
+        },
+      ]);
+      vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
+
+      // Act
+      const result = await authService.validateUser('test@example.com', 'Password123!');
 
       // Assert
       expect(result).toBeNull();
