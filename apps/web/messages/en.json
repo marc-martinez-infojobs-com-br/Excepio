@@ -223,5 +223,74 @@
       "regenerate": "Error regenerating API Key",
       "activate": "Error activating platform"
     }
+  },
+  "users": {
+    "title": "Users",
+    "empty": "No users registered",
+    "loading": "Loading users...",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "lastLogin": "Last login",
+      "createdAt": "Created",
+      "actions": "Actions"
+    },
+    "roles": {
+      "ADMINISTRADOR": "Administrator",
+      "USUARIO": "User"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "expired": "Expired",
+      "deleted": "Deleted"
+    },
+    "create": {
+      "title": "New User",
+      "button": "New user",
+      "success": "User created successfully"
+    },
+    "edit": {
+      "title": "Edit User",
+      "button": "Edit",
+      "success": "User updated successfully"
+    },
+    "delete": {
+      "title": "Delete User",
+      "button": "Delete",
+      "confirm": "Are you sure you want to delete user \"{name}\"? This action cannot be undone.",
+      "success": "User deleted successfully",
+      "cannotDeleteSelf": "You cannot delete yourself"
+    },
+    "activate": {
+      "button": "Activate",
+      "success": "User activated successfully"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "E.g: John Doe",
+      "email": "Email",
+      "emailPlaceholder": "E.g: john@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Minimum 8 characters",
+      "passwordHelp": "Only required when creating user",
+      "confirmPassword": "Confirm Password",
+      "confirmPasswordPlaceholder": "Repeat password",
+      "passwordMismatch": "Passwords do not match",
+      "role": "Role",
+      "rolePlaceholder": "Select a role",
+      "submit": "Save",
+      "submitting": "Saving..."
+    },
+    "errors": {
+      "loading": "Error loading users",
+      "create": "Error creating user",
+      "update": "Error updating user",
+      "delete": "Error deleting user",
+      "activate": "Error activating user",
+      "emailExists": "Email already registered"
+    }
   }
 }

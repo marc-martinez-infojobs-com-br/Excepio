@@ -16,7 +16,6 @@ import {
 } from '@components/ui/form';
 import { useState } from 'react';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
 export function LoginForm() {
@@ -74,17 +73,10 @@ export function LoginForm() {
           name="password"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <div className="flex justify-between items-center">
-                <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
-                  {t('password')}
-                </FormLabel>
-                <Link 
-                  href="/forgot-password" 
-                  className="text-sm text-primary hover:underline transition-all"
-                >
-                  {t('forgotPassword')}
-                </Link>
-              </div>
+              {/* TODO: Implementar funcionalidad "Forgot password" */}
+              <FormLabel className="text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
+                {t('password')}
+              </FormLabel>
               <FormControl>
                 <div className="relative group">
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-muted-foreground group-focus-within:text-primary transition-colors" />

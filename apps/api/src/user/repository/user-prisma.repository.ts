@@ -12,7 +12,7 @@ export class UserPrismaRepository implements UserRepository {
 
   async findAll(): Promise<UserResponseDto[]> {
     const users = await this.prisma.user.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: 'asc' },
     });
 
     return users.map((user) => this.mapToDto(user));

@@ -28,7 +28,9 @@ export class UserMemoryRepository implements UserRepository {
   }
 
   async findAll(): Promise<UserResponseDto[]> {
-    return Array.from(this.users.values()).map(({ password, ...user }) => ({ ...user }));
+    return Array.from(this.users.values())
+      .map(({ password, ...user }) => ({ ...user }))
+      .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
   }
 
   async findById(id: string): Promise<UserResponseDto | null> {
