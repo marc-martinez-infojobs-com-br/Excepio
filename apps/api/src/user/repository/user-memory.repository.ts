@@ -97,6 +97,22 @@ export class UserMemoryRepository implements UserRepository {
     return { ...userWithoutPassword };
   }
 
+  async activate(id: string): Promise<UserResponseDto | null> {
+    const user = this.users.get(id);
+    if (!user) return null;
+
+    const activatedUser = {
+      ...user,
+      statusId: 2, // ACTIVE
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.users.set(id, activatedUser);
+
+    const { password, ...userWithoutPassword } = activatedUser;
+    return { ...userWithoutPassword };
+  }
+
   async findPasswordByEmail(email: string): Promise<string | null> {
     const user = Array.from(this.users.values()).find((u) => u.email === email);
     return user ? user.password : null;

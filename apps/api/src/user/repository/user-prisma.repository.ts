@@ -76,6 +76,21 @@ export class UserPrismaRepository implements UserRepository {
     }
   }
 
+  async activate(id: string): Promise<UserResponseDto | null> {
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data: {
+          statusId: 2, // ACTIVE
+        },
+      });
+
+      return this.mapToDto(user);
+    } catch (error) {
+      return null;
+    }
+  }
+
   async findPasswordByEmail(email: string): Promise<string | null> {
     const user = await this.prisma.user.findUnique({
       where: { email },

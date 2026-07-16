@@ -61,6 +61,15 @@ class TestUserService {
     }
     return user;
   }
+
+  async activate(id: string): Promise<UserResponseDto> {
+    const user = await this.repo.activate(id);
+    if (!user) {
+      const { NotFoundException } = await import('@nestjs/common');
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+    return user;
+  }
 }
 
 @Controller('users')
@@ -90,6 +99,11 @@ class TestUserController {
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<UserResponseDto> {
     return this.userService.delete(id);
+  }
+
+  @Post(':id/activate')
+  async activate(@Param('id') id: string): Promise<UserResponseDto> {
+    return this.userService.activate(id);
   }
 }
 
@@ -332,6 +346,56 @@ describe('User CRUD (integration)', () => {
       // Act
       const response = await request(app.getHttpServer())
         .delete(`/api/users/${nonExistingId}`)
+        .expect(404);
+
+      // Assert
+      expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('not found');
+    });
+  });
+
+  describe('POST /api/users/:id/activate', () => {
+    it('Given_DeletedUser_When_ActivateUser_Then_SetsStatusToActive', async () => {
+      // Arrange - Primero eliminamos un usuario
+      const createUserDto: CreateUserDto = {
+        email: 'toactivate@example.com',
+        password: 'Password123!',
+        name: 'User To Activate',
+        role: UserRole.USUARIO,
+      };
+
+      // Crear usuario
+      const createResponse = await request(app.getHttpServer())
+        .post('/api/users')
+        .send(createUserDto)
+        .expect(201);
+
+      const userId = createResponse.body.id;
+
+      // Eliminar usuario
+      await request(app.getHttpServer())
+        .delete(`/api/users/${userId}`)
+        .expect(200);
+
+      // Act - Activar usuario
+      const response = await request(app.getHttpServer())
+        .post(`/api/users/${userId}/activate`)
+        .expect(201);
+
+      // Assert
+      const user: UserResponseDto = response.body;
+      expect(user.id).toBe(userId);
+      expect(user.statusId).toBe(STATUS_ID.ACTIVE);
+      expect(user.email).toBe('toactivate@example.com');
+    });
+
+    it('Given_NonExistingUserId_When_ActivateUser_Then_Returns404', async () => {
+      // Arrange
+      const nonExistingId = '00000000-0000-0000-0000-000000000000';
+
+      // Act
+      const response = await request(app.getHttpServer())
+        .post(`/api/users/${nonExistingId}/activate`)
         .expect(404);
 
       // Assert

@@ -102,14 +102,29 @@ describe('UserController', () => {
     it('Given_ExistingId_When_Delete_Then_DeletesUser', async () => {
       // Arrange
       const deletedUser: UserResponseDto = { ...mockUser, statusId: 4 };
+      const currentUser: UserResponseDto = {
+        ...mockUser,
+        id: '999e4567-e89b-12d3-a456-426614174999', // Diferente ID
+      };
       vi.mocked(service.delete).mockResolvedValue(deletedUser);
 
       // Act
-      const result = await controller.delete(mockUser.id);
+      const result = await controller.delete(currentUser, mockUser.id);
 
       // Assert
       expect(service.delete).toHaveBeenCalledWith(mockUser.id);
       expect(result).toEqual(deletedUser);
+    });
+
+    it('Given_SelfDelete_When_Delete_Then_ThrowsBadRequestException', async () => {
+      // Arrange
+      const currentUser: UserResponseDto = mockUser;
+
+      // Act & Assert
+      await expect(controller.delete(currentUser, mockUser.id)).rejects.toThrow(
+        'You cannot delete yourself'
+      );
+      expect(service.delete).not.toHaveBeenCalled();
     });
   });
 });
