@@ -116,6 +116,12 @@
         "description": "View and manage all exceptions across your platforms",
         "action": "View Exceptions"
       }
+    },
+    "stats": {
+      "title": "Total events",
+      "vsPrevPeriod": "vs prev. period",
+      "noChange": "No change",
+      "error": "Error loading stats"
     }
   },
   "health": {

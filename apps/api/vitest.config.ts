@@ -25,6 +25,7 @@ export default defineConfig({
       '@user': path.resolve(__dirname, './src/user'),
       '@level': path.resolve(__dirname, './src/level'),
       '@status': path.resolve(__dirname, './src/status'),
+      '@stats': path.resolve(__dirname, './src/stats'),
       '@config': path.resolve(__dirname, './src/config'),
       '@test': path.resolve(__dirname, './test'),
     },

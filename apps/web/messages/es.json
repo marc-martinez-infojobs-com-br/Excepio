@@ -116,6 +116,12 @@
         "description": "Ver y gestionar todas las excepciones de tus plataformas",
         "action": "Ver Excepciones"
       }
+    },
+    "stats": {
+      "title": "Total de eventos",
+      "vsPrevPeriod": "vs período anterior",
+      "noChange": "Sin cambios",
+      "error": "Error al cargar estadísticas"
     }
   },
   "health": {

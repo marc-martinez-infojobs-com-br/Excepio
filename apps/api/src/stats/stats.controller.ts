@@ -50,7 +50,9 @@ export class StatsController {
   @ApiQuery({ name: 'platformId', required: false, type: Number })
   @ApiResponse({ status: 200, description: 'Total de excepciones' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  getTotal(@Query() filters: StatsFilterDto): TotalStatsResponseDto {
+  async getTotal(
+    @Query() filters: StatsFilterDto,
+  ): Promise<TotalStatsResponseDto> {
     return this.statsService.getTotal(filters);
   }
 

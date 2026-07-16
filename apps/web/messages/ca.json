@@ -116,6 +116,12 @@
         "description": "Veure i gestionar totes les excepcions de les teves plataformes",
         "action": "Veure Excepcions"
       }
+    },
+    "stats": {
+      "title": "Total d'esdeveniments",
+      "vsPrevPeriod": "vs període anterior",
+      "noChange": "Sense canvis",
+      "error": "Error en carregar estadístiques"
     }
   },
   "health": {
