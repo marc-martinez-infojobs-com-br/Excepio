@@ -127,4 +127,20 @@ export class UserMemoryRepository implements UserRepository {
       this.users.set(id, user);
     }
   }
+
+  async updatePassword(id: string, hashedPassword: string): Promise<UserResponseDto | null> {
+    const user = this.users.get(id);
+    if (!user) return null;
+
+    const updatedUser = {
+      ...user,
+      password: hashedPassword,
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.users.set(id, updatedUser);
+
+    const { password, ...userWithoutPassword } = updatedUser;
+    return { ...userWithoutPassword };
+  }
 }

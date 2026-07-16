@@ -66,6 +66,14 @@ export interface UserRepository {
    * @param id - ID del usuario
    */
   updateLastLogin(id: string): Promise<void>;
+
+  /**
+   * Actualiza la contraseña de un usuario.
+   * @param id - ID del usuario
+   * @param hashedPassword - Nueva contraseña hasheada
+   * @returns El usuario actualizado o null si no existe
+   */
+  updatePassword(id: string, hashedPassword: string): Promise<UserResponseDto | null>;
 }
 
 /**

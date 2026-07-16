@@ -109,6 +109,21 @@ export class UserPrismaRepository implements UserRepository {
     });
   }
 
+  async updatePassword(id: string, hashedPassword: string): Promise<UserResponseDto | null> {
+    try {
+      const user = await this.prisma.user.update({
+        where: { id },
+        data: {
+          password: hashedPassword,
+        },
+      });
+
+      return this.mapToDto(user);
+    } catch (error) {
+      return null;
+    }
+  }
+
   /**
    * Mapea un User de Prisma a UserResponseDto (sin password).
    */

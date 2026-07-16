@@ -7,7 +7,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { CreateUserDto, UpdateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto, ResetPasswordDto } from './dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -163,5 +163,41 @@ export class UserController {
   })
   async activate(@Param('id') id: string): Promise<UserResponseDto> {
     return this.userService.activate(id);
+  }
+
+  @Post(':id/reset-password')
+  @Roles(UserRole.ADMINISTRADOR)
+  @ApiOperation({ summary: 'Resetear contraseña de un usuario - solo ADMINISTRADOR' })
+  @ApiParam({ name: 'id', type: 'string', description: 'ID del usuario (UUID)' })
+  @ApiResponse({
+    status: 201,
+    description: 'Contraseña reseteada exitosamente',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Las contraseñas no coinciden',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'No autenticado',
+  })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Usuario no encontrado',
+  })
+  async resetPassword(
+    @Param('id') id: string,
+    @Body() resetPasswordDto: ResetPasswordDto,
+  ): Promise<UserResponseDto> {
+    // Validar que las contraseñas coincidan
+    if (resetPasswordDto.newPassword !== resetPasswordDto.confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    return this.userService.resetPassword(id, resetPasswordDto.newPassword);
   }
 }

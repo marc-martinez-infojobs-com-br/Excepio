@@ -5,9 +5,10 @@ import { useTranslations } from 'next-intl';
 import { useRequireRole } from '@hooks/use-require-role';
 import { useUsers } from '@hooks/use-users';
 import { useUserMutations } from '@hooks/use-user-mutations';
+import { useResetPassword } from '@hooks/use-reset-password';
 import { useToast } from '@hooks/use-toast';
 import { useAuth } from '@hooks/use-auth';
-import { UserRole, type UserResponseDto, type CreateUserDto, type UpdateUserDto } from '@excepio/shared';
+import { UserRole, type UserResponseDto, type CreateUserDto, type UpdateUserDto, type ResetPasswordDto } from '@excepio/shared';
 import { Button } from '@components/ui/button';
 import { Skeleton } from '@components/ui/skeleton';
 import {
@@ -15,6 +16,7 @@ import {
   UserCard,
   UserFormModal,
   DeleteUserDialog,
+  ResetPasswordDialog,
 } from '@components/users';
 import { Plus } from 'lucide-react';
 import { AxiosError } from 'axios';
@@ -28,10 +30,12 @@ export default function UsersPage() {
   // Data fetching
   const { data: users, isLoading, error } = useUsers();
   const { createUser, updateUser, deleteUser, activateUser } = useUserMutations();
+  const resetPassword = useResetPassword();
 
   // Modal states
   const [formModalOpen, setFormModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<UserResponseDto | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -139,6 +143,30 @@ export default function UsersPage() {
     }
   };
 
+  const handleResetPassword = (user: UserResponseDto) => {
+    setSelectedUser(user);
+    setResetPasswordDialogOpen(true);
+  };
+
+  const handleResetPasswordConfirm = async (data: ResetPasswordDto) => {
+    if (!selectedUser) return;
+
+    try {
+      await resetPassword.mutateAsync({ userId: selectedUser.id, data });
+      toast({
+        title: t('resetPassword.success'),
+        variant: 'success',
+      });
+      setResetPasswordDialogOpen(false);
+    } catch {
+      toast({
+        title: t('errors.resetPassword'),
+        variant: 'error',
+      });
+      throw new Error('Reset password failed');
+    }
+  };
+
   return (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">
       {/* Header */}
@@ -174,6 +202,7 @@ export default function UsersPage() {
                 onEdit={handleEdit}
                 onDelete={handleDelete}
                 onActivate={handleActivate}
+                onResetPassword={handleResetPassword}
               />
             ))}
           </div>
@@ -186,6 +215,7 @@ export default function UsersPage() {
               onEdit={handleEdit}
               onDelete={handleDelete}
               onActivate={handleActivate}
+              onResetPassword={handleResetPassword}
             />
           </div>
         </>
@@ -211,6 +241,14 @@ export default function UsersPage() {
         user={selectedUser}
         onConfirm={handleDeleteConfirm}
         isDeleting={deleteUser.isPending}
+      />
+
+      <ResetPasswordDialog
+        open={resetPasswordDialogOpen}
+        onOpenChange={setResetPasswordDialogOpen}
+        user={selectedUser}
+        onConfirm={handleResetPasswordConfirm}
+        isSubmitting={resetPassword.isPending}
       />
     </div>
   );

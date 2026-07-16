@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Button } from '@components/ui/button';
 import { Badge } from '@components/ui/badge';
-import { Pencil, Trash2, RotateCcw } from 'lucide-react';
+import { Pencil, Trash2, RotateCcw, KeyRound } from 'lucide-react';
 import type { UserResponseDto } from '@excepio/shared';
 import { UserRole } from '@excepio/shared';
 
@@ -13,6 +13,7 @@ interface UserCardProps {
   onEdit: (user: UserResponseDto) => void;
   onDelete: (user: UserResponseDto) => void;
   onActivate: (user: UserResponseDto) => void;
+  onResetPassword: (user: UserResponseDto) => void;
 }
 
 function RoleBadge({ role }: { role: UserRole }) {
@@ -70,6 +71,7 @@ export function UserCard({
   onEdit,
   onDelete,
   onActivate,
+  onResetPassword,
 }: UserCardProps) {
   const t = useTranslations('users');
 
@@ -104,6 +106,16 @@ export function UserCard({
       <div className="flex items-center gap-2 pt-3 border-t border-border">
         {!isDeleted && (
           <>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onResetPassword(user)}
+              className="flex-1 gap-1"
+              aria-label={t('resetPassword.button')}
+            >
+              <KeyRound className="h-4 w-4" />
+              {t('resetPassword.buttonShort')}
+            </Button>
             <Button
               variant="outline"
               size="sm"

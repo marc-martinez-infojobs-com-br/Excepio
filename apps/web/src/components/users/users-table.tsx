@@ -17,7 +17,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@components/ui/tooltip';
-import { Pencil, Trash2, RotateCcw } from 'lucide-react';
+import { Pencil, Trash2, RotateCcw, KeyRound } from 'lucide-react';
 import type { UserResponseDto } from '@excepio/shared';
 import { UserRole } from '@excepio/shared';
 
@@ -27,6 +27,7 @@ interface UsersTableProps {
   onEdit: (user: UserResponseDto) => void;
   onDelete: (user: UserResponseDto) => void;
   onActivate: (user: UserResponseDto) => void;
+  onResetPassword: (user: UserResponseDto) => void;
 }
 
 function RoleBadge({ role }: { role: UserRole }) {
@@ -84,6 +85,7 @@ export function UsersTable({
   onEdit,
   onDelete,
   onActivate,
+  onResetPassword,
 }: UsersTableProps) {
   const t = useTranslations('users');
 
@@ -152,6 +154,21 @@ export function UsersTable({
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>{t('edit.button')}</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => onResetPassword(user)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <KeyRound className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>{t('resetPassword.button')}</TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
                       {!isCurrentUser(user) && (

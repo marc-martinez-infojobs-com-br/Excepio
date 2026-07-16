@@ -273,6 +273,15 @@
       "button": "Activate",
       "success": "User activated successfully"
     },
+    "resetPassword": {
+      "title": "Reset Password",
+      "button": "Reset password",
+      "buttonShort": "Regenerate password",
+      "description": "Set a new password for {name}",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password",
+      "success": "Password reset successfully"
+    },
     "form": {
       "name": "Name",
       "namePlaceholder": "E.g: John Doe",
@@ -295,6 +304,7 @@
       "update": "Error updating user",
       "delete": "Error deleting user",
       "activate": "Error activating user",
+      "resetPassword": "Error resetting password",
       "emailExists": "Email already registered"
     }
   }
