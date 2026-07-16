@@ -116,6 +116,20 @@
         "description": "Ver y gestionar todas las excepciones de tus plataformas",
         "action": "Ver Excepciones"
       }
+    },
+    "stats": {
+      "title": "Total de eventos",
+      "vsPrevPeriod": "vs período anterior",
+      "noChange": "Sin cambios",
+      "error": "Error al cargar estadísticas",
+      "timeSeriesTitle": "Excepciones por tiempo",
+      "platformTitle": "Distribución por plataforma",
+      "groupedTitle": "Errores más frecuentes",
+      "lastSeen": "hace",
+      "noData": "No hay datos para el período seleccionado",
+      "count": "Total",
+      "occurrences": "{count, plural, one {# ocurrencia} other {# ocurrencias}}",
+      "viewAllIssues": "Ver todas las incidencias"
     }
   },
   "health": {

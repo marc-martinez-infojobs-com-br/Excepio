@@ -1,5 +1,21 @@
-import { Controller, Get, Post, Patch, Delete, Param, Body, UseGuards, ParseIntPipe } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  Param,
+  Body,
+  UseGuards,
+  ParseIntPipe,
+} from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { PlatformDto } from '@excepio/shared';
 import { UserRole } from '@excepio/shared';
 import { PlatformService } from './platform.service';
@@ -40,11 +56,19 @@ export class PlatformController {
   @Post()
   @Roles(UserRole.ADMINISTRADOR)
   @ApiOperation({ summary: 'Crear una nueva plataforma (solo ADMINISTRADOR)' })
-  @ApiResponse({ status: 201, description: 'Plataforma creada (incluye apiKey generada)' })
+  @ApiResponse({
+    status: 201,
+    description: 'Plataforma creada (incluye apiKey generada)',
+  })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo ADMINISTRADOR' })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
   @ApiResponse({ status: 409, description: 'El ID ya existe' })
-  async create(@Body() createPlatformDto: CreatePlatformDto): Promise<PlatformDto> {
+  async create(
+    @Body() createPlatformDto: CreatePlatformDto,
+  ): Promise<PlatformDto> {
     return this.platformService.create(createPlatformDto);
   }
 
@@ -54,7 +78,10 @@ export class PlatformController {
   @ApiParam({ name: 'id', type: 'number', description: 'ID de la plataforma' })
   @ApiResponse({ status: 200, description: 'Plataforma actualizada' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo ADMINISTRADOR' })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
   @ApiResponse({ status: 404, description: 'Plataforma no encontrada' })
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -65,11 +92,16 @@ export class PlatformController {
 
   @Delete(':id')
   @Roles(UserRole.ADMINISTRADOR)
-  @ApiOperation({ summary: 'Eliminar una plataforma (borrado lógico, solo ADMINISTRADOR)' })
+  @ApiOperation({
+    summary: 'Eliminar una plataforma (borrado lógico, solo ADMINISTRADOR)',
+  })
   @ApiParam({ name: 'id', type: 'number', description: 'ID de la plataforma' })
   @ApiResponse({ status: 200, description: 'Plataforma eliminada' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo ADMINISTRADOR' })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
   @ApiResponse({ status: 404, description: 'Plataforma no encontrada' })
   async delete(@Param('id', ParseIntPipe) id: number): Promise<PlatformDto> {
     return this.platformService.delete(id);
@@ -77,23 +109,35 @@ export class PlatformController {
 
   @Post(':id/regenerate')
   @Roles(UserRole.ADMINISTRADOR)
-  @ApiOperation({ summary: 'Regenerar API Key de una plataforma (solo ADMINISTRADOR)' })
+  @ApiOperation({
+    summary: 'Regenerar API Key de una plataforma (solo ADMINISTRADOR)',
+  })
   @ApiParam({ name: 'id', type: 'number', description: 'ID de la plataforma' })
   @ApiResponse({ status: 200, description: 'API Key regenerada exitosamente' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo ADMINISTRADOR' })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
   @ApiResponse({ status: 404, description: 'Plataforma no encontrada' })
-  async regenerate(@Param('id', ParseIntPipe) id: number): Promise<PlatformDto> {
+  async regenerate(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<PlatformDto> {
     return this.platformService.regenerate(id);
   }
 
   @Post(':id/activate')
   @Roles(UserRole.ADMINISTRADOR)
-  @ApiOperation({ summary: 'Activar una plataforma eliminada (solo ADMINISTRADOR)' })
+  @ApiOperation({
+    summary: 'Activar una plataforma eliminada (solo ADMINISTRADOR)',
+  })
   @ApiParam({ name: 'id', type: 'number', description: 'ID de la plataforma' })
   @ApiResponse({ status: 200, description: 'Plataforma activada exitosamente' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo ADMINISTRADOR' })
+  @ApiResponse({
+    status: 403,
+    description: 'Acceso denegado - Solo ADMINISTRADOR',
+  })
   @ApiResponse({ status: 404, description: 'Plataforma no encontrada' })
   async activate(@Param('id', ParseIntPipe) id: number): Promise<PlatformDto> {
     return this.platformService.activate(id);

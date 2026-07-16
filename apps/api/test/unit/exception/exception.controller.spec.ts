@@ -1,7 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { ExceptionController } from '@exception/exception.controller';
 import { ExceptionService } from '@exception/exception.service';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, PlatformDto } from '@excepio/shared';
+import {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+  PlatformDto,
+} from '@excepio/shared';
 
 describe('ExceptionController', () => {
   let controller: ExceptionController;

@@ -101,7 +101,9 @@ describe('Database Seed', () => {
 
     it('should have non-empty apiKey for all platforms', async () => {
       const platforms = await prisma.platform.findMany();
-      expect(platforms.every((p) => p.apiKey && p.apiKey.length > 0)).toBe(true);
+      expect(platforms.every((p) => p.apiKey && p.apiKey.length > 0)).toBe(
+        true,
+      );
     });
   });
 });

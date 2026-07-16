@@ -1,5 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength, IsEnum, IsOptional, IsInt } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  MinLength,
+  IsEnum,
+  IsOptional,
+  IsInt,
+} from 'class-validator';
 import { UserRole } from '@excepio/shared';
 
 export class UpdateUserDto {
@@ -40,7 +47,8 @@ export class UpdateUserDto {
   role?: UserRole;
 
   @ApiPropertyOptional({
-    description: 'ID del estado del usuario (1=PENDING, 2=ACTIVE, 3=EXPIRED, 4=DELETED)',
+    description:
+      'ID del estado del usuario (1=PENDING, 2=ACTIVE, 3=EXPIRED, 4=DELETED)',
     example: 2,
     minimum: 1,
     maximum: 4,

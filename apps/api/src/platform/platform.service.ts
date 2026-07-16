@@ -1,5 +1,14 @@
-import { Injectable, Inject, NotFoundException, ConflictException } from '@nestjs/common';
-import type { PlatformDto, CreatePlatformDto, UpdatePlatformDto } from '@excepio/shared';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
+import type {
+  PlatformDto,
+  CreatePlatformDto,
+  UpdatePlatformDto,
+} from '@excepio/shared';
 import type { PlatformRepository } from './repository';
 import { PLATFORM_REPOSITORY } from './repository';
 
@@ -42,9 +51,13 @@ export class PlatformService {
    * @throws ConflictException si el ID ya existe
    */
   async create(createPlatformDto: CreatePlatformDto): Promise<PlatformDto> {
-    const exists = await this.platformRepository.existsById(createPlatformDto.id);
+    const exists = await this.platformRepository.existsById(
+      createPlatformDto.id,
+    );
     if (exists) {
-      throw new ConflictException(`Platform with id ${createPlatformDto.id} already exists`);
+      throw new ConflictException(
+        `Platform with id ${createPlatformDto.id} already exists`,
+      );
     }
 
     return this.platformRepository.create(createPlatformDto);
@@ -57,8 +70,14 @@ export class PlatformService {
    * @returns La plataforma actualizada
    * @throws NotFoundException si la plataforma no existe
    */
-  async update(id: number, updatePlatformDto: UpdatePlatformDto): Promise<PlatformDto> {
-    const platform = await this.platformRepository.update(id, updatePlatformDto);
+  async update(
+    id: number,
+    updatePlatformDto: UpdatePlatformDto,
+  ): Promise<PlatformDto> {
+    const platform = await this.platformRepository.update(
+      id,
+      updatePlatformDto,
+    );
     if (!platform) {
       throw new NotFoundException(`Platform with id ${id} not found`);
     }

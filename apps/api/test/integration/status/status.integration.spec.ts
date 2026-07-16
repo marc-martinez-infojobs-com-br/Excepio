@@ -1,6 +1,15 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { NestFactory } from '@nestjs/core';
-import { Module, INestApplication, Controller, Get, Param, ParseIntPipe, Injectable, Inject } from '@nestjs/common';
+import {
+  Module,
+  INestApplication,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Injectable,
+  Inject,
+} from '@nestjs/common';
 import request from 'supertest';
 import { App } from 'supertest/types';
 import { StatusResponseDto } from '@excepio/shared';
@@ -20,7 +29,9 @@ const TEST_STATUS_SERVICE = Symbol('TEST_STATUS_SERVICE');
 // Recreamos el servicio y controller inline para evitar problemas con metadata
 @Injectable()
 class TestStatusService {
-  constructor(@Inject(STATUS_REPOSITORY) private readonly repo: StatusRepository) {}
+  constructor(
+    @Inject(STATUS_REPOSITORY) private readonly repo: StatusRepository,
+  ) {}
 
   async findAll(): Promise<StatusResponseDto[]> {
     return this.repo.findAll();
@@ -38,7 +49,10 @@ class TestStatusService {
 
 @Controller('status')
 class TestStatusController {
-  constructor(@Inject(TEST_STATUS_SERVICE) private readonly statusService: TestStatusService) {}
+  constructor(
+    @Inject(TEST_STATUS_SERVICE)
+    private readonly statusService: TestStatusService,
+  ) {}
 
   @Get()
   async findAll(): Promise<StatusResponseDto[]> {
@@ -46,7 +60,9 @@ class TestStatusController {
   }
 
   @Get(':id')
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<StatusResponseDto> {
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<StatusResponseDto> {
     return this.statusService.findById(id);
   }
 }

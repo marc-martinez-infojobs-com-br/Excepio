@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ExceptionListResponseDto } from '@excepio/shared';
+import {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+  ExceptionListResponseDto,
+} from '@excepio/shared';
 import { PrismaService } from '@app/prisma/prisma.service';
 import { ExceptionRepository } from './exception.repository.interface';
 import { Prisma } from '@prisma/client';
@@ -30,7 +35,10 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     };
   }
 
-  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(
+    platformId: number,
+    data: CreateExceptionDto,
+  ): Promise<ExceptionDto> {
     const exception = await this.prisma.exception.create({
       data: {
         platformId,
@@ -41,7 +49,9 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
         url: data.url,
         userAgent: data.userAgent,
         appVersion: data.appVersion,
-        metadata: data.metadata ? (data.metadata as Prisma.InputJsonValue) : undefined,
+        metadata: data.metadata
+          ? (data.metadata as Prisma.InputJsonValue)
+          : undefined,
       },
     });
 
@@ -57,7 +67,9 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     return this.mapToDto(exception);
   }
 
-  async findAll(filters: ExceptionFilterDto): Promise<ExceptionListResponseDto> {
+  async findAll(
+    filters: ExceptionFilterDto,
+  ): Promise<ExceptionListResponseDto> {
     // Paginación
     const page = filters.page || 1;
     const limit = filters.limit || 50;
@@ -97,16 +109,25 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
       where.message = { contains: filters.messageSearch, mode: 'insensitive' };
     }
     if (filters.stackTraceSearch) {
-      where.stackTrace = { contains: filters.stackTraceSearch, mode: 'insensitive' };
+      where.stackTrace = {
+        contains: filters.stackTraceSearch,
+        mode: 'insensitive',
+      };
     }
     if (filters.urlSearch) {
       where.url = { contains: filters.urlSearch, mode: 'insensitive' };
     }
     if (filters.userAgentSearch) {
-      where.userAgent = { contains: filters.userAgentSearch, mode: 'insensitive' };
+      where.userAgent = {
+        contains: filters.userAgentSearch,
+        mode: 'insensitive',
+      };
     }
     if (filters.appVersionSearch) {
-      where.appVersion = { contains: filters.appVersionSearch, mode: 'insensitive' };
+      where.appVersion = {
+        contains: filters.appVersionSearch,
+        mode: 'insensitive',
+      };
     }
 
     // Ejecutar consultas en paralelo
@@ -138,7 +159,10 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     offset: number,
   ): Promise<ExceptionListResponseDto> {
     // Construir condiciones WHERE dinámicamente
-    const conditions: string[] = ['metadata IS NOT NULL', 'metadata::text ILIKE $1'];
+    const conditions: string[] = [
+      'metadata IS NOT NULL',
+      'metadata::text ILIKE $1',
+    ];
     const params: (string | number | Date)[] = [`%${filters.metadataSearch}%`];
     let paramIndex = 2;
 
@@ -213,7 +237,10 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
 
     const [exceptions, countResult] = await Promise.all([
       this.prisma.$queryRawUnsafe<any[]>(dataQuery, ...params),
-      this.prisma.$queryRawUnsafe<[{ count: number }]>(countQuery, ...countParams),
+      this.prisma.$queryRawUnsafe<[{ count: number }]>(
+        countQuery,
+        ...countParams,
+      ),
     ]);
 
     return {

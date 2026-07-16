@@ -1,6 +1,12 @@
 import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import type { RegisterBackendDto, LoginDto, LoginResponseDto, UserResponseDto, JwtPayload } from '@excepio/shared';
+import type {
+  RegisterBackendDto,
+  LoginDto,
+  LoginResponseDto,
+  UserResponseDto,
+  JwtPayload,
+} from '@excepio/shared';
 import { UserService } from '../user';
 import { USER_REPOSITORY, type UserRepository } from '../user/repository';
 import * as bcrypt from 'bcrypt';
@@ -85,7 +91,10 @@ export class AuthService {
    * @param password - Contraseña en texto plano
    * @returns Usuario si las credenciales son válidas, null si no
    */
-  async validateUser(email: string, password: string): Promise<UserResponseDto | null> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<UserResponseDto | null> {
     // Buscar usuario por email
     const userPassword = await this.userRepository.findPasswordByEmail(email);
     if (!userPassword) {
@@ -100,7 +109,7 @@ export class AuthService {
 
     // Retornar usuario sin password
     const user = await this.userRepository.findByEmail(email);
-    
+
     // Verificar que el usuario esté activo (statusId = 2)
     if (!user || user.statusId !== 2) {
       return null;

@@ -29,7 +29,9 @@ export class LevelController {
     status: 404,
     description: 'Nivel no encontrado',
   })
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<LevelResponseDto> {
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<LevelResponseDto> {
     return this.levelService.findById(id);
   }
 }

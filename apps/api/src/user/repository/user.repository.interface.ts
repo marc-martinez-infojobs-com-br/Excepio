@@ -1,4 +1,8 @@
-import type { UserResponseDto, CreateUserDto, UpdateUserDto } from '@excepio/shared';
+import type {
+  UserResponseDto,
+  CreateUserDto,
+  UpdateUserDto,
+} from '@excepio/shared';
 
 /**
  * Interfaz del repositorio de User.
@@ -73,7 +77,10 @@ export interface UserRepository {
    * @param hashedPassword - Nueva contraseña hasheada
    * @returns El usuario actualizado o null si no existe
    */
-  updatePassword(id: string, hashedPassword: string): Promise<UserResponseDto | null>;
+  updatePassword(
+    id: string,
+    hashedPassword: string,
+  ): Promise<UserResponseDto | null>;
 }
 
 /**

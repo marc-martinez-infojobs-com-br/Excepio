@@ -34,7 +34,9 @@ export class UserPrismaRepository implements UserRepository {
     return user ? this.mapToDto(user) : null;
   }
 
-  async create(data: CreateUserDto & { password: string }): Promise<UserResponseDto> {
+  async create(
+    data: CreateUserDto & { password: string },
+  ): Promise<UserResponseDto> {
     const user = await this.prisma.user.create({
       data: {
         email: data.email,
@@ -48,7 +50,10 @@ export class UserPrismaRepository implements UserRepository {
     return this.mapToDto(user);
   }
 
-  async update(id: string, data: UpdateUserDto): Promise<UserResponseDto | null> {
+  async update(
+    id: string,
+    data: UpdateUserDto,
+  ): Promise<UserResponseDto | null> {
     try {
       const user = await this.prisma.user.update({
         where: { id },
@@ -109,7 +114,10 @@ export class UserPrismaRepository implements UserRepository {
     });
   }
 
-  async updatePassword(id: string, hashedPassword: string): Promise<UserResponseDto | null> {
+  async updatePassword(
+    id: string,
+    hashedPassword: string,
+  ): Promise<UserResponseDto | null> {
     try {
       const user = await this.prisma.user.update({
         where: { id },

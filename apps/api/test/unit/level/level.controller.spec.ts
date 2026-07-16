@@ -76,7 +76,9 @@ describe('LevelController', () => {
 
     it('Given_NonExistingId_When_FindById_Then_ThrowsNotFoundException', async () => {
       // Arrange
-      mockService.findById.mockRejectedValue(new NotFoundException('Level with id 999 not found'));
+      mockService.findById.mockRejectedValue(
+        new NotFoundException('Level with id 999 not found'),
+      );
 
       // Act & Assert
       await expect(controller.findById(999)).rejects.toThrow(NotFoundException);

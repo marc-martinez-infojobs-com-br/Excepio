@@ -4,7 +4,13 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from '@auth/auth.service';
 import { UserService } from '@user/user.service';
 import { UserMemoryRepository } from '@user/repository';
-import { UserResponseDto, UserRole, RegisterBackendDto, LoginDto, LoginResponseDto } from '@excepio/shared';
+import {
+  UserResponseDto,
+  UserRole,
+  RegisterBackendDto,
+  LoginDto,
+  LoginResponseDto,
+} from '@excepio/shared';
 import * as bcrypt from 'bcrypt';
 
 // Mock bcrypt y JwtService
@@ -31,7 +37,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     userRepository = new UserMemoryRepository();
     userService = new UserService(userRepository);
-    jwtService = new JwtService({} as any);
+    jwtService = new JwtService({});
     authService = new AuthService(userService, jwtService, userRepository);
     vi.clearAllMocks();
   });
@@ -73,8 +79,12 @@ describe('AuthService', () => {
       await authService.register(registerDto);
 
       // Act & Assert
-      await expect(authService.register(registerDto)).rejects.toThrow(ConflictException);
-      await expect(authService.register(registerDto)).rejects.toThrow('already exists');
+      await expect(authService.register(registerDto)).rejects.toThrow(
+        ConflictException,
+      );
+      await expect(authService.register(registerDto)).rejects.toThrow(
+        'already exists',
+      );
     });
 
     it('Given_ValidData_When_Register_Then_CallsBcryptHash', async () => {
@@ -109,7 +119,7 @@ describe('AuthService', () => {
           sub: result.user.id,
           email: registerDto.email,
           role: UserRole.USUARIO,
-        })
+        }),
       );
     });
   });
@@ -126,7 +136,7 @@ describe('AuthService', () => {
       userRepository.seed([
         {
           ...mockUser,
-          password: hashedPassword as string,
+          password: hashedPassword,
         },
       ]);
     });
@@ -156,8 +166,12 @@ describe('AuthService', () => {
       };
 
       // Act & Assert
-      await expect(authService.login(invalidLoginDto)).rejects.toThrow(UnauthorizedException);
-      await expect(authService.login(invalidLoginDto)).rejects.toThrow('Invalid credentials');
+      await expect(authService.login(invalidLoginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(authService.login(invalidLoginDto)).rejects.toThrow(
+        'Invalid credentials',
+      );
     });
 
     it('Given_InvalidPassword_When_Login_Then_ThrowsUnauthorizedException', async () => {
@@ -169,8 +183,12 @@ describe('AuthService', () => {
       };
 
       // Act & Assert
-      await expect(authService.login(invalidLoginDto)).rejects.toThrow(UnauthorizedException);
-      await expect(authService.login(invalidLoginDto)).rejects.toThrow('Invalid credentials');
+      await expect(authService.login(invalidLoginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(authService.login(invalidLoginDto)).rejects.toThrow(
+        'Invalid credentials',
+      );
     });
 
     it('Given_ValidCredentials_When_Login_Then_UpdatesLastLoginAt', async () => {
@@ -202,7 +220,7 @@ describe('AuthService', () => {
           sub: mockUser.id,
           email: mockUser.email,
           role: mockUser.role,
-        })
+        }),
       );
     });
 
@@ -216,14 +234,18 @@ describe('AuthService', () => {
       userRepository.seed([
         {
           ...deletedUser,
-          password: hashedPassword as string,
+          password: hashedPassword,
         },
       ]);
       vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
 
       // Act & Assert
-      await expect(authService.login(loginDto)).rejects.toThrow(UnauthorizedException);
-      await expect(authService.login(loginDto)).rejects.toThrow('Invalid credentials');
+      await expect(authService.login(loginDto)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(authService.login(loginDto)).rejects.toThrow(
+        'Invalid credentials',
+      );
     });
   });
 
@@ -234,7 +256,7 @@ describe('AuthService', () => {
       userRepository.seed([
         {
           ...mockUser,
-          password: hashedPassword as string,
+          password: hashedPassword,
         },
       ]);
     });
@@ -244,7 +266,10 @@ describe('AuthService', () => {
       vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
 
       // Act
-      const result = await authService.validateUser('test@example.com', 'Password123!');
+      const result = await authService.validateUser(
+        'test@example.com',
+        'Password123!',
+      );
 
       // Assert
       expect(result).toBeDefined();
@@ -254,7 +279,10 @@ describe('AuthService', () => {
 
     it('Given_InvalidEmail_When_ValidateUser_Then_ReturnsNull', async () => {
       // Act
-      const result = await authService.validateUser('nonexistent@example.com', 'Password123!');
+      const result = await authService.validateUser(
+        'nonexistent@example.com',
+        'Password123!',
+      );
 
       // Assert
       expect(result).toBeNull();
@@ -265,7 +293,10 @@ describe('AuthService', () => {
       vi.mocked(bcrypt.compare).mockResolvedValue(false as never);
 
       // Act
-      const result = await authService.validateUser('test@example.com', 'WrongPassword');
+      const result = await authService.validateUser(
+        'test@example.com',
+        'WrongPassword',
+      );
 
       // Assert
       expect(result).toBeNull();
@@ -281,13 +312,16 @@ describe('AuthService', () => {
       userRepository.seed([
         {
           ...deletedUser,
-          password: hashedPassword as string,
+          password: hashedPassword,
         },
       ]);
       vi.mocked(bcrypt.compare).mockResolvedValue(true as never);
 
       // Act
-      const result = await authService.validateUser('test@example.com', 'Password123!');
+      const result = await authService.validateUser(
+        'test@example.com',
+        'Password123!',
+      );
 
       // Assert
       expect(result).toBeNull();

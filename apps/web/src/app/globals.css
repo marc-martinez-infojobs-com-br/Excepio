@@ -128,3 +128,9 @@ body {
   background-color: var(--color-background);
   color: var(--color-foreground);
 }
+
+/* Remove focus outline from Recharts SVG elements */
+.recharts-wrapper svg:focus,
+.recharts-wrapper svg *:focus {
+  outline: none;
+}

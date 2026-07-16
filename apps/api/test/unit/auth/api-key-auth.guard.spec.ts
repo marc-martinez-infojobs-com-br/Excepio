@@ -11,7 +11,8 @@ describe('ApiKeyAuthGuard', () => {
   const mockActivePlatform: PlatformDto = {
     id: 1,
     name: 'Test Platform',
-    apiKey: 'exc_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+    apiKey:
+      'exc_1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
     statusId: 2, // ACTIVE
     createdAt: new Date().toISOString(),
   };
@@ -19,7 +20,8 @@ describe('ApiKeyAuthGuard', () => {
   const mockDeletedPlatform: PlatformDto = {
     id: 2,
     name: 'Deleted Platform',
-    apiKey: 'exc_deleted1234567890abcdef1234567890abcdef1234567890abcdef12345678',
+    apiKey:
+      'exc_deleted1234567890abcdef1234567890abcdef1234567890abcdef12345678',
     statusId: 4, // DELETED
     createdAt: new Date().toISOString(),
   };
@@ -49,8 +51,12 @@ describe('ApiKeyAuthGuard', () => {
       const context = createMockExecutionContext();
 
       // Act & Assert
-      await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
-      await expect(guard.canActivate(context)).rejects.toThrow('API Key is required');
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        'API Key is required',
+      );
     });
 
     it('Given_EmptyApiKeyHeader_When_CanActivate_Then_ThrowsUnauthorizedException', async () => {
@@ -58,17 +64,27 @@ describe('ApiKeyAuthGuard', () => {
       const context = createMockExecutionContext('');
 
       // Act & Assert
-      await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
-      await expect(guard.canActivate(context)).rejects.toThrow('API Key is required');
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        'API Key is required',
+      );
     });
 
     it('Given_InvalidApiKey_When_CanActivate_Then_ThrowsUnauthorizedException', async () => {
       // Arrange
-      const context = createMockExecutionContext('exc_invalid_api_key_that_does_not_exist');
+      const context = createMockExecutionContext(
+        'exc_invalid_api_key_that_does_not_exist',
+      );
 
       // Act & Assert
-      await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
-      await expect(guard.canActivate(context)).rejects.toThrow('Invalid API Key');
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        'Invalid API Key',
+      );
     });
 
     it('Given_ApiKeyOfDeletedProject_When_CanActivate_Then_ThrowsUnauthorizedException', async () => {
@@ -76,8 +92,12 @@ describe('ApiKeyAuthGuard', () => {
       const context = createMockExecutionContext(mockDeletedPlatform.apiKey);
 
       // Act & Assert
-      await expect(guard.canActivate(context)).rejects.toThrow(UnauthorizedException);
-      await expect(guard.canActivate(context)).rejects.toThrow('Invalid API Key');
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        UnauthorizedException,
+      );
+      await expect(guard.canActivate(context)).rejects.toThrow(
+        'Invalid API Key',
+      );
     });
 
     it('Given_ValidApiKey_When_CanActivate_Then_ReturnsTrue', async () => {

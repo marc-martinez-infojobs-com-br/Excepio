@@ -1,8 +1,17 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
+import {
+  NotFoundException,
+  ConflictException,
+  BadRequestException,
+} from '@nestjs/common';
 import { UserService } from '@user/user.service';
 import { UserMemoryRepository } from '@user/repository';
-import { UserResponseDto, UserRole, CreateUserDto, UpdateUserDto } from '@excepio/shared';
+import {
+  UserResponseDto,
+  UserRole,
+  CreateUserDto,
+  UpdateUserDto,
+} from '@excepio/shared';
 import * as bcrypt from 'bcrypt';
 
 // Mock bcrypt
@@ -40,11 +49,13 @@ describe('UserService', () => {
 
       // Assert
       expect(result).toHaveLength(1);
-      expect(result[0]).toEqual(expect.objectContaining({
-        id: mockUser.id,
-        email: mockUser.email,
-        name: mockUser.name,
-      }));
+      expect(result[0]).toEqual(
+        expect.objectContaining({
+          id: mockUser.id,
+          email: mockUser.email,
+          name: mockUser.name,
+        }),
+      );
       expect(result[0]).not.toHaveProperty('password');
     });
 
@@ -66,17 +77,23 @@ describe('UserService', () => {
       const result = await service.findById(mockUser.id);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockUser.id,
-        email: mockUser.email,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockUser.id,
+          email: mockUser.email,
+        }),
+      );
       expect(result).not.toHaveProperty('password');
     });
 
     it('Given_NonExistingId_When_FindById_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
-      await expect(service.findById('non-existing-id')).rejects.toThrow(NotFoundException);
-      await expect(service.findById('non-existing-id')).rejects.toThrow('User with id non-existing-id not found');
+      await expect(service.findById('non-existing-id')).rejects.toThrow(
+        NotFoundException,
+      );
+      await expect(service.findById('non-existing-id')).rejects.toThrow(
+        'User with id non-existing-id not found',
+      );
     });
   });
 
@@ -89,14 +106,18 @@ describe('UserService', () => {
       const result = await service.findByEmail(mockUser.email);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        email: mockUser.email,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          email: mockUser.email,
+        }),
+      );
     });
 
     it('Given_NonExistingEmail_When_FindByEmail_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
-      await expect(service.findByEmail('nonexisting@example.com')).rejects.toThrow(NotFoundException);
+      await expect(
+        service.findByEmail('nonexisting@example.com'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -118,11 +139,13 @@ describe('UserService', () => {
 
       // Assert
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
-      expect(result).toEqual(expect.objectContaining({
-        email: createUserDto.email,
-        name: createUserDto.name,
-        role: createUserDto.role,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          email: createUserDto.email,
+          name: createUserDto.name,
+          role: createUserDto.role,
+        }),
+      );
       expect(result).not.toHaveProperty('password');
     });
 
@@ -131,10 +154,12 @@ describe('UserService', () => {
       repository.seed([mockUser]);
 
       // Act & Assert
-      await expect(service.create({ ...createUserDto, email: mockUser.email }))
-        .rejects.toThrow(ConflictException);
-      await expect(service.create({ ...createUserDto, email: mockUser.email }))
-        .rejects.toThrow('User with email test@example.com already exists');
+      await expect(
+        service.create({ ...createUserDto, email: mockUser.email }),
+      ).rejects.toThrow(ConflictException);
+      await expect(
+        service.create({ ...createUserDto, email: mockUser.email }),
+      ).rejects.toThrow('User with email test@example.com already exists');
     });
   });
 
@@ -151,15 +176,19 @@ describe('UserService', () => {
       const result = await service.update(mockUser.id, updateDto);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockUser.id,
-        name: updateDto.name,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockUser.id,
+          name: updateDto.name,
+        }),
+      );
     });
 
     it('Given_NonExistingId_When_Update_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
-      await expect(service.update('non-existing-id', updateDto)).rejects.toThrow(NotFoundException);
+      await expect(
+        service.update('non-existing-id', updateDto),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -172,15 +201,19 @@ describe('UserService', () => {
       const result = await service.delete(mockUser.id);
 
       // Assert
-      expect(result).toEqual(expect.objectContaining({
-        id: mockUser.id,
-        statusId: 4, // DELETED
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockUser.id,
+          statusId: 4, // DELETED
+        }),
+      );
     });
 
     it('Given_NonExistingId_When_Delete_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
-      await expect(service.delete('non-existing-id')).rejects.toThrow(NotFoundException);
+      await expect(service.delete('non-existing-id')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -197,20 +230,24 @@ describe('UserService', () => {
 
       // Assert
       expect(bcrypt.hash).toHaveBeenCalledWith(newPassword, 10);
-      expect(result).toEqual(expect.objectContaining({
-        id: mockUser.id,
-        email: mockUser.email,
-        name: mockUser.name,
-      }));
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: mockUser.id,
+          email: mockUser.email,
+          name: mockUser.name,
+        }),
+      );
       expect(result).not.toHaveProperty('password');
     });
 
     it('Given_NonExistingUser_When_ResetPassword_Then_ThrowsNotFoundException', async () => {
       // Act & Assert
-      await expect(service.resetPassword('non-existing-id', 'NewPassword123!'))
-        .rejects.toThrow(NotFoundException);
-      await expect(service.resetPassword('non-existing-id', 'NewPassword123!'))
-        .rejects.toThrow('User with id non-existing-id not found');
+      await expect(
+        service.resetPassword('non-existing-id', 'NewPassword123!'),
+      ).rejects.toThrow(NotFoundException);
+      await expect(
+        service.resetPassword('non-existing-id', 'NewPassword123!'),
+      ).rejects.toThrow('User with id non-existing-id not found');
     });
   });
 });

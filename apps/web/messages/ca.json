@@ -116,6 +116,20 @@
         "description": "Veure i gestionar totes les excepcions de les teves plataformes",
         "action": "Veure Excepcions"
       }
+    },
+    "stats": {
+      "title": "Total d'esdeveniments",
+      "vsPrevPeriod": "vs període anterior",
+      "noChange": "Sense canvis",
+      "error": "Error en carregar estadístiques",
+      "timeSeriesTitle": "Excepcions per temps",
+      "platformTitle": "Distribució per plataforma",
+      "groupedTitle": "Errors més freqüents",
+      "lastSeen": "fa",
+      "noData": "No hi ha dades per al període seleccionat",
+      "count": "Total",
+      "occurrences": "{count, plural, one {# ocurrència} other {# ocurrències}}",
+      "viewAllIssues": "Veure totes les incidències"
     }
   },
   "health": {

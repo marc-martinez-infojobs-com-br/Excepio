@@ -116,6 +116,20 @@
         "description": "View and manage all exceptions across your platforms",
         "action": "View Exceptions"
       }
+    },
+    "stats": {
+      "title": "Total events",
+      "vsPrevPeriod": "vs prev. period",
+      "noChange": "No change",
+      "error": "Error loading stats",
+      "timeSeriesTitle": "Exceptions over time",
+      "platformTitle": "Distribution by platform",
+      "groupedTitle": "Most frequent errors",
+      "lastSeen": "ago",
+      "noData": "No data for selected period",
+      "count": "Total",
+      "occurrences": "{count, plural, one {# occurrence} other {# occurrences}}",
+      "viewAllIssues": "View all issues"
     }
   },
   "health": {

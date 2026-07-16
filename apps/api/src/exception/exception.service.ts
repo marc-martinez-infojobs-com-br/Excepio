@@ -1,5 +1,15 @@
-import { Injectable, Inject, NotFoundException, BadRequestException } from '@nestjs/common';
-import type { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ExceptionListResponseDto } from '@excepio/shared';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
+import type {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+  ExceptionListResponseDto,
+} from '@excepio/shared';
 import type { ExceptionRepository } from './repository';
 import { EXCEPTION_REPOSITORY } from './repository';
 import type { PlatformRepository } from '../platform/repository';
@@ -24,7 +34,10 @@ export class ExceptionService {
    * @param data - Datos de la excepción
    * @returns La excepción creada
    */
-  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(
+    platformId: number,
+    data: CreateExceptionDto,
+  ): Promise<ExceptionDto> {
     // Validar y normalizar levelId
     let levelId = data.levelId;
     if (levelId < 1 || levelId > 5) {
@@ -58,14 +71,16 @@ export class ExceptionService {
    * @param filters - Filtros de búsqueda y paginación
    * @returns Lista paginada de excepciones
    */
-  async findAll(filters: ExceptionFilterDto): Promise<ExceptionListResponseDto> {
+  async findAll(
+    filters: ExceptionFilterDto,
+  ): Promise<ExceptionListResponseDto> {
     // Normalizar paginación con defaults
     const normalizedFilters: ExceptionFilterDto = {
       ...filters,
       page: filters.page || 1,
       limit: filters.limit || 50,
     };
-    
+
     return this.exceptionRepository.findAll(normalizedFilters);
   }
 }

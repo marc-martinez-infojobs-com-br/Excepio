@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ExceptionDto, CreateExceptionDto, ExceptionFilterDto, ExceptionListResponseDto } from '@excepio/shared';
+import {
+  ExceptionDto,
+  CreateExceptionDto,
+  ExceptionFilterDto,
+  ExceptionListResponseDto,
+} from '@excepio/shared';
 import { ExceptionRepository } from './exception.repository.interface';
 import { randomUUID } from 'crypto';
 
@@ -25,10 +30,15 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
    */
   seed(data: ExceptionDto[]): void {
     this.clear();
-    data.forEach((exception) => this.exceptions.set(exception.id, { ...exception }));
+    data.forEach((exception) =>
+      this.exceptions.set(exception.id, { ...exception }),
+    );
   }
 
-  async create(platformId: number, data: CreateExceptionDto): Promise<ExceptionDto> {
+  async create(
+    platformId: number,
+    data: CreateExceptionDto,
+  ): Promise<ExceptionDto> {
     const exception: ExceptionDto = {
       id: randomUUID(),
       platformId,
@@ -52,12 +62,16 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
     return { ...exception };
   }
 
-  async findAll(filters: ExceptionFilterDto): Promise<ExceptionListResponseDto> {
+  async findAll(
+    filters: ExceptionFilterDto,
+  ): Promise<ExceptionListResponseDto> {
     let exceptions = Array.from(this.exceptions.values());
 
     // Filtros exactos
     if (filters.platformId !== undefined) {
-      exceptions = exceptions.filter((e) => e.platformId === filters.platformId);
+      exceptions = exceptions.filter(
+        (e) => e.platformId === filters.platformId,
+      );
     }
     if (filters.levelId !== undefined) {
       exceptions = exceptions.filter((e) => e.levelId === filters.levelId);
@@ -79,23 +93,33 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
     // Búsqueda ILIKE (case-insensitive)
     if (filters.messageSearch) {
       const search = filters.messageSearch.toLowerCase();
-      exceptions = exceptions.filter((e) => e.message.toLowerCase().includes(search));
+      exceptions = exceptions.filter((e) =>
+        e.message.toLowerCase().includes(search),
+      );
     }
     if (filters.stackTraceSearch && filters.stackTraceSearch.trim() !== '') {
       const search = filters.stackTraceSearch.toLowerCase();
-      exceptions = exceptions.filter((e) => e.stackTrace?.toLowerCase().includes(search));
+      exceptions = exceptions.filter((e) =>
+        e.stackTrace?.toLowerCase().includes(search),
+      );
     }
     if (filters.urlSearch && filters.urlSearch.trim() !== '') {
       const search = filters.urlSearch.toLowerCase();
-      exceptions = exceptions.filter((e) => e.url?.toLowerCase().includes(search));
+      exceptions = exceptions.filter((e) =>
+        e.url?.toLowerCase().includes(search),
+      );
     }
     if (filters.userAgentSearch && filters.userAgentSearch.trim() !== '') {
       const search = filters.userAgentSearch.toLowerCase();
-      exceptions = exceptions.filter((e) => e.userAgent?.toLowerCase().includes(search));
+      exceptions = exceptions.filter((e) =>
+        e.userAgent?.toLowerCase().includes(search),
+      );
     }
     if (filters.appVersionSearch && filters.appVersionSearch.trim() !== '') {
       const search = filters.appVersionSearch.toLowerCase();
-      exceptions = exceptions.filter((e) => e.appVersion?.toLowerCase().includes(search));
+      exceptions = exceptions.filter((e) =>
+        e.appVersion?.toLowerCase().includes(search),
+      );
     }
     if (filters.metadataSearch && filters.metadataSearch.trim() !== '') {
       const search = filters.metadataSearch.toLowerCase();
@@ -106,7 +130,10 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
     }
 
     // Ordenar por createdAt DESC
-    exceptions.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    exceptions.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
 
     // Paginación
     const page = filters.page || 1;

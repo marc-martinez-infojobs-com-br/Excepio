@@ -1,5 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, MinLength, MaxLength, IsInt, Min, IsOptional } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  MaxLength,
+  IsInt,
+  Min,
+  IsOptional,
+} from 'class-validator';
 
 export class CreatePlatformDto {
   @ApiProperty({
@@ -23,7 +30,8 @@ export class CreatePlatformDto {
   name: string;
 
   @ApiPropertyOptional({
-    description: 'Nombre del icono de la plataforma (de la galería predefinida)',
+    description:
+      'Nombre del icono de la plataforma (de la galería predefinida)',
     example: 'Monitor',
     maxLength: 50,
   })

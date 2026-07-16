@@ -29,7 +29,9 @@ export class StatusController {
     status: 404,
     description: 'Status no encontrado',
   })
-  async findById(@Param('id', ParseIntPipe) id: number): Promise<StatusResponseDto> {
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<StatusResponseDto> {
     return this.statusService.findById(id);
   }
 }
