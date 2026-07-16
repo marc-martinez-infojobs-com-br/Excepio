@@ -166,6 +166,27 @@ describe('Project CRUD (integration)', () => {
       createdProjectId = project.id;
     });
 
+    it('Given_ValidProjectDataWithIcon_When_CreateProject_Then_ReturnsCreatedProjectWithIcon', async () => {
+      // Arrange
+      const createPlatformDto: CreatePlatformDto = {
+        id: 102,
+        name: 'Platform with Icon',
+        icon: 'Server',
+      };
+
+      // Act
+      const response = await request(app.getHttpServer())
+        .post('/api/projects')
+        .send(createPlatformDto)
+        .expect(201);
+
+      // Assert
+      const project: PlatformDto = response.body;
+      expect(project.id).toBe(createPlatformDto.id);
+      expect(project.name).toBe(createPlatformDto.name);
+      expect(project.icon).toBe('Server');
+    });
+
     it('Given_DuplicateId_When_CreateProject_Then_Returns409', async () => {
       // Arrange
       const createPlatformDto: CreatePlatformDto = {
@@ -189,8 +210,8 @@ describe('Project CRUD (integration)', () => {
     it('Given_ProjectsExist_When_GetAllProjects_Then_ReturnsAllProjects', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project 1', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
-        { id: 2, name: 'Project 2', apiKey: 'exc_key2', statusId: 2, createdAt: new Date().toISOString() },
+        { id: 1, name: 'Project 1', icon: 'Monitor', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        { id: 2, name: 'Project 2', icon: null, apiKey: 'exc_key2', statusId: 2, createdAt: new Date().toISOString() },
       ]);
 
       // Act
@@ -202,6 +223,7 @@ describe('Project CRUD (integration)', () => {
       expect(response.body).toHaveLength(2);
       expect(response.body[0]).toHaveProperty('id');
       expect(response.body[0]).toHaveProperty('name');
+      expect(response.body[0]).toHaveProperty('icon');
       expect(response.body[0]).toHaveProperty('apiKey');
     });
 
@@ -220,7 +242,7 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingId_When_GetProjectById_Then_ReturnsProject', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project 1', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        { id: 1, name: 'Project 1', icon: 'Monitor', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
       ]);
 
       // Act
@@ -231,6 +253,7 @@ describe('Project CRUD (integration)', () => {
       // Assert
       expect(response.body.id).toBe(1);
       expect(response.body.name).toBe('Project 1');
+      expect(response.body.icon).toBe('Monitor');
     });
 
     it('Given_NonExistingId_When_GetProjectById_Then_Returns404', async () => {
@@ -245,7 +268,7 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingProject_When_UpdateProject_Then_ReturnsUpdatedProject', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Original Name', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        { id: 1, name: 'Original Name', icon: null, apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
       ]);
       const updateDto: UpdatePlatformDto = { name: 'Updated Name' };
 
@@ -258,6 +281,23 @@ describe('Project CRUD (integration)', () => {
       // Assert
       expect(response.body.name).toBe('Updated Name');
       expect(response.body.id).toBe(1);
+    });
+
+    it('Given_ExistingProject_When_UpdateIcon_Then_ReturnsUpdatedIcon', async () => {
+      // Arrange
+      sharedRepository.seed([
+        { id: 1, name: 'Project', icon: null, apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+      ]);
+      const updateDto: UpdatePlatformDto = { icon: 'Globe' };
+
+      // Act
+      const response = await request(app.getHttpServer())
+        .patch('/api/projects/1')
+        .send(updateDto)
+        .expect(200);
+
+      // Assert
+      expect(response.body.icon).toBe('Globe');
     });
 
     it('Given_NonExistingId_When_UpdateProject_Then_Returns404', async () => {
@@ -273,7 +313,7 @@ describe('Project CRUD (integration)', () => {
     it('Given_ExistingProject_When_DeleteProject_Then_SetsStatusToDeleted', async () => {
       // Arrange
       sharedRepository.seed([
-        { id: 1, name: 'Project to Delete', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
+        { id: 1, name: 'Project to Delete', icon: 'Monitor', apiKey: 'exc_key1', statusId: 2, createdAt: new Date().toISOString() },
       ]);
 
       // Act
@@ -298,7 +338,7 @@ describe('Project CRUD (integration)', () => {
       // Arrange
       const originalApiKey = 'exc_originalkey123';
       sharedRepository.seed([
-        { id: 1, name: 'Project', apiKey: originalApiKey, statusId: 2, createdAt: new Date().toISOString() },
+        { id: 1, name: 'Project', icon: 'Server', apiKey: originalApiKey, statusId: 2, createdAt: new Date().toISOString() },
       ]);
 
       // Act

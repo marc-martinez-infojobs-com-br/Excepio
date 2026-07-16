@@ -155,5 +155,73 @@
     "title": "Pàgina no trobada",
     "description": "Ho sentim, la pàgina que busques no existeix o ha estat moguda.",
     "backHome": "Tornar a l'inici"
+  },
+  "platforms": {
+    "title": "Plataformes",
+    "empty": "No hi ha plataformes registrades",
+    "loading": "Carregant plataformes...",
+    "table": {
+      "id": "ID",
+      "name": "Nom",
+      "icon": "Icona",
+      "apiKey": "API Key",
+      "createdAt": "Creat",
+      "status": "Estat",
+      "actions": "Accions"
+    },
+    "apiKey": {
+      "copy": "Copiar API Key",
+      "copied": "API Key copiada",
+      "show": "Mostrar API Key",
+      "hide": "Amagar API Key",
+      "regenerate": "Regenerar API Key",
+      "regenerateConfirm": "Estàs segur de regenerar l'API Key? Les aplicacions que facin servir la key actual deixaran de funcionar.",
+      "regenerated": "API Key regenerada correctament"
+    },
+    "status": {
+      "active": "Actiu",
+      "pending": "Pendent",
+      "expired": "Expirat",
+      "deleted": "Eliminat"
+    },
+    "create": {
+      "title": "Nova Plataforma",
+      "button": "Nova plataforma",
+      "success": "Plataforma creada correctament"
+    },
+    "edit": {
+      "title": "Editar Plataforma",
+      "button": "Editar",
+      "success": "Plataforma actualitzada correctament"
+    },
+    "delete": {
+      "title": "Eliminar Plataforma",
+      "button": "Eliminar",
+      "confirm": "Estàs segur d'eliminar la plataforma \"{name}\"? Aquesta acció no es pot desfer.",
+      "success": "Plataforma eliminada correctament"
+    },
+    "activate": {
+      "button": "Activar",
+      "success": "Plataforma activada correctament"
+    },
+    "form": {
+      "id": "ID",
+      "idPlaceholder": "Ex: 1",
+      "idHelp": "Identificador numèric únic",
+      "name": "Nom",
+      "namePlaceholder": "Ex: La Meva Aplicació Web",
+      "icon": "Icona",
+      "iconPlaceholder": "Selecciona una icona",
+      "submit": "Desar",
+      "submitting": "Desant..."
+    },
+    "errors": {
+      "loading": "Error en carregar plataformes",
+      "create": "Error en crear plataforma",
+      "update": "Error en actualitzar plataforma",
+      "delete": "Error en eliminar plataforma",
+      "regenerate": "Error en regenerar API Key",
+      "activate": "Error en activar plataforma"
+    }
   }
 }

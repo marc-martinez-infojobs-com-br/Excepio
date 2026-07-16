@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import PlatformsPage from '@app/(dashboard)/platforms/page';
 import { UserRole } from '@excepio/shared';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 // Mock de next/navigation
 const mockPush = vi.fn();
@@ -21,10 +22,32 @@ vi.mock('@hooks/use-auth', () => ({
   }),
 }));
 
-// Mock de toast
+// Mock de toast (función directa para useRequireRole)
 const mockToast = vi.fn();
 vi.mock('@hooks/use-toast', () => ({
   toast: (...args: unknown[]) => mockToast(...args),
+  useToast: () => ({
+    toast: mockToast,
+  }),
+}));
+
+// Mock de usePlatforms
+vi.mock('@hooks/use-platforms', () => ({
+  usePlatforms: () => ({
+    data: [],
+    isLoading: false,
+    error: null,
+  }),
+}));
+
+// Mock de usePlatformMutations
+vi.mock('@hooks/use-platform-mutations', () => ({
+  usePlatformMutations: () => ({
+    createPlatform: { mutateAsync: vi.fn(), isPending: false },
+    updatePlatform: { mutateAsync: vi.fn(), isPending: false },
+    deletePlatform: { mutateAsync: vi.fn(), isPending: false },
+    regenerateApiKey: { mutateAsync: vi.fn(), isPending: false },
+  }),
 }));
 
 // Mock de next-intl
@@ -33,10 +56,25 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       accessDenied: 'No tienes permisos para acceder a esta sección',
       platforms: 'Plataformas',
+      title: 'Plataformas',
+      empty: 'No hay plataformas registradas',
+      'create.button': 'Nueva plataforma',
     };
     return translations[key] || key;
   }),
 }));
+
+// Helper para envolver en QueryClientProvider
+const createWrapper = () => {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: { retry: false },
+    },
+  });
+  return ({ children }: { children: React.ReactNode }) => (
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+  );
+};
 
 describe('PlatformsPage', () => {
   beforeEach(() => {
@@ -56,13 +94,13 @@ describe('PlatformsPage', () => {
     });
 
     it('debería renderizar la página correctamente', () => {
-      render(<PlatformsPage />);
+      render(<PlatformsPage />, { wrapper: createWrapper() });
 
       expect(screen.getByText('Plataformas')).toBeInTheDocument();
     });
 
     it('NO debería redirigir ni mostrar toast', () => {
-      render(<PlatformsPage />);
+      render(<PlatformsPage />, { wrapper: createWrapper() });
 
       expect(mockPush).not.toHaveBeenCalled();
       expect(mockToast).not.toHaveBeenCalled();
@@ -81,7 +119,7 @@ describe('PlatformsPage', () => {
     });
 
     it('debería redirigir a /dashboard', async () => {
-      render(<PlatformsPage />);
+      render(<PlatformsPage />, { wrapper: createWrapper() });
 
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith('/dashboard');
@@ -89,7 +127,7 @@ describe('PlatformsPage', () => {
     });
 
     it('debería mostrar toast de acceso denegado', async () => {
-      render(<PlatformsPage />);
+      render(<PlatformsPage />, { wrapper: createWrapper() });
 
       await waitFor(() => {
         expect(mockToast).toHaveBeenCalledWith({

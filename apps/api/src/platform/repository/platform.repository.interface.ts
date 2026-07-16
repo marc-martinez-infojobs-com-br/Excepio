@@ -62,6 +62,13 @@ export interface PlatformRepository {
    * @returns La plataforma con la nueva API Key o null si no existe
    */
   regenerate(id: number): Promise<PlatformDto | null>;
+
+  /**
+   * Activa una plataforma (cambia statusId a 2 = ACTIVE).
+   * @param id - ID de la plataforma a activar
+   * @returns La plataforma activada o null si no existe
+   */
+  activate(id: number): Promise<PlatformDto | null>;
 }
 
 /**

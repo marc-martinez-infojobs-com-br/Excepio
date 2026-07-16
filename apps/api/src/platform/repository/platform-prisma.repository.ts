@@ -25,6 +25,7 @@ export class PlatformPrismaRepository implements PlatformRepository {
     return {
       id: platform.id,
       name: platform.name,
+      icon: platform.icon,
       apiKey: platform.apiKey,
       statusId: platform.statusId,
       createdAt: platform.createdAt.toISOString(),
@@ -33,8 +34,7 @@ export class PlatformPrismaRepository implements PlatformRepository {
 
   async findAll(): Promise<PlatformDto[]> {
     const platforms = await this.prisma.platform.findMany({
-      where: { statusId: { not: 4 } }, // Excluir DELETED
-      orderBy: { createdAt: 'desc' },
+      orderBy: { id: 'asc' },
     });
 
     return platforms.map((platform) => this.mapToDto(platform));
@@ -73,6 +73,7 @@ export class PlatformPrismaRepository implements PlatformRepository {
       data: {
         id: data.id,
         name: data.name,
+        icon: data.icon ?? null,
         apiKey: this.generateApiKey(),
         statusId: 2, // ACTIVE por defecto
       },
@@ -115,6 +116,21 @@ export class PlatformPrismaRepository implements PlatformRepository {
         where: { id },
         data: {
           apiKey: this.generateApiKey(),
+        },
+      });
+
+      return this.mapToDto(platform);
+    } catch {
+      return null;
+    }
+  }
+
+  async activate(id: number): Promise<PlatformDto | null> {
+    try {
+      const platform = await this.prisma.platform.update({
+        where: { id },
+        data: {
+          statusId: 2, // ACTIVE
         },
       });
 

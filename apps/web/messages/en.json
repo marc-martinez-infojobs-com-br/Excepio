@@ -155,5 +155,73 @@
     "title": "Page not found",
     "description": "Sorry, the page you're looking for doesn't exist or has been moved.",
     "backHome": "Back to home"
+  },
+  "platforms": {
+    "title": "Platforms",
+    "empty": "No platforms registered",
+    "loading": "Loading platforms...",
+    "table": {
+      "id": "ID",
+      "name": "Name",
+      "icon": "Icon",
+      "apiKey": "API Key",
+      "createdAt": "Created",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "apiKey": {
+      "copy": "Copy API Key",
+      "copied": "API Key copied",
+      "show": "Show API Key",
+      "hide": "Hide API Key",
+      "regenerate": "Regenerate API Key",
+      "regenerateConfirm": "Are you sure you want to regenerate the API Key? Applications using the current key will stop working.",
+      "regenerated": "API Key regenerated successfully"
+    },
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "expired": "Expired",
+      "deleted": "Deleted"
+    },
+    "create": {
+      "title": "New Platform",
+      "button": "New platform",
+      "success": "Platform created successfully"
+    },
+    "edit": {
+      "title": "Edit Platform",
+      "button": "Edit",
+      "success": "Platform updated successfully"
+    },
+    "delete": {
+      "title": "Delete Platform",
+      "button": "Delete",
+      "confirm": "Are you sure you want to delete the platform \"{name}\"? This action cannot be undone.",
+      "success": "Platform deleted successfully"
+    },
+    "activate": {
+      "button": "Activate",
+      "success": "Platform activated successfully"
+    },
+    "form": {
+      "id": "ID",
+      "idPlaceholder": "E.g: 1",
+      "idHelp": "Unique numeric identifier",
+      "name": "Name",
+      "namePlaceholder": "E.g: My Web Application",
+      "icon": "Icon",
+      "iconPlaceholder": "Select an icon",
+      "submit": "Save",
+      "submitting": "Saving..."
+    },
+    "errors": {
+      "loading": "Error loading platforms",
+      "create": "Error creating platform",
+      "update": "Error updating platform",
+      "delete": "Error deleting platform",
+      "regenerate": "Error regenerating API Key",
+      "activate": "Error activating platform"
+    }
   }
 }

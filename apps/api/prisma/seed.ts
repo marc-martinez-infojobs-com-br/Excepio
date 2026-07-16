@@ -222,12 +222,13 @@ async function main() {
   console.log(`✓ ${levels.length} Level records`);
 
   // Platforms de ejemplo (para desarrollo)
+  // Iconos disponibles: Lucide (LuXxx), Font Awesome (FaXxx), Ionicons (IoXxx)
   const platforms = [
-    { id: 1, name: 'Web', statusId: 2 },
-    { id: 2, name: 'WM', statusId: 2 },
-    { id: 3, name: 'Android', statusId: 2 },
-    { id: 4, name: 'iOS', statusId: 2 },
-    { id: 5, name: 'API', statusId: 2 },
+    { id: 1, name: 'Web', icon: 'LuMonitor', statusId: 2 },
+    { id: 2, name: 'WM', icon: 'LuSmartphone', statusId: 2 },
+    { id: 3, name: 'Android', icon: 'IoLogoAndroid', statusId: 2 },
+    { id: 4, name: 'iOS', icon: 'IoLogoApple', statusId: 2 },
+    { id: 5, name: 'API', icon: 'LuServer', statusId: 2 },
   ];
 
   for (const platform of platforms) {
@@ -240,9 +241,16 @@ async function main() {
         data: {
           id: platform.id,
           name: platform.name,
+          icon: platform.icon,
           apiKey: generateApiKey(),
           statusId: platform.statusId,
         },
+      });
+    } else {
+      // Actualizar icon siempre para reflejar cambios
+      await prisma.platform.update({
+        where: { id: platform.id },
+        data: { icon: platform.icon },
       });
     }
   }
