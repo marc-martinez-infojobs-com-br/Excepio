@@ -1,7 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { BadRequestException } from '@nestjs/common';
 import { UserController } from '@user/user.controller';
 import { UserService } from '@user/user.service';
 import { UserResponseDto, UserRole, CreateUserDto, UpdateUserDto } from '@excepio/shared';
+import { ResetPasswordDto } from '@user/dto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -25,6 +27,7 @@ describe('UserController', () => {
       create: vi.fn(),
       update: vi.fn(),
       delete: vi.fn(),
+      resetPassword: vi.fn(),
     } as any;
 
     controller = new UserController(service);
@@ -125,6 +128,42 @@ describe('UserController', () => {
         'You cannot delete yourself'
       );
       expect(service.delete).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('Given_ValidPasswordsMatch_When_ResetPassword_Then_ResetsPassword', async () => {
+      // Arrange
+      const resetDto: ResetPasswordDto = {
+        newPassword: 'NewPassword123!',
+        confirmPassword: 'NewPassword123!',
+      };
+      const updatedUser: UserResponseDto = mockUser;
+      vi.mocked(service.resetPassword).mockResolvedValue(updatedUser);
+
+      // Act
+      const result = await controller.resetPassword(mockUser.id, resetDto);
+
+      // Assert
+      expect(service.resetPassword).toHaveBeenCalledWith(mockUser.id, resetDto.newPassword);
+      expect(result).toEqual(updatedUser);
+    });
+
+    it('Given_PasswordsDoNotMatch_When_ResetPassword_Then_ThrowsBadRequestException', async () => {
+      // Arrange
+      const resetDto: ResetPasswordDto = {
+        newPassword: 'NewPassword123!',
+        confirmPassword: 'DifferentPassword123!',
+      };
+
+      // Act & Assert
+      await expect(controller.resetPassword(mockUser.id, resetDto)).rejects.toThrow(
+        BadRequestException
+      );
+      await expect(controller.resetPassword(mockUser.id, resetDto)).rejects.toThrow(
+        'Passwords do not match'
+      );
+      expect(service.resetPassword).not.toHaveBeenCalled();
     });
   });
 });

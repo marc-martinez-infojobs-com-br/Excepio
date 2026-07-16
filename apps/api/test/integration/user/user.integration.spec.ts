@@ -70,6 +70,23 @@ class TestUserService {
     }
     return user;
   }
+
+  async resetPassword(id: string, newPassword: string): Promise<UserResponseDto> {
+    const user = await this.repo.findById(id);
+    if (!user) {
+      const { NotFoundException } = await import('@nestjs/common');
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const updatedUser = await this.repo.updatePassword(id, hashedPassword);
+    if (!updatedUser) {
+      const { NotFoundException } = await import('@nestjs/common');
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return updatedUser;
+  }
 }
 
 @Controller('users')
@@ -104,6 +121,15 @@ class TestUserController {
   @Post(':id/activate')
   async activate(@Param('id') id: string): Promise<UserResponseDto> {
     return this.userService.activate(id);
+  }
+
+  @Post(':id/reset-password')
+  async resetPassword(@Param('id') id: string, @Body() body: { newPassword: string; confirmPassword: string }): Promise<UserResponseDto> {
+    const { BadRequestException } = await import('@nestjs/common');
+    if (body.newPassword !== body.confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+    return this.userService.resetPassword(id, body.newPassword);
   }
 }
 
@@ -396,6 +422,64 @@ describe('User CRUD (integration)', () => {
       // Act
       const response = await request(app.getHttpServer())
         .post(`/api/users/${nonExistingId}/activate`)
+        .expect(404);
+
+      // Assert
+      expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('not found');
+    });
+  });
+
+  describe('POST /api/users/:id/reset-password', () => {
+    it('Given_ValidMatchingPasswords_When_ResetPassword_Then_UpdatesPassword', async () => {
+      // Arrange
+      const resetPasswordDto = {
+        newPassword: 'NewPassword123!',
+        confirmPassword: 'NewPassword123!',
+      };
+
+      // Act
+      const response = await request(app.getHttpServer())
+        .post(`/api/users/${createdUserId}/reset-password`)
+        .send(resetPasswordDto)
+        .expect(201);
+
+      // Assert
+      const user: UserResponseDto = response.body;
+      expect(user.id).toBe(createdUserId);
+      expect(user).not.toHaveProperty('password');
+    });
+
+    it('Given_MismatchedPasswords_When_ResetPassword_Then_Returns400', async () => {
+      // Arrange
+      const resetPasswordDto = {
+        newPassword: 'NewPassword123!',
+        confirmPassword: 'DifferentPassword123!',
+      };
+
+      // Act
+      const response = await request(app.getHttpServer())
+        .post(`/api/users/${createdUserId}/reset-password`)
+        .send(resetPasswordDto)
+        .expect(400);
+
+      // Assert
+      expect(response.body).toHaveProperty('message');
+      expect(response.body.message).toContain('Passwords do not match');
+    });
+
+    it('Given_NonExistingUserId_When_ResetPassword_Then_Returns404', async () => {
+      // Arrange
+      const nonExistingId = '00000000-0000-0000-0000-000000000000';
+      const resetPasswordDto = {
+        newPassword: 'NewPassword123!',
+        confirmPassword: 'NewPassword123!',
+      };
+
+      // Act
+      const response = await request(app.getHttpServer())
+        .post(`/api/users/${nonExistingId}/reset-password`)
+        .send(resetPasswordDto)
         .expect(404);
 
       // Assert

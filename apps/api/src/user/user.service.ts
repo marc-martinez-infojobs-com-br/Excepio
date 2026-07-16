@@ -117,4 +117,30 @@ export class UserService {
     }
     return user;
   }
+
+  /**
+   * Resetea la contraseña de un usuario (solo administradores).
+   * @param id - ID del usuario
+   * @param newPassword - Nueva contraseña en texto plano
+   * @returns El usuario actualizado
+   * @throws NotFoundException si el usuario no existe
+   */
+  async resetPassword(id: string, newPassword: string): Promise<UserResponseDto> {
+    // Verificar que el usuario existe
+    const user = await this.userRepository.findById(id);
+    if (!user) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    // Hashear la nueva contraseña
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Actualizar la contraseña
+    const updatedUser = await this.userRepository.updatePassword(id, hashedPassword);
+    if (!updatedUser) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    return updatedUser;
+  }
 }

@@ -183,4 +183,34 @@ describe('UserService', () => {
       await expect(service.delete('non-existing-id')).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('resetPassword', () => {
+    it('Given_ExistingUser_When_ResetPassword_Then_UpdatesPasswordWithHash', async () => {
+      // Arrange
+      repository.seed([mockUser]);
+      const newPassword = 'NewPassword123!';
+      const hashedPassword = 'hashedNewPassword123';
+      vi.mocked(bcrypt.hash).mockResolvedValue(hashedPassword as never);
+
+      // Act
+      const result = await service.resetPassword(mockUser.id, newPassword);
+
+      // Assert
+      expect(bcrypt.hash).toHaveBeenCalledWith(newPassword, 10);
+      expect(result).toEqual(expect.objectContaining({
+        id: mockUser.id,
+        email: mockUser.email,
+        name: mockUser.name,
+      }));
+      expect(result).not.toHaveProperty('password');
+    });
+
+    it('Given_NonExistingUser_When_ResetPassword_Then_ThrowsNotFoundException', async () => {
+      // Act & Assert
+      await expect(service.resetPassword('non-existing-id', 'NewPassword123!'))
+        .rejects.toThrow(NotFoundException);
+      await expect(service.resetPassword('non-existing-id', 'NewPassword123!'))
+        .rejects.toThrow('User with id non-existing-id not found');
+    });
+  });
 });

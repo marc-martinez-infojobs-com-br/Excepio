@@ -44,6 +44,20 @@ export const ChangePasswordSchema = z.object({
 export type ChangePasswordDto = z.infer<typeof ChangePasswordSchema>;
 
 /**
+ * Schema para resetear contraseña (admin)
+ * No requiere contraseña actual ya que lo hace un administrador
+ */
+export const ResetPasswordSchema = z.object({
+  newPassword: z.string().min(8, 'La nueva contraseña debe tener al menos 8 caracteres'),
+  confirmPassword: z.string().min(1, 'Debes confirmar la contraseña'),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: 'Las contraseñas no coinciden',
+  path: ['confirmPassword'],
+});
+
+export type ResetPasswordDto = z.infer<typeof ResetPasswordSchema>;
+
+/**
  * Schema de respuesta de usuario
  * NO incluye el password por seguridad
  */
