@@ -30,7 +30,7 @@ export default function ExceptionsPage() {
 
   // Mapear los datos a la estructura esperada por los componentes
   const levels = levelsData?.map((l) => ({ id: l.id, name: l.name })) ?? [];
-  const platforms = platformsData?.map((p) => ({ id: p.id, name: p.name })) ?? [];
+  const platforms = platformsData ?? [];
 
   const handleFilterChange = (newFilters: ExceptionFilterDto) => {
     setFilters(newFilters);

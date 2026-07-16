@@ -86,4 +86,16 @@ export class PlatformController {
   async regenerate(@Param('id', ParseIntPipe) id: number): Promise<PlatformDto> {
     return this.platformService.regenerate(id);
   }
+
+  @Post(':id/activate')
+  @Roles(UserRole.ADMINISTRADOR)
+  @ApiOperation({ summary: 'Activar una plataforma eliminada (solo ADMINISTRADOR)' })
+  @ApiParam({ name: 'id', type: 'number', description: 'ID de la plataforma' })
+  @ApiResponse({ status: 200, description: 'Plataforma activada exitosamente' })
+  @ApiResponse({ status: 401, description: 'No autenticado' })
+  @ApiResponse({ status: 403, description: 'Acceso denegado - Solo ADMINISTRADOR' })
+  @ApiResponse({ status: 404, description: 'Plataforma no encontrada' })
+  async activate(@Param('id', ParseIntPipe) id: number): Promise<PlatformDto> {
+    return this.platformService.activate(id);
+  }
 }

@@ -6,7 +6,7 @@ import { locales, defaultLocale, type Locale } from '@i18n/config';
 const publicRoutes = ['/login', '/register'];
 
 // Rutas protegidas que requieren autenticación
-const protectedRoutes = ['/dashboard', '/exceptions'];
+const protectedRoutes = ['/dashboard', '/issues', '/platforms', '/users'];
 
 /**
  * Obtiene el locale del request.

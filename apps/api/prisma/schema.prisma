@@ -50,6 +50,7 @@ model Level {
 model Platform {
   id        Int      @id
   name      String
+  icon      String?
   apiKey    String   @unique
   statusId  Int
   createdAt DateTime @default(now())

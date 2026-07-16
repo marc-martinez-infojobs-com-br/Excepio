@@ -36,9 +36,8 @@ export class PlatformMemoryRepository implements PlatformRepository {
   }
 
   async findAll(): Promise<PlatformDto[]> {
-    return Array.from(this.platforms.values()).filter(
-      (platform) => platform.statusId !== 4,
-    );
+    return Array.from(this.platforms.values())
+      .sort((a, b) => a.id - b.id);
   }
 
   async findById(id: number): Promise<PlatformDto | null> {
@@ -63,6 +62,7 @@ export class PlatformMemoryRepository implements PlatformRepository {
     const platform: PlatformDto = {
       id: data.id,
       name: data.name,
+      icon: data.icon ?? null,
       apiKey: this.generateApiKey(),
       statusId: 2, // ACTIVE por defecto
       createdAt: new Date().toISOString(),
@@ -78,6 +78,7 @@ export class PlatformMemoryRepository implements PlatformRepository {
     const updated: PlatformDto = {
       ...platform,
       ...(data.name !== undefined && { name: data.name }),
+      ...(data.icon !== undefined && { icon: data.icon }),
       ...(data.statusId !== undefined && { statusId: data.statusId }),
     };
     this.platforms.set(id, updated);
@@ -100,6 +101,18 @@ export class PlatformMemoryRepository implements PlatformRepository {
     const updated: PlatformDto = {
       ...platform,
       apiKey: this.generateApiKey(),
+    };
+    this.platforms.set(id, updated);
+    return { ...updated };
+  }
+
+  async activate(id: number): Promise<PlatformDto | null> {
+    const platform = this.platforms.get(id);
+    if (!platform) return null;
+
+    const updated: PlatformDto = {
+      ...platform,
+      statusId: 2, // ACTIVE
     };
     this.platforms.set(id, updated);
     return { ...updated };

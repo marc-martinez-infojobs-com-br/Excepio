@@ -11,6 +11,7 @@ describe('PlatformService', () => {
   const mockPlatform: PlatformDto = {
     id: 1,
     name: 'Test Platform',
+    icon: 'Monitor',
     apiKey: 'exc_abc123def456',
     statusId: 2,
     createdAt: new Date().toISOString(),
@@ -88,6 +89,26 @@ describe('PlatformService', () => {
       expect(result.apiKey).toMatch(/^exc_[a-f0-9]{64}$/);
     });
 
+    it('Given_ValidDataWithIcon_When_Create_Then_CreatesProjectWithIcon', async () => {
+      // Arrange
+      const createWithIcon: CreatePlatformDto = {
+        id: 11,
+        name: 'Platform with Icon',
+        icon: 'Server',
+      };
+
+      // Act
+      const result = await service.create(createWithIcon);
+
+      // Assert
+      expect(result).toEqual(expect.objectContaining({
+        id: createWithIcon.id,
+        name: createWithIcon.name,
+        icon: 'Server',
+        statusId: 2,
+      }));
+    });
+
     it('Given_DuplicateId_When_Create_Then_ThrowsConflictException', async () => {
       // Arrange
       repository.seed([mockPlatform]);
@@ -135,6 +156,30 @@ describe('PlatformService', () => {
 
       // Assert
       expect(result.statusId).toBe(3);
+    });
+
+    it('Given_IconUpdate_When_Update_Then_UpdatesIcon', async () => {
+      // Arrange
+      repository.seed([mockPlatform]);
+      const updateIconDto: UpdatePlatformDto = { icon: 'Globe' };
+
+      // Act
+      const result = await service.update(mockPlatform.id, updateIconDto);
+
+      // Assert
+      expect(result.icon).toBe('Globe');
+    });
+
+    it('Given_NullIcon_When_Update_Then_RemovesIcon', async () => {
+      // Arrange
+      repository.seed([mockPlatform]);
+      const updateIconDto: UpdatePlatformDto = { icon: null };
+
+      // Act
+      const result = await service.update(mockPlatform.id, updateIconDto);
+
+      // Assert
+      expect(result.icon).toBeNull();
     });
   });
 

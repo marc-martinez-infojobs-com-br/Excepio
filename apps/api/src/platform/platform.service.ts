@@ -92,4 +92,18 @@ export class PlatformService {
     }
     return platform;
   }
+
+  /**
+   * Activa una plataforma eliminada.
+   * @param id - ID de la plataforma
+   * @returns La plataforma activada
+   * @throws NotFoundException si la plataforma no existe
+   */
+  async activate(id: number): Promise<PlatformDto> {
+    const platform = await this.platformRepository.activate(id);
+    if (!platform) {
+      throw new NotFoundException(`Platform with id ${id} not found`);
+    }
+    return platform;
+  }
 }

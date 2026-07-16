@@ -23,6 +23,7 @@ CREATE TABLE "Level" (
 CREATE TABLE "Platform" (
     "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
+    "icon" TEXT,
     "apiKey" TEXT NOT NULL,
     "statusId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

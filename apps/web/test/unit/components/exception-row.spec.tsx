@@ -194,6 +194,6 @@ describe('ExceptionRow', () => {
 
     // El role es "link" porque le pusimos role="link" al tr
     const row = screen.getByRole('link');
-    expect(row).toHaveAttribute('data-href', `/exceptions/${mockException.id}`);
+    expect(row).toHaveAttribute('data-href', `/issues/${mockException.id}`);
   });
 });
