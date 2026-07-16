@@ -7,8 +7,6 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
-  Legend,
-  Tooltip,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { Skeleton } from '@components/ui/skeleton';
@@ -57,11 +55,11 @@ export function PlatformPieChart({ filters, className }: PlatformPieChartProps) 
   if (isLoading) {
     return (
       <Card className={cn('border-input', className)}>
-        <CardHeader>
-          <Skeleton className="h-6 w-48" />
+        <CardHeader className="pb-2">
+          <Skeleton className="h-5 w-36" />
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-[300px] w-full" />
+          <Skeleton className="h-[200px] w-full" />
         </CardContent>
       </Card>
     );
@@ -70,8 +68,8 @@ export function PlatformPieChart({ filters, className }: PlatformPieChartProps) 
   if (isError || !data) {
     return (
       <Card className={cn('border-input', className)}>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold">
             {t('platformTitle')}
           </CardTitle>
         </CardHeader>
@@ -85,8 +83,8 @@ export function PlatformPieChart({ filters, className }: PlatformPieChartProps) 
   if (chartData.length === 0) {
     return (
       <Card className={cn('border-input', className)}>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold">
             {t('platformTitle')}
           </CardTitle>
         </CardHeader>
@@ -99,43 +97,51 @@ export function PlatformPieChart({ filters, className }: PlatformPieChartProps) 
 
   return (
     <Card className={cn('border-input', className)}>
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base font-semibold">
           {t('platformTitle')}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={({ name, percent }) => `${name}: ${percent}%`}
-              outerRadius={100}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '6px',
-              }}
-              labelStyle={{ color: 'hsl(var(--foreground))' }}
-              formatter={(value, name) => {
-                const item = chartData.find((d) => d.name === name);
-                return [`${value} (${item?.percent ?? 0}%)`, name];
-              }}
-            />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+        <div className="flex flex-col items-center">
+          {/* Pie Chart */}
+          <div className="outline-none" tabIndex={-1}>
+            <ResponsiveContainer width={120} height={120}>
+              <PieChart>
+                <Pie
+                  data={chartData}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={55}
+                  innerRadius={30}
+                  fill="#8884d8"
+                  dataKey="value"
+                  strokeWidth={0}
+                >
+                  {chartData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Leyenda en 2 columnas */}
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 w-full">
+            {chartData.map((item, index) => (
+              <div key={index} className="flex items-center gap-2 text-sm min-w-0">
+                <div
+                  className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="truncate text-muted-foreground text-xs">
+                  {item.name}
+                </span>
+                <span className="font-medium text-xs ml-auto">{item.percent}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

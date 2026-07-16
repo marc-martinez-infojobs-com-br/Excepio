@@ -10,7 +10,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from '@components/ui/card';
 import { Skeleton } from '@components/ui/skeleton';
@@ -24,13 +23,14 @@ interface TimeSeriesChartProps {
 }
 
 // Colores por nivel de severidad (levelId)
+// Consistentes con los badges del listado de excepciones
 // 1: Debug, 2: Info, 3: Warning, 4: Error, 5: Critical
 const LEVEL_COLORS: Record<string, string> = {
-  '1': '#6b7280', // Debug - gray
-  '2': '#3b82f6', // Info - blue
-  '3': '#f59e0b', // Warning - amber
-  '4': '#ef4444', // Error - red
-  '5': '#7c3aed', // Critical - purple
+  '1': '#6b7280', // Debug - gray-500
+  '2': '#3b82f6', // Info - blue-500
+  '3': '#f59e0b', // Warning - amber-500
+  '4': '#ef4444', // Error - red-500
+  '5': '#f43f5e', // Critical - rose-500
 };
 
 const LEVEL_NAMES: Record<string, string> = {
@@ -44,12 +44,20 @@ const LEVEL_NAMES: Record<string, string> = {
 /**
  * Formatea una fecha ISO a formato legible según granularidad
  */
-function formatDate(dateStr: string, granularity: 'hour' | 'day'): string {
+function formatDate(dateStr: string, granularity: 'hour' | 'day' | 'week' | 'month'): string {
   const date = new Date(dateStr);
-  if (granularity === 'hour') {
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  switch (granularity) {
+    case 'hour':
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    case 'day':
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    case 'week':
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    case 'month':
+      return date.toLocaleDateString([], { month: 'short', year: '2-digit' });
+    default:
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
   }
-  return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
 }
 
 /**
@@ -98,11 +106,11 @@ export function TimeSeriesChart({ filters, className }: TimeSeriesChartProps) {
   if (isLoading) {
     return (
       <Card className={cn('border-input', className)}>
-        <CardHeader>
-          <Skeleton className="h-6 w-48" />
+        <CardHeader className="pb-2">
+          <Skeleton className="h-5 w-36" />
         </CardHeader>
         <CardContent>
-          <Skeleton className="h-[300px] w-full" />
+          <Skeleton className="h-[180px] w-full" />
         </CardContent>
       </Card>
     );
@@ -111,8 +119,8 @@ export function TimeSeriesChart({ filters, className }: TimeSeriesChartProps) {
   if (isError || !data) {
     return (
       <Card className={cn('border-input', className)}>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold">
             {t('timeSeriesTitle')}
           </CardTitle>
         </CardHeader>
@@ -126,8 +134,8 @@ export function TimeSeriesChart({ filters, className }: TimeSeriesChartProps) {
   if (chartData.length === 0) {
     return (
       <Card className={cn('border-input', className)}>
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base font-semibold">
             {t('timeSeriesTitle')}
           </CardTitle>
         </CardHeader>
@@ -140,36 +148,55 @@ export function TimeSeriesChart({ filters, className }: TimeSeriesChartProps) {
 
   return (
     <Card className={cn('border-input', className)}>
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold">
-          {t('timeSeriesTitle')}
-        </CardTitle>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <CardTitle className="text-base font-semibold">
+            {t('timeSeriesTitle')}
+          </CardTitle>
+          {/* Leyenda de colores inline - de mayor a menor criticidad */}
+          <div className="flex items-center gap-3">
+            {[...levelIds].reverse().map((levelId) => (
+              <div key={levelId} className="flex items-center gap-1">
+                <div
+                  className="w-2.5 h-2.5 rounded-sm"
+                  style={{ backgroundColor: LEVEL_COLORS[levelId] || '#888888' }}
+                />
+                <span className="text-xs text-muted-foreground">
+                  {LEVEL_NAMES[levelId] || `Level ${levelId}`}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={chartData}>
+        <div className="outline-none" tabIndex={-1}>
+          <ResponsiveContainer width="100%" height={180}>
+            <AreaChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
             <XAxis
               dataKey="date"
               className="text-xs"
-              tick={{ fill: 'currentColor' }}
+              tick={{ fill: 'currentColor', fontSize: 10 }}
               tickLine={{ stroke: 'currentColor' }}
             />
             <YAxis
               className="text-xs"
-              tick={{ fill: 'currentColor' }}
+              tick={{ fill: 'currentColor', fontSize: 10 }}
               tickLine={{ stroke: 'currentColor' }}
               allowDecimals={false}
+              width={30}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
+                backgroundColor: 'var(--color-card)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '6px',
+                fontSize: '12px',
               }}
-              labelStyle={{ color: 'hsl(var(--foreground))' }}
+              labelStyle={{ color: 'var(--color-foreground)' }}
+              itemSorter={(item) => -(parseInt(String(item.dataKey).replace('level_', '')) || 0)}
             />
-            <Legend />
             {/* Renderizar áreas en orden inverso para que los críticos queden arriba */}
             {[...levelIds].reverse().map((levelId) => (
               <Area
@@ -185,6 +212,7 @@ export function TimeSeriesChart({ filters, className }: TimeSeriesChartProps) {
             ))}
           </AreaChart>
         </ResponsiveContainer>
+        </div>
       </CardContent>
     </Card>
   );

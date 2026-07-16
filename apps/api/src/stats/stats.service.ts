@@ -108,7 +108,9 @@ export class StatsService {
    * Obtiene excepciones agrupadas por tiempo y nivel de severidad.
    * La granularidad se calcula automáticamente según el rango:
    * - Rango <= 48h: por hora
-   * - Rango > 48h: por día
+   * - Rango <= 7 días: por día
+   * - Rango <= 90 días: por semana
+   * - Rango > 90 días: por mes
    */
   async getByTime(filters: TimeStatsFilterDto): Promise<TimeStatsResponseDto> {
     const now = new Date();
@@ -119,13 +121,24 @@ export class StatsService {
       ? new Date(filters.startDate)
       : new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // 24h antes
 
-    // Calcular duración del período en horas
+    // Calcular duración del período en horas y días
     const periodHours =
       (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60);
+    const periodDays = periodHours / 24;
 
     // Determinar granularidad
-    const granularity: 'hour' | 'day' =
-      filters.granularity || (periodHours <= 48 ? 'hour' : 'day');
+    let granularity: 'hour' | 'day' | 'week' | 'month';
+    if (filters.granularity) {
+      granularity = filters.granularity;
+    } else if (periodHours <= 48) {
+      granularity = 'hour';
+    } else if (periodDays <= 7) {
+      granularity = 'day';
+    } else if (periodDays <= 90) {
+      granularity = 'week';
+    } else {
+      granularity = 'month';
+    }
 
     // Construir condiciones WHERE
     const conditions: string[] = [

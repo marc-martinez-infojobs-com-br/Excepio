@@ -38,7 +38,7 @@ export type TotalStatsResponseDto = z.infer<typeof TotalStatsResponseSchema>;
 
 export const TimeStatsFilterSchema = StatsFilterSchema.extend({
   levelId: z.coerce.number().int().optional(),
-  granularity: z.enum(['hour', 'day']).optional(),
+  granularity: z.enum(['hour', 'day', 'week', 'month']).optional(),
 });
 
 export type TimeStatsFilterDto = z.infer<typeof TimeStatsFilterSchema>;
@@ -53,7 +53,7 @@ export type TimeDataPointDto = z.infer<typeof TimeDataPointSchema>;
 
 export const TimeStatsResponseSchema = z.object({
   data: z.array(TimeDataPointSchema),
-  granularity: z.enum(['hour', 'day']),
+  granularity: z.enum(['hour', 'day', 'week', 'month']),
 });
 
 export type TimeStatsResponseDto = z.infer<typeof TimeStatsResponseSchema>;
