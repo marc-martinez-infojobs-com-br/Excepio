@@ -3,6 +3,7 @@ import { PrismaService } from '@app/prisma/prisma.service';
 import type {
   TotalStatsResponseDto,
   TimeStatsResponseDto,
+  TimeDataPointDto,
   PlatformStatsResponseDto,
   GroupedExceptionsResponseDto,
 } from '@excepio/shared';
@@ -11,6 +12,13 @@ import {
   TimeStatsFilterDto,
   GroupedExceptionsFilterDto,
 } from './dto';
+
+// Tipo para los resultados de la query raw de agrupación temporal
+interface TimeGroupRawResult {
+  date: Date;
+  levelId: number;
+  count: bigint;
+}
 
 @Injectable()
 export class StatsService {
@@ -86,10 +94,82 @@ export class StatsService {
     };
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getByTime(_filters: TimeStatsFilterDto): TimeStatsResponseDto {
-    // TODO: Implementar en Fase 2
-    throw new Error('Not implemented');
+  /**
+   * Obtiene excepciones agrupadas por tiempo y nivel de severidad.
+   * La granularidad se calcula automáticamente según el rango:
+   * - Rango <= 48h: por hora
+   * - Rango > 48h: por día
+   */
+  async getByTime(filters: TimeStatsFilterDto): Promise<TimeStatsResponseDto> {
+    const now = new Date();
+
+    // Calcular período
+    const endDate = filters.endDate ? new Date(filters.endDate) : now;
+    const startDate = filters.startDate
+      ? new Date(filters.startDate)
+      : new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // 24h antes
+
+    // Calcular duración del período en horas
+    const periodHours =
+      (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60);
+
+    // Determinar granularidad
+    const granularity: 'hour' | 'day' =
+      filters.granularity || (periodHours <= 48 ? 'hour' : 'day');
+
+    // Construir condiciones WHERE
+    const conditions: string[] = [
+      `"createdAt" >= '${startDate.toISOString()}'`,
+      `"createdAt" <= '${endDate.toISOString()}'`,
+    ];
+
+    if (filters.platformId) {
+      conditions.push(`"platformId" = ${filters.platformId}`);
+    }
+
+    if (filters.levelId) {
+      conditions.push(`"levelId" = ${filters.levelId}`);
+    }
+
+    const whereClause = conditions.join(' AND ');
+
+    // Query raw para agrupar por fecha truncada y nivel
+    // Usamos Prisma.raw para construir la query completa ya que date_trunc necesita un literal
+    const rawResults = await this.prisma.$queryRawUnsafe<TimeGroupRawResult[]>(`
+      SELECT 
+        date_trunc('${granularity}', "createdAt") as date,
+        "levelId",
+        COUNT(*)::bigint as count
+      FROM "Exception"
+      WHERE ${whereClause}
+      GROUP BY date_trunc('${granularity}', "createdAt"), "levelId"
+      ORDER BY date ASC
+    `);
+
+    // Agrupar resultados por fecha
+    const dataMap = new Map<string, TimeDataPointDto>();
+
+    for (const row of rawResults) {
+      const dateKey = row.date.toISOString();
+
+      if (!dataMap.has(dateKey)) {
+        dataMap.set(dateKey, {
+          date: dateKey,
+          levels: {},
+          total: 0,
+        });
+      }
+
+      const point = dataMap.get(dateKey)!;
+      const count = Number(row.count);
+      point.levels[row.levelId.toString()] = count;
+      point.total += count;
+    }
+
+    return {
+      data: Array.from(dataMap.values()),
+      granularity,
+    };
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

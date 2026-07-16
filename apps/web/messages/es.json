@@ -121,7 +121,9 @@
       "title": "Total de eventos",
       "vsPrevPeriod": "vs período anterior",
       "noChange": "Sin cambios",
-      "error": "Error al cargar estadísticas"
+      "error": "Error al cargar estadísticas",
+      "timeSeriesTitle": "Excepciones por tiempo",
+      "noData": "No hay datos para el período seleccionado"
     }
   },
   "health": {

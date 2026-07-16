@@ -121,7 +121,9 @@
       "title": "Total events",
       "vsPrevPeriod": "vs prev. period",
       "noChange": "No change",
-      "error": "Error loading stats"
+      "error": "Error loading stats",
+      "timeSeriesTitle": "Exceptions over time",
+      "noData": "No data for selected period"
     }
   },
   "health": {

@@ -80,7 +80,9 @@ export class StatsController {
   })
   @ApiResponse({ status: 200, description: 'Serie temporal de excepciones' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
-  getByTime(@Query() filters: TimeStatsFilterDto): TimeStatsResponseDto {
+  async getByTime(
+    @Query() filters: TimeStatsFilterDto,
+  ): Promise<TimeStatsResponseDto> {
     return this.statsService.getByTime(filters);
   }
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { TotalExceptionsCard } from '@components/dashboard';
+import { TotalExceptionsCard, TimeSeriesChart } from '@components/dashboard';
 
 export default function DashboardPage() {
   return (
@@ -8,6 +8,11 @@ export default function DashboardPage() {
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 mb-8">
         <TotalExceptionsCard />
+      </div>
+
+      {/* Time Series Chart */}
+      <div className="mb-8">
+        <TimeSeriesChart />
       </div>
     </div>
   );

@@ -1,21 +1,24 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { StatsService } from '@stats/stats.service';
 import { PrismaService } from '@app/prisma/prisma.service';
-import type { TotalStatsResponseDto } from '@excepio/shared';
 
 describe('StatsService - getTotal', () => {
   let service: StatsService;
   let mockPrisma: {
     exception: {
       count: ReturnType<typeof vi.fn>;
+      groupBy: ReturnType<typeof vi.fn>;
     };
+    $queryRaw: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
     mockPrisma = {
       exception: {
         count: vi.fn(),
+        groupBy: vi.fn(),
       },
+      $queryRaw: vi.fn(),
     };
 
     service = new StatsService(mockPrisma as unknown as PrismaService);
@@ -124,6 +127,130 @@ describe('StatsService - getTotal', () => {
 
       // ((133 - 100) / 100) * 100 = 33%
       expect(result.changePercent).toBe(33);
+    });
+  });
+});
+
+describe('StatsService - getByTime', () => {
+  let service: StatsService;
+  let mockPrisma: {
+    exception: {
+      count: ReturnType<typeof vi.fn>;
+      groupBy: ReturnType<typeof vi.fn>;
+    };
+    $queryRawUnsafe: ReturnType<typeof vi.fn>;
+  };
+
+  beforeEach(() => {
+    mockPrisma = {
+      exception: {
+        count: vi.fn(),
+        groupBy: vi.fn(),
+      },
+      $queryRawUnsafe: vi.fn(),
+    };
+
+    service = new StatsService(mockPrisma as unknown as PrismaService);
+  });
+
+  describe('granularidad automática', () => {
+    it('debería usar granularidad "hour" para rangos <= 48h', async () => {
+      const now = new Date();
+      const startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString(); // 24h antes
+      const endDate = now.toISOString();
+
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+
+      const result = await service.getByTime({ startDate, endDate });
+
+      expect(result.granularity).toBe('hour');
+    });
+
+    it('debería usar granularidad "day" para rangos > 48h', async () => {
+      const now = new Date();
+      const startDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 días antes
+      const endDate = now.toISOString();
+
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+
+      const result = await service.getByTime({ startDate, endDate });
+
+      expect(result.granularity).toBe('day');
+    });
+
+    it('debería respetar la granularidad especificada manualmente', async () => {
+      const now = new Date();
+      const startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString();
+      const endDate = now.toISOString();
+
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+
+      const result = await service.getByTime({ startDate, endDate, granularity: 'day' });
+
+      expect(result.granularity).toBe('day');
+    });
+  });
+
+  describe('estructura de respuesta', () => {
+    it('debería retornar estructura correcta con data y granularity', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+        { date: new Date('2024-01-01T10:00:00Z'), levelId: 4, count: BigInt(5) },
+        { date: new Date('2024-01-01T10:00:00Z'), levelId: 3, count: BigInt(3) },
+        { date: new Date('2024-01-01T11:00:00Z'), levelId: 4, count: BigInt(2) },
+      ]);
+
+      const result = await service.getByTime({
+        startDate: '2024-01-01T00:00:00.000Z',
+        endDate: '2024-01-01T23:59:59.999Z',
+      });
+
+      expect(result).toHaveProperty('data');
+      expect(result).toHaveProperty('granularity');
+      expect(Array.isArray(result.data)).toBe(true);
+    });
+
+    it('debería agrupar por fecha y tener levels como objeto', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+        { date: new Date('2024-01-01T10:00:00Z'), levelId: 4, count: BigInt(5) },
+        { date: new Date('2024-01-01T10:00:00Z'), levelId: 3, count: BigInt(3) },
+      ]);
+
+      const result = await service.getByTime({
+        startDate: '2024-01-01T00:00:00.000Z',
+        endDate: '2024-01-01T23:59:59.999Z',
+      });
+
+      expect(result.data.length).toBeGreaterThan(0);
+      const firstPoint = result.data[0];
+      expect(firstPoint).toHaveProperty('date');
+      expect(firstPoint).toHaveProperty('levels');
+      expect(firstPoint).toHaveProperty('total');
+      expect(typeof firstPoint.levels).toBe('object');
+    });
+
+    it('debería calcular el total sumando todos los levels', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([
+        { date: new Date('2024-01-01T10:00:00Z'), levelId: 4, count: BigInt(5) },
+        { date: new Date('2024-01-01T10:00:00Z'), levelId: 3, count: BigInt(3) },
+      ]);
+
+      const result = await service.getByTime({
+        startDate: '2024-01-01T00:00:00.000Z',
+        endDate: '2024-01-01T23:59:59.999Z',
+      });
+
+      const firstPoint = result.data[0];
+      expect(firstPoint.total).toBe(8); // 5 + 3
+    });
+  });
+
+  describe('filtros', () => {
+    it('debería usar las últimas 24h si no se especifican fechas', async () => {
+      mockPrisma.$queryRawUnsafe.mockResolvedValueOnce([]);
+
+      const result = await service.getByTime({});
+
+      expect(result.granularity).toBe('hour');
     });
   });
 });
