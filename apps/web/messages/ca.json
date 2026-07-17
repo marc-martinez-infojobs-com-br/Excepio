@@ -114,7 +114,8 @@
       "sections": {
         "stackTrace": "Stack Trace",
         "metadata": "Metadata",
-        "context": "Informació Contextual"
+        "context": "Informació Contextual",
+        "userAgent": "User Agent"
       },
       "fields": {
         "platform": "Plataforma",
@@ -127,6 +128,15 @@
         "noMetadata": "Sense metadata",
         "noStackTrace": "Sense stack trace",
         "notAvailable": "No disponible"
+      },
+      "userAgent": {
+        "browser": "Navegador",
+        "os": "Sistema Operatiu",
+        "device": "Dispositiu",
+        "raw": "Original"
+      },
+      "actions": {
+        "copy": "Copiar"
       }
     }
   },

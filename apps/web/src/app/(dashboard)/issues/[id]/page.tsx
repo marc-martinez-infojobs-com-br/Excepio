@@ -11,6 +11,7 @@ import { ExceptionDetailHeader } from '@components/exceptions/exception-detail-h
 import { ExceptionStackTrace } from '@components/exceptions/exception-stack-trace';
 import { ExceptionMetadata } from '@components/exceptions/exception-metadata';
 import { ExceptionContext } from '@components/exceptions/exception-context';
+import { ExceptionUserAgent } from '@components/exceptions/exception-user-agent';
 
 interface ExceptionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -93,9 +94,10 @@ export default function ExceptionDetailPage({ params }: ExceptionDetailPageProps
           <ExceptionMetadata metadata={exception.metadata} />
         </div>
 
-        {/* Right column - Context */}
-        <div className="lg:col-span-1">
+        {/* Right column - Context & User Agent */}
+        <div className="lg:col-span-1 space-y-6">
           <ExceptionContext exception={exception} />
+          <ExceptionUserAgent userAgent={exception.userAgent} />
         </div>
       </div>
     </div>

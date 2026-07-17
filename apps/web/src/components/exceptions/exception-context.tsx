@@ -90,14 +90,6 @@ export function ExceptionContext({ exception }: ExceptionContextProps) {
           notAvailableText={notAvailable} 
         />
 
-        {/* User Agent - vertical layout for long text */}
-        <div className="flex flex-col py-2 border-b border-input">
-          <span className="text-sm font-medium text-muted-foreground mb-1">{t('fields.userAgent')}</span>
-          <span className={`text-sm break-words ${exception.userAgent ? 'text-foreground' : 'text-muted-foreground italic'}`}>
-            {exception.userAgent || notAvailable}
-          </span>
-        </div>
-
         {/* Timestamp */}
         <ContextRow 
           label={t('fields.timestamp')} 

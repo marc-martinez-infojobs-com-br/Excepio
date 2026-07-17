@@ -12,7 +12,6 @@ vi.mock('next-intl', () => ({
       'fields.appVersion': 'Version',
       'fields.url': 'URL',
       'fields.userId': 'User',
-      'fields.userAgent': 'User Agent',
       'fields.timestamp': 'Date and time',
       'fields.affectedUsers': 'Affected users',
       'fields.notAvailable': 'Not available',
@@ -74,13 +73,6 @@ describe('ExceptionContext', () => {
     expect(screen.getByText('user-456')).toBeInTheDocument();
   });
 
-  it('debería mostrar el userAgent', () => {
-    render(<ExceptionContext exception={mockException} />);
-
-    expect(screen.getByText('User Agent')).toBeInTheDocument();
-    expect(screen.getByText(/Mozilla\/5.0/)).toBeInTheDocument();
-  });
-
   it('debería mostrar la fecha y hora', () => {
     render(<ExceptionContext exception={mockException} />);
 
@@ -101,14 +93,13 @@ describe('ExceptionContext', () => {
       ...mockException,
       url: null,
       userId: null,
-      userAgent: null,
       appVersion: null,
     };
 
     render(<ExceptionContext exception={exceptionWithNulls} />);
 
     const notAvailableElements = screen.getAllByText('Not available');
-    expect(notAvailableElements.length).toBeGreaterThanOrEqual(4);
+    expect(notAvailableElements.length).toBeGreaterThanOrEqual(3);
   });
 
   it('debería mostrar 0 usuarios afectados correctamente', () => {

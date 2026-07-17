@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { CopyButton } from '@components/ui/copy-button';
 
 interface ExceptionStackTraceProps {
   stackTrace: string | null | undefined;
@@ -18,9 +19,16 @@ export function ExceptionStackTrace({ stackTrace }: ExceptionStackTraceProps) {
       </h2>
 
       {hasStackTrace ? (
-        <pre className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto border border-transparent dark:border-input">
-          <code role="code">{stackTrace}</code>
-        </pre>
+        <div className="relative">
+          <pre className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto border border-transparent dark:border-input">
+            <code role="code">{stackTrace}</code>
+          </pre>
+          <CopyButton 
+            text={stackTrace} 
+            label={t('actions.copy')}
+            className="absolute top-2 right-2"
+          />
+        </div>
       ) : (
         <p className="text-sm text-muted-foreground italic">
           {t('fields.noStackTrace')}

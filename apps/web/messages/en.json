@@ -114,7 +114,8 @@
       "sections": {
         "stackTrace": "Stack Trace",
         "metadata": "Metadata",
-        "context": "Contextual Information"
+        "context": "Contextual Information",
+        "userAgent": "User Agent"
       },
       "fields": {
         "platform": "Platform",
@@ -127,6 +128,15 @@
         "noMetadata": "No metadata",
         "noStackTrace": "No stack trace",
         "notAvailable": "Not available"
+      },
+      "userAgent": {
+        "browser": "Browser",
+        "os": "Operating System",
+        "device": "Device",
+        "raw": "Raw"
+      },
+      "actions": {
+        "copy": "Copy"
       }
     }
   },
