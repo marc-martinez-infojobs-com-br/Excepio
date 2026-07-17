@@ -18,7 +18,7 @@ export function ExceptionStackTrace({ stackTrace }: ExceptionStackTraceProps) {
       </h2>
 
       {hasStackTrace ? (
-        <pre className="bg-zinc-900 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto">
+        <pre className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto border border-transparent dark:border-input">
           <code role="code">{stackTrace}</code>
         </pre>
       ) : (

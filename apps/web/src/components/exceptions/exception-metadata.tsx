@@ -18,7 +18,7 @@ export function ExceptionMetadata({ metadata }: ExceptionMetadataProps) {
       </h2>
 
       {hasMetadata ? (
-        <pre className="bg-zinc-900 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto">
+        <pre className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto border border-transparent dark:border-input">
           <code role="code">{JSON.stringify(metadata, null, 2)}</code>
         </pre>
       ) : (

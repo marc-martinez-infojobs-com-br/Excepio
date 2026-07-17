@@ -10,6 +10,7 @@ import { BugSearchingIllustration } from '@components/illustrations/bug-searchin
 import { ExceptionDetailHeader } from '@components/exceptions/exception-detail-header';
 import { ExceptionStackTrace } from '@components/exceptions/exception-stack-trace';
 import { ExceptionMetadata } from '@components/exceptions/exception-metadata';
+import { ExceptionContext } from '@components/exceptions/exception-context';
 
 interface ExceptionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -84,11 +85,19 @@ export default function ExceptionDetailPage({ params }: ExceptionDetailPageProps
       {/* Header */}
       <ExceptionDetailHeader exception={exception} />
 
-      {/* Stack Trace */}
-      <ExceptionStackTrace stackTrace={exception.stackTrace} />
+      {/* Two column layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left column - Stack Trace & Metadata */}
+        <div className="lg:col-span-2 space-y-6">
+          <ExceptionStackTrace stackTrace={exception.stackTrace} />
+          <ExceptionMetadata metadata={exception.metadata} />
+        </div>
 
-      {/* Metadata */}
-      <ExceptionMetadata metadata={exception.metadata} />
+        {/* Right column - Context */}
+        <div className="lg:col-span-1">
+          <ExceptionContext exception={exception} />
+        </div>
+      </div>
     </div>
   );
 }
