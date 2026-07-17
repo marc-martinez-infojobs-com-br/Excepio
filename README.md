@@ -368,7 +368,7 @@ El seed creará:
 - 5 niveles de severidad (DEBUG, INFO, WARNING, ERROR, FATAL)
 - 5 plataformas de ejemplo (Web, WM, Android, iOS, API)
 - 2 usuarios de prueba: 1 administrador (`admin@excepio.com`) y 1 usuario básico (`user@excepio.com`)
-- 100 excepciones de prueba distribuidas en los últimos 30 días
+- 500 excepciones de prueba con stack traces y metadata extensos distribuidos en los últimos 60 días
 
 ### 6. Iniciar el proyecto
 
