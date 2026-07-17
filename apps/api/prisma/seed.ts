@@ -82,229 +82,178 @@ const EXCEPTION_MESSAGES = [
 
 const STACK_TRACES = [
   // Stack trace 1: Autofac DependencyResolution (estilo .NET)
-  `Autofac.Core.DependencyResolutionException: An exception was thrown while activating ApplicationCore.Services.UserService -> ApplicationCore.Repositories.UserRepository -> Microsoft.EntityFrameworkCore.DbContext.
-   ---> Autofac.Core.DependencyResolutionException: An exception was thrown while invoking the constructor 'Void .ctor(Microsoft.EntityFrameworkCore.DbContextOptions)' on type 'ApplicationDbContext'.
-   ---> System.InvalidOperationException: No database provider has been configured for this DbContext. A provider can be configured by overriding the DbContext.OnConfiguring method or by using AddDbContext on the application service provider.
-   at Microsoft.EntityFrameworkCore.Infrastructure.Internal.InfrastructureExtensions.GetRequiredInfrastructure[TService](IInfrastructure infrastructure)
-   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.Initialize(IServiceProvider scopedProvider, IDbContextOptions contextOptions, DbContext context)
-   at Microsoft.EntityFrameworkCore.DbContext..ctor(DbContextOptions options)
-   at ApplicationCore.Infrastructure.ApplicationDbContext..ctor(DbContextOptions`1 options)
-   at lambda_method42(Closure, Object[])
-   at Autofac.Core.Activators.Reflection.BoundConstructor.Instantiate()
-   --- End of inner exception stack trace ---
-   at Autofac.Core.Activators.Reflection.BoundConstructor.Instantiate()
-   at Autofac.Core.Activators.Reflection.ReflectionActivator.<>c__DisplayClass14_0.<UseSingleConstructorActivation>b__0(ResolveRequestContext context, Action\`1 next)
-   at Autofac.Core.Resolving.Middleware.DisposalTrackingMiddleware.Execute(ResolveRequestContext context, Action\`1 next)
-   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action\`1 next)
-   --- End of inner exception stack trace ---
-   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action\`1 next)
-   at Autofac.Core.Lifetime.LifetimeScope.CreateSharedInstance(Guid id, Func\`1 creator)
-   at Autofac.Core.Resolving.Middleware.SharingMiddleware.Execute(ResolveRequestContext context, Action\`1 next)
-   at Autofac.Core.Resolving.ResolveOperation.GetOrCreateInstance(ISharingLifetimeScope currentOperationScope, ResolveRequest& request)
-   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.<>c__DisplayClass6_0.<CreateControllerFactory>g__CreateController|0(ControllerContext controllerContext)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
-   --- End of stack trace from previous location ---
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
-   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
-   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.<Invoke>g__Awaited|10_0(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)
-   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT\`1.ProcessRequestAsync()`,
+  'Autofac.Core.DependencyResolutionException: An exception was thrown while activating ApplicationCore.Services.UserService -> ApplicationCore.Repositories.UserRepository -> Microsoft.EntityFrameworkCore.DbContext.\n' +
+  '   ---> Autofac.Core.DependencyResolutionException: An exception was thrown while invoking the constructor Void .ctor(Microsoft.EntityFrameworkCore.DbContextOptions) on type ApplicationDbContext.\n' +
+  '   ---> System.InvalidOperationException: No database provider has been configured for this DbContext. A provider can be configured by overriding the DbContext.OnConfiguring method or by using AddDbContext on the application service provider.\n' +
+  '   at Microsoft.EntityFrameworkCore.Infrastructure.Internal.InfrastructureExtensions.GetRequiredInfrastructure[TService](IInfrastructure infrastructure)\n' +
+  '   at Microsoft.EntityFrameworkCore.Internal.DbContextServices.Initialize(IServiceProvider scopedProvider, IDbContextOptions contextOptions, DbContext context)\n' +
+  '   at Microsoft.EntityFrameworkCore.DbContext..ctor(DbContextOptions options)\n' +
+  '   at ApplicationCore.Infrastructure.ApplicationDbContext..ctor(DbContextOptions options)\n' +
+  '   at lambda_method42(Closure, Object[])\n' +
+  '   at Autofac.Core.Activators.Reflection.BoundConstructor.Instantiate()\n' +
+  '   --- End of inner exception stack trace ---\n' +
+  '   at Autofac.Core.Activators.Reflection.BoundConstructor.Instantiate()\n' +
+  '   at Autofac.Core.Activators.Reflection.ReflectionActivator.UseSingleConstructorActivation(ResolveRequestContext context, Action next)\n' +
+  '   at Autofac.Core.Resolving.Middleware.DisposalTrackingMiddleware.Execute(ResolveRequestContext context, Action next)\n' +
+  '   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action next)\n' +
+  '   --- End of inner exception stack trace ---\n' +
+  '   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action next)\n' +
+  '   at Autofac.Core.Lifetime.LifetimeScope.CreateSharedInstance(Guid id, Func creator)\n' +
+  '   at Autofac.Core.Resolving.Middleware.SharingMiddleware.Execute(ResolveRequestContext context, Action next)\n' +
+  '   at Autofac.Core.Resolving.ResolveOperation.GetOrCreateInstance(ISharingLifetimeScope currentOperationScope, ResolveRequest request)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Controllers.ControllerFactoryProvider.CreateControllerFactory(ControllerContext controllerContext)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State next, Scope scope, Object state, Boolean isCompleted)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()\n' +
+  '   --- End of stack trace from previous location ---\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeNextResourceFilter(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State next, Scope scope, Object state, Boolean isCompleted)\n' +
+  '   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)\n' +
+  '   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)\n' +
+  '   at Microsoft.AspNetCore.Diagnostics.ExceptionHandlerMiddlewareImpl.Invoke(ExceptionHandlerMiddlewareImpl middleware, HttpContext context, Task task)\n' +
+  '   at Microsoft.AspNetCore.Server.IIS.Core.IISHttpContextOfT.ProcessRequestAsync()',
 
   // Stack trace 2: Database timeout (EntityFramework)
-  `System.Data.SqlClient.SqlException (0x80131904): Timeout expired. The timeout period elapsed prior to completion of the operation or the server is not responding.
-   ---> System.ComponentModel.Win32Exception (0x80004005): The wait operation timed out
-   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action\`1 wrapCloseInAction)
-   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)
-   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
-   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()
-   at System.Data.SqlClient.SqlDataReader.get_MetaData()
-   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString, Boolean isInternal, Boolean forDescribeParameterEncryption, Boolean shouldCacheForAlwaysEncrypted)
-   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, Boolean async, Int32 timeout, Task& task, Boolean asyncWrite, Boolean inRetry, SqlDataReader ds, Boolean describeParameterEncryptionRequest)
-   at System.Data.SqlClient.SqlCommand.RunExecuteReader(CommandBehavior cmdBehavior, RunBehavior runBehavior, Boolean returnStream, String method, TaskCompletionSource\`1 completion, Int32 timeout, Task& task, Boolean& usedCache, Boolean asyncWrite, Boolean inRetry)
-   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)
-   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)
-   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable\`1.Enumerator.InitializeReader(DbContext _, Boolean result)
-   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable\`1.Enumerator.MoveNext()
-   at System.Collections.Generic.List\`1..ctor(IEnumerable\`1 collection)
-   at System.Linq.Enumerable.ToList[TSource](IEnumerable\`1 source)
-   at ApplicationCore.Services.UserService.GetAllActiveUsers() in D:\\Projects\\Application\\Services\\UserService.cs:line 89
-   at ApplicationCore.Controllers.UserController.GetUsers() in D:\\Projects\\Application\\Controllers\\UserController.cs:line 45
-   at lambda_method123(Closure, Object)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
-   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask\`1 actionResultValueTask)`,
+  'System.Data.SqlClient.SqlException (0x80131904): Timeout expired. The timeout period elapsed prior to completion of the operation or the server is not responding.\n' +
+  '   ---> System.ComponentModel.Win32Exception (0x80004005): The wait operation timed out\n' +
+  '   at System.Data.SqlClient.SqlConnection.OnError(SqlException exception, Boolean breakConnection, Action wrapCloseInAction)\n' +
+  '   at System.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, Boolean callerHasConnectionLock, Boolean asyncClose)\n' +
+  '   at System.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream)\n' +
+  '   at System.Data.SqlClient.SqlDataReader.TryConsumeMetaData()\n' +
+  '   at System.Data.SqlClient.SqlDataReader.get_MetaData()\n' +
+  '   at System.Data.SqlClient.SqlCommand.FinishExecuteReader(SqlDataReader ds, RunBehavior runBehavior, String resetOptionsString)\n' +
+  '   at System.Data.SqlClient.SqlCommand.RunExecuteReaderTds(CommandBehavior cmdBehavior, RunBehavior runBehavior)\n' +
+  '   at System.Data.SqlClient.SqlCommand.ExecuteReader(CommandBehavior behavior, String method)\n' +
+  '   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReader(RelationalCommandParameterObject parameterObject)\n' +
+  '   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable.Enumerator.InitializeReader(DbContext _, Boolean result)\n' +
+  '   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable.Enumerator.MoveNext()\n' +
+  '   at System.Collections.Generic.List..ctor(IEnumerable collection)\n' +
+  '   at System.Linq.Enumerable.ToList[TSource](IEnumerable source)\n' +
+  '   at ApplicationCore.Services.UserService.GetAllActiveUsers() in D:\\Projects\\Application\\Services\\UserService.cs:line 89\n' +
+  '   at ApplicationCore.Controllers.UserController.GetUsers() in D:\\Projects\\Application\\Controllers\\UserController.cs:line 45\n' +
+  '   at lambda_method123(Closure, Object)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfActionResultExecutor.Execute(ActionContext actionContext)\n' +
+  '   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeActionMethodAsync(ControllerActionInvoker invoker)',
 
   // Stack trace 3: NullReferenceException (JavaScript/Node.js)
-  `TypeError: Cannot read properties of null (reading 'userId')
-   at UserService.getUserProfile (/app/src/services/user.service.js:156:28)
-   at async AuthMiddleware.validateSession (/app/src/middleware/auth.middleware.js:89:18)
-   at async Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)
-   at async next (/app/node_modules/express/lib/router/route.js:144:13)
-   at async SessionMiddleware.checkSession (/app/src/middleware/session.middleware.js:67:7)
-   at async Function.process_params (/app/node_modules/express/lib/router/index.js:346:13)
-   at async next (/app/node_modules/express/lib/router/index.js:280:10)
-   at async CorsMiddleware.handleCors (/app/node_modules/cors/lib/index.js:188:7)
-   at async /app/src/app.js:45:3
-   at async Server.<anonymous> (/app/node_modules/express/lib/application.js:652:7)`,
+  'TypeError: Cannot read properties of null (reading userId)\n' +
+  '   at UserService.getUserProfile (/app/src/services/user.service.js:156:28)\n' +
+  '   at async AuthMiddleware.validateSession (/app/src/middleware/auth.middleware.js:89:18)\n' +
+  '   at async Layer.handle [as handle_request] (/app/node_modules/express/lib/router/layer.js:95:5)\n' +
+  '   at async next (/app/node_modules/express/lib/router/route.js:144:13)\n' +
+  '   at async SessionMiddleware.checkSession (/app/src/middleware/session.middleware.js:67:7)\n' +
+  '   at async Function.process_params (/app/node_modules/express/lib/router/index.js:346:13)\n' +
+  '   at async next (/app/node_modules/express/lib/router/index.js:280:10)\n' +
+  '   at async CorsMiddleware.handleCors (/app/node_modules/cors/lib/index.js:188:7)\n' +
+  '   at async /app/src/app.js:45:3',
 
-  // Stack trace 4: PostgreSQL constraint violation
-  `Npgsql.PostgresException (0x80004005): 23505: duplicate key value violates unique constraint "users_email_key"
-  Severity: ERROR
-  SqlState: 23505
-  MessageText: duplicate key value violates unique constraint "users_email_key"
-  Detail: Key (email)=(john.doe@example.com) already exists.
-  SchemaName: public
-  TableName: users
-  ConstraintName: users_email_key
-  File: nbtinsert.c
-  Line: 673
-  Routine: _bt_check_unique
-   at Npgsql.NpgsqlConnector.<ReadMessage>g__ReadMessageLong|194_0(NpgsqlConnector connector, Boolean async, DataRowLoadingMode dataRowLoadingMode, Boolean readingNotifications, Boolean isReadingPrependedMessage)
-   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)
-   at Npgsql.NpgsqlDataReader.NextResult()
-   at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior, Boolean async, CancellationToken cancellationToken)
-   at Npgsql.NpgsqlCommand.ExecuteReader(CommandBehavior behavior)
-   at Npgsql.NpgsqlCommand.ExecuteNonQuery()
-   at Dapper.SqlMapper.ExecuteCommand(IDbConnection cnn, ref CommandDefinition command, Action\`2 paramReader)
-   at Dapper.SqlMapper.ExecuteImpl(IDbConnection cnn, ref CommandDefinition command)
-   at Dapper.SqlMapper.Execute(IDbConnection cnn, String sql, Object param, IDbTransaction transaction, Nullable\`1 commandTimeout, Nullable\`1 commandType)
-   at ApplicationCore.Repositories.UserRepository.CreateUser(User user) in C:\\Projects\\Repositories\\UserRepository.cs:line 234
-   at ApplicationCore.Services.UserService.RegisterNewUser(UserRegistrationDto dto) in C:\\Projects\\Services\\UserService.cs:line 178
-   at ApplicationCore.Controllers.AuthController.Register(UserRegistrationDto model) in C:\\Projects\\Controllers\\AuthController.cs:line 67`,
+  // Stack trace 4: PostgreSQL constraint violation  
+  'Npgsql.PostgresException (0x80004005): 23505: duplicate key value violates unique constraint users_email_key\n' +
+  'Severity: ERROR\n' +
+  'SqlState: 23505\n' +
+  'Detail: Key (email)=(john.doe@example.com) already exists.\n' +
+  'SchemaName: public\n' +
+  'TableName: users\n' +
+  'ConstraintName: users_email_key\n' +
+  '   at Npgsql.NpgsqlConnector.ReadMessage(NpgsqlConnector connector, Boolean async)\n' +
+  '   at Npgsql.NpgsqlDataReader.NextResult(Boolean async, Boolean isConsuming, CancellationToken cancellationToken)\n' +
+  '   at Npgsql.NpgsqlCommand.ExecuteNonQuery()\n' +
+  '   at Dapper.SqlMapper.ExecuteCommand(IDbConnection cnn, ref CommandDefinition command)\n' +
+  '   at ApplicationCore.Repositories.UserRepository.CreateUser(User user) in C:\\Projects\\Repositories\\UserRepository.cs:line 234\n' +
+  '   at ApplicationCore.Services.UserService.RegisterNewUser(UserRegistrationDto dto) in C:\\Projects\\Services\\UserService.cs:line 178\n' +
+  '   at ApplicationCore.Controllers.AuthController.Register(UserRegistrationDto model) in C:\\Projects\\Controllers\\AuthController.cs:line 67',
 
   // Stack trace 5: React component error
-  `Error: Uncaught [Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState inside componentWillUpdate or componentDidUpdate. React limits the number of nested updates to prevent infinite loops.]
-   at reportException (http://localhost:3000/static/js/bundle.js:1234:15)
-   at renderWithHooks (http://localhost:3000/static/js/bundle.js:14567:28)
-   at updateFunctionComponent (http://localhost:3000/static/js/bundle.js:16789:20)
-   at beginWork (http://localhost:3000/static/js/bundle.js:19012:16)
-   at HTMLUnknownElement.callCallback (http://localhost:3000/static/js/bundle.js:3945:14)
-   at Object.invokeGuardedCallbackDev (http://localhost:3000/static/js/bundle.js:3994:16)
-   at invokeGuardedCallback (http://localhost:3000/static/js/bundle.js:4056:31)
-   at beginWork$1 (http://localhost:3000/static/js/bundle.js:23964:7)
-   at performUnitOfWork (http://localhost:3000/static/js/bundle.js:22707:12)
-   at workLoopSync (http://localhost:3000/static/js/bundle.js:22683:5)
-   at renderRootSync (http://localhost:3000/static/js/bundle.js:22656:7)
-   at performSyncWorkOnRoot (http://localhost:3000/static/js/bundle.js:22293:18)
-   at scheduleUpdateOnFiber (http://localhost:3000/static/js/bundle.js:21907:7)
-   at dispatchSetState (http://localhost:3000/static/js/bundle.js:16405:5)
-   at UserDashboard.handleUpdate (http://localhost:3000/static/js/main.chunk.js:2345:9)
-   at http://localhost:3000/static/js/main.chunk.js:2367:18`,
+  'Error: Maximum update depth exceeded. This can happen when a component repeatedly calls setState.\n' +
+  '   at reportException (http://localhost:3000/static/js/bundle.js:1234:15)\n' +
+  '   at renderWithHooks (http://localhost:3000/static/js/bundle.js:14567:28)\n' +
+  '   at updateFunctionComponent (http://localhost:3000/static/js/bundle.js:16789:20)\n' +
+  '   at beginWork (http://localhost:3000/static/js/bundle.js:19012:16)\n' +
+  '   at HTMLUnknownElement.callCallback (http://localhost:3000/static/js/bundle.js:3945:14)\n' +
+  '   at Object.invokeGuardedCallbackDev (http://localhost:3000/static/js/bundle.js:3994:16)\n' +
+  '   at performUnitOfWork (http://localhost:3000/static/js/bundle.js:22707:12)\n' +
+  '   at workLoopSync (http://localhost:3000/static/js/bundle.js:22683:5)\n' +
+  '   at renderRootSync (http://localhost:3000/static/js/bundle.js:22656:7)\n' +
+  '   at scheduleUpdateOnFiber (http://localhost:3000/static/js/bundle.js:21907:7)\n' +
+  '   at UserDashboard.handleUpdate (http://localhost:3000/static/js/main.chunk.js:2345:9)',
 
   // Stack trace 6: Redis connection error
-  `StackExchange.Redis.RedisConnectionException: It was not possible to connect to the redis server(s). UnableToConnect on redis-cluster-01.production.local:6379/Interactive, Initializing/NotStarted, last: NONE, origin: BeginConnectAsync, outstanding: 0, last-read: 0s ago, last-write: 0s ago, keep-alive: 60s, state: Connecting, mgr: 10 of 10 available, last-heartbeat: never, global: 0s ago, v: 2.6.122.38350
-   ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)
-   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.System.Threading.Tasks.Sources.IValueTaskSource.GetResult(Int16 token)
-   at System.Net.Sockets.Socket.<ConnectAsync>g__WaitForConnectWithCancellation|277_0(AwaitableSocketAsyncEventArgs saea, ValueTask connectTask, CancellationToken cancellationToken)
-   at StackExchange.Redis.PhysicalConnection.ConnectAsync(EndPoint endpoint, ILogger log)
-   --- End of inner exception stack trace ---
-   at StackExchange.Redis.ConnectionMultiplexer.ConnectImpl(Func\`1 multiplexerFactory, TextWriter log)
-   at StackExchange.Redis.ConnectionMultiplexer.Connect(String configuration, TextWriter log)
-   at ApplicationCore.Services.CacheService.InitializeConnection() in D:\\Projects\\Services\\CacheService.cs:line 56
-   at ApplicationCore.Services.CacheService.GetAsync[T](String key) in D:\\Projects\\Services\\CacheService.cs:line 89
-   at ApplicationCore.Services.UserService.GetUserByIdWithCache(Guid userId) in D:\\Projects\\Services\\UserService.cs:line 234
-   at ApplicationCore.Controllers.UserController.GetUser(Guid id) in D:\\Projects\\Controllers\\UserController.cs:line 112`,
+  'StackExchange.Redis.RedisConnectionException: It was not possible to connect to the redis server(s).\n' +
+  'UnableToConnect on redis-cluster-01.production.local:6379/Interactive\n' +
+  '   ---> System.Net.Sockets.SocketException (10061): No connection could be made because the target machine actively refused it.\n' +
+  '   at System.Net.Sockets.Socket.AwaitableSocketAsyncEventArgs.ThrowException(SocketError error, CancellationToken cancellationToken)\n' +
+  '   at StackExchange.Redis.PhysicalConnection.ConnectAsync(EndPoint endpoint, ILogger log)\n' +
+  '   --- End of inner exception stack trace ---\n' +
+  '   at StackExchange.Redis.ConnectionMultiplexer.ConnectImpl(Func multiplexerFactory, TextWriter log)\n' +
+  '   at StackExchange.Redis.ConnectionMultiplexer.Connect(String configuration, TextWriter log)\n' +
+  '   at ApplicationCore.Services.CacheService.InitializeConnection() in D:\\Projects\\Services\\CacheService.cs:line 56\n' +
+  '   at ApplicationCore.Services.CacheService.GetAsync(String key) in D:\\Projects\\Services\\CacheService.cs:line 89\n' +
+  '   at ApplicationCore.Services.UserService.GetUserByIdWithCache(Guid userId) in D:\\Projects\\Services\\UserService.cs:line 234\n' +
+  '   at ApplicationCore.Controllers.UserController.GetUser(Guid id) in D:\\Projects\\Controllers\\UserController.cs:line 112',
 
   // Stack trace 7: Python Django error
-  `Traceback (most recent call last):
-  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
-    response = wrapped_callback(request, *callback_args, **callback_kwargs)
-  File "/usr/local/lib/python3.11/site-packages/django/views/decorators/csrf.py", line 56, in wrapped_view
-    return view_func(*args, **kwargs)
-  File "/app/core/views/user_views.py", line 145, in update_user_profile
-    user = User.objects.get(id=user_id)
-  File "/usr/local/lib/python3.11/site-packages/django/db/models/manager.py", line 87, in manager_method
-    return getattr(self.get_queryset(), name)(*args, **kwargs)
-  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 637, in get
-    raise self.model.DoesNotExist(
-django.contrib.auth.models.User.DoesNotExist: User matching query does not exist.
-During handling of the above exception, another exception occurred:
-  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
-    response = get_response(request)
-  File "/usr/local/lib/python3.11/site-packages/django/db/backends/utils.py", line 98, in __exit__
-    connection.close()
-  File "/usr/local/lib/python3.11/site-packages/django/db/backends/postgresql/base.py", line 278, in close
-    self.connection.close()
-psycopg2.InterfaceError: connection already closed`,
+  'Traceback (most recent call last):\n' +
+  '  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner\n' +
+  '    response = get_response(request)\n' +
+  '  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response\n' +
+  '    response = wrapped_callback(request, *callback_args, **callback_kwargs)\n' +
+  '  File "/app/core/views/user_views.py", line 145, in update_user_profile\n' +
+  '    user = User.objects.get(id=user_id)\n' +
+  '  File "/usr/local/lib/python3.11/site-packages/django/db/models/query.py", line 637, in get\n' +
+  '    raise self.model.DoesNotExist\n' +
+  'django.contrib.auth.models.User.DoesNotExist: User matching query does not exist.\n' +
+  'During handling of the above exception, another exception occurred:\n' +
+  '  File "/usr/local/lib/python3.11/site-packages/django/db/backends/postgresql/base.py", line 278, in close\n' +
+  '    self.connection.close()\n' +
+  'psycopg2.InterfaceError: connection already closed',
 
   // Stack trace 8: Java Spring Boot error
-  `org.springframework.web.util.NestedServletException: Request processing failed; nested exception is org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [fk_orders_user_id]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement
-	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
-	at org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:681)
-	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
-	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
-	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
-	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)
-	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
-	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at com.application.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:67)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
-	at org.springframework.boot.actuate.metrics.web.servlet.WebMvcMetricsFilter.doFilterInternal(WebMvcMetricsFilter.java:96)
-	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
-Caused by: org.springframework.dao.DataIntegrityViolationException: could not execute statement; SQL [n/a]; constraint [fk_orders_user_id]; nested exception is org.hibernate.exception.ConstraintViolationException: could not execute statement
-	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:298)
-	at org.springframework.orm.jpa.vendor.HibernateJpaDialect.translateExceptionIfPossible(HibernateJpaDialect.java:233)
-	at org.springframework.orm.jpa.AbstractEntityManagerFactoryBean.translateExceptionIfPossible(AbstractEntityManagerFactoryBean.java:551)
-	at com.application.services.OrderService.createOrder(OrderService.java:145)
-	at com.application.controllers.OrderController.placeOrder(OrderController.java:89)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
-	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
-	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)`,
+  'org.springframework.web.util.NestedServletException: Request processing failed\n' +
+  'nested exception is org.springframework.dao.DataIntegrityViolationException\n' +
+  '\tat org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)\n' +
+  '\tat org.springframework.web.servlet.FrameworkServlet.doPost(FrameworkServlet.java:909)\n' +
+  '\tat javax.servlet.http.HttpServlet.service(HttpServlet.java:681)\n' +
+  '\tat org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)\n' +
+  '\tat org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:327)\n' +
+  '\tat org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)\n' +
+  '\tat com.application.security.JwtAuthenticationFilter.doFilterInternal(JwtAuthenticationFilter.java:67)\n' +
+  '\tat org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)\n' +
+  'Caused by: org.springframework.dao.DataIntegrityViolationException: could not execute statement\n' +
+  '\tat org.springframework.orm.jpa.vendor.HibernateJpaDialect.convertHibernateAccessException(HibernateJpaDialect.java:298)\n' +
+  '\tat com.application.services.OrderService.createOrder(OrderService.java:145)\n' +
+  '\tat com.application.controllers.OrderController.placeOrder(OrderController.java:89)\n' +
+  '\tat java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)',
 
   // Stack trace 9: Go panic
-  `panic: runtime error: invalid memory address or nil pointer dereference
-[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x7b4c89]
-
-goroutine 1 [running]:
-main.(*UserService).GetUserProfile(0xc0001b4000, {0x7ffed0f5b0a0?, 0xc00019e008?})
-	/app/services/user_service.go:234 +0x89
-main.(*UserController).HandleGetProfile(0xc0001b6000, 0xc0002d2000)
-	/app/controllers/user_controller.go:145 +0x12b
-github.com/gin-gonic/gin.(*Context).Next(...)
-	/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:173
-main.AuthMiddleware.func1(0xc0002d2000)
-	/app/middleware/auth_middleware.go:67 +0x2e5
-github.com/gin-gonic/gin.(*Context).Next(...)
-	/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:173
-github.com/gin-gonic/gin.CustomRecoveryWithWriter.func1(0xc0002d2000)
-	/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/recovery.go:101 +0x78
-github.com/gin-gonic/gin.(*Context).Next(...)
-	/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:173
-github.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0000a2000, 0xc0002d2000)
-	/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:616 +0x66b
-github.com/gin-gonic/gin.(*Engine).ServeHTTP(0xc0000a2000, {0xd8f3e0?, 0xc00028e0e0}, 0xc0002d0000)
-	/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:572 +0x1dd
-net/http.serverHandler.ServeHTTP({0xd8d8a0?}, {0xd8f3e0?, 0xc00028e0e0?}, 0x6?)
-	/usr/local/go/src/net/http/server.go:2936 +0x316
-net/http.(*conn).serve(0xc0002a4000, {0xd8fa68, 0xc00009c120})
-	/usr/local/go/src/net/http/server.go:1995 +0x612`,
+  'panic: runtime error: invalid memory address or nil pointer dereference\n' +
+  '[signal SIGSEGV: segmentation violation code=0x1 addr=0x0 pc=0x7b4c89]\n' +
+  '\n' +
+  'goroutine 1 [running]:\n' +
+  'main.(*UserService).GetUserProfile(0xc0001b4000)\n' +
+  '\t/app/services/user_service.go:234 +0x89\n' +
+  'main.(*UserController).HandleGetProfile(0xc0001b6000, 0xc0002d2000)\n' +
+  '\t/app/controllers/user_controller.go:145 +0x12b\n' +
+  'github.com/gin-gonic/gin.(*Context).Next(...)\n' +
+  '\t/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/context.go:173\n' +
+  'main.AuthMiddleware.func1(0xc0002d2000)\n' +
+  '\t/app/middleware/auth_middleware.go:67 +0x2e5\n' +
+  'github.com/gin-gonic/gin.(*Engine).handleHTTPRequest(0xc0000a2000, 0xc0002d2000)\n' +
+  '\t/go/pkg/mod/github.com/gin-gonic/gin@v1.9.1/gin.go:616 +0x66b\n' +
+  'net/http.serverHandler.ServeHTTP\n' +
+  '\t/usr/local/go/src/net/http/server.go:2936 +0x316',
 
   // Stack trace 10: PHP Laravel error
-  `[2024-01-15 14:23:45] production.ERROR: SQLSTATE[HY000]: General error: 1364 Field 'email' doesn't have a default value (SQL: insert into \`users\` (\`name\`, \`password\`, \`created_at\`, \`updated_at\`) values (John Doe, $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi, 2024-01-15 14:23:45, 2024-01-15 14:23:45)) {"exception":"[object] (Illuminate\\\\Database\\\\QueryException(code: HY000): SQLSTATE[HY000]: General error: 1364 Field 'email' doesn't have a default value at /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php:742)
-[stacktrace]
-#0 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php(712): Illuminate\\\\Database\\\\Connection->runQueryCallback()
-#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php(422): Illuminate\\\\Database\\\\Connection->run()
-#2 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php(384): Illuminate\\\\Database\\\\Connection->statement()
-#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/Processor.php(32): Illuminate\\\\Database\\\\Connection->insert()
-#4 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(1484): Illuminate\\\\Database\\\\Query\\\\Processors\\\\Processor->processInsertGetId()
-#5 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Builder.php(1708): Illuminate\\\\Database\\\\Query\\\\Builder->insertGetId()
-#6 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1103): Illuminate\\\\Database\\\\Eloquent\\\\Builder->insertGetId()
-#7 /var/www/html/app/Services/UserService.php(89): Illuminate\\\\Database\\\\Eloquent\\\\Model->save()
-#8 /var/www/html/app/Http/Controllers/Auth/RegisterController.php(67): App\\\\Services\\\\UserService->createUser()
-#9 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\\\Http\\\\Controllers\\\\Auth\\\\RegisterController->register()
-#10 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/ControllerDispatcher.php(43): Illuminate\\\\Routing\\\\Controller->callAction()`,
+  '[2024-01-15 14:23:45] production.ERROR: SQLSTATE[HY000]: General error: 1364 Field email does not have a default value\n' +
+  '[stacktrace]\n' +
+  '#0 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php(712): Illuminate\\Database\\Connection->runQueryCallback()\n' +
+  '#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php(422): Illuminate\\Database\\Connection->run()\n' +
+  '#2 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Connection.php(384): Illuminate\\Database\\Connection->statement()\n' +
+  '#3 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Query/Processors/Processor.php(32): Illuminate\\Database\\Connection->insert()\n' +
+  '#4 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(1484): Illuminate\\Database\\Query\\Processors\\Processor->processInsertGetId()\n' +
+  '#5 /var/www/html/vendor/laravel/framework/src/Illuminate/Database/Eloquent/Model.php(1103): Illuminate\\Database\\Eloquent\\Builder->insertGetId()\n' +
+  '#6 /var/www/html/app/Services/UserService.php(89): Illuminate\\Database\\Eloquent\\Model->save()\n' +
+  '#7 /var/www/html/app/Http/Controllers/Auth/RegisterController.php(67): App\\Services\\UserService->createUser()\n' +
+  '#8 /var/www/html/vendor/laravel/framework/src/Illuminate/Routing/Controller.php(54): App\\Http\\Controllers\\Auth\\RegisterController->register()',
 ];
 
 const USER_AGENTS = [
