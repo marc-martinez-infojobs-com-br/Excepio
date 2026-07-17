@@ -4,6 +4,8 @@ import {
   CreateExceptionDto,
   ExceptionFilterDto,
   ExceptionListResponseDto,
+  OccurrenceDto,
+  OccurrenceByDayDto,
 } from '@excepio/shared';
 import { PrismaService } from '@app/prisma/prisma.service';
 import { ExceptionRepository } from './exception.repository.interface';
@@ -260,5 +262,74 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
     `;
     
     return result[0].count;
+  }
+
+  async findOccurrencesByMessage(message: string, limit: number): Promise<OccurrenceDto[]> {
+    const occurrences = await this.prisma.exception.findMany({
+      where: { message },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      include: {
+        platform: {
+          select: {
+            name: true,
+            icon: true,
+          },
+        },
+      },
+    });
+
+    return occurrences.map((e) => ({
+      id: e.id,
+      createdAt: e.createdAt.toISOString(),
+      userId: e.userId,
+      platformName: e.platform.name,
+      platformIcon: e.platform.icon,
+      appVersion: e.appVersion,
+      url: e.url,
+    }));
+  }
+
+  async countOccurrencesByDay(message: string, days: number): Promise<OccurrenceByDayDto[]> {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days + 1);
+    startDate.setHours(0, 0, 0, 0);
+
+    const result = await this.prisma.$queryRaw<{ date: Date; count: bigint }[]>`
+      SELECT DATE("createdAt") as date, COUNT(*)::int as count
+      FROM "Exception"
+      WHERE message = ${message}
+        AND "createdAt" >= ${startDate}
+      GROUP BY DATE("createdAt")
+      ORDER BY date ASC
+    `;
+
+    // Crear un mapa con todos los días (incluyendo los que tienen 0)
+    const occurrenceMap = new Map<string, number>();
+    
+    // Inicializar todos los días con 0
+    for (let i = 0; i < days; i++) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + i);
+      const dateStr = date.toISOString().split('T')[0];
+      occurrenceMap.set(dateStr, 0);
+    }
+
+    // Llenar con los datos reales
+    for (const row of result) {
+      const dateStr = row.date.toISOString().split('T')[0];
+      occurrenceMap.set(dateStr, Number(row.count));
+    }
+
+    // Convertir a array ordenado
+    return Array.from(occurrenceMap.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, count]) => ({ date, count }));
+  }
+
+  async countTotalOccurrences(message: string): Promise<number> {
+    return this.prisma.exception.count({
+      where: { message },
+    });
   }
 }

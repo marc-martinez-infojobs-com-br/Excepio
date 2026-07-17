@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
+import { ArrowLeft } from 'lucide-react';
 import { cn } from '@lib/utils';
+import { Button } from '@components/ui/button';
 import type { ExceptionDetailDto } from '@excepio/shared';
 
 interface ExceptionDetailHeaderProps {
   exception: ExceptionDetailDto;
+  onBack: () => void;
 }
 
 /**
@@ -78,8 +81,9 @@ function getRelativeTime(
   }
 }
 
-export function ExceptionDetailHeader({ exception }: ExceptionDetailHeaderProps) {
+export function ExceptionDetailHeader({ exception, onBack }: ExceptionDetailHeaderProps) {
   const tTime = useTranslations('exceptions.time');
+  const tDetail = useTranslations('exceptions.detail');
   const [relativeTime, setRelativeTime] = useState<string>('');
 
   // Calcular tiempo relativo solo en cliente para evitar hydration mismatch
@@ -92,17 +96,23 @@ export function ExceptionDetailHeader({ exception }: ExceptionDetailHeaderProps)
 
   return (
     <div className="space-y-4">
-      {/* Severity badge + time */}
-      <div className="flex items-center gap-3">
-        <span
-          className={cn(
-            'inline-flex items-center rounded px-2 py-1 text-xs font-semibold border',
-            getLevelBadgeClasses(exception.levelId)
-          )}
-        >
-          {getLevelDisplayName(exception.levelId, exception.levelName)}
-        </span>
-        <span className="text-sm text-muted-foreground">{displayTime}</span>
+      {/* Severity badge + time + back button */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <span
+            className={cn(
+              'inline-flex items-center rounded px-2 py-1 text-xs font-semibold border',
+              getLevelBadgeClasses(exception.levelId)
+            )}
+          >
+            {getLevelDisplayName(exception.levelId, exception.levelName)}
+          </span>
+          <span className="text-sm text-muted-foreground">{displayTime}</span>
+        </div>
+        <Button variant="default" size="sm" onClick={onBack}>
+          <ArrowLeft className="h-4 w-4" />
+          {tDetail('backToList')}
+        </Button>
       </div>
 
       {/* Message title */}

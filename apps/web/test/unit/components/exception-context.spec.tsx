@@ -12,12 +12,18 @@ vi.mock('next-intl', () => ({
       'fields.appVersion': 'Version',
       'fields.url': 'URL',
       'fields.userId': 'User',
+      'fields.userAgent': 'User Agent',
       'fields.timestamp': 'Date and time',
       'fields.affectedUsers': 'Affected users',
       'fields.notAvailable': 'Not available',
     };
     return translations[key] || key;
   }),
+}));
+
+// Mock next-themes
+vi.mock('next-themes', () => ({
+  useTheme: vi.fn(() => ({ resolvedTheme: 'light' })),
 }));
 
 const mockException: ExceptionDetailDto = {
@@ -111,5 +117,25 @@ describe('ExceptionContext', () => {
     render(<ExceptionContext exception={exceptionNoUsers} />);
 
     expect(screen.getByText('0')).toBeInTheDocument();
+  });
+
+  it('debería mostrar rawUserAgent cuando se pasa como prop', () => {
+    const rawUA = 'MyApp/1.0.0 (iOS 17.0)';
+    render(<ExceptionContext exception={mockException} rawUserAgent={rawUA} />);
+
+    expect(screen.getByText('User Agent')).toBeInTheDocument();
+    expect(screen.getByText(rawUA)).toBeInTheDocument();
+  });
+
+  it('no debería mostrar User Agent si rawUserAgent no se pasa', () => {
+    render(<ExceptionContext exception={mockException} />);
+
+    expect(screen.queryByText('User Agent')).not.toBeInTheDocument();
+  });
+
+  it('no debería mostrar User Agent si rawUserAgent es null', () => {
+    render(<ExceptionContext exception={mockException} rawUserAgent={null} />);
+
+    expect(screen.queryByText('User Agent')).not.toBeInTheDocument();
   });
 });

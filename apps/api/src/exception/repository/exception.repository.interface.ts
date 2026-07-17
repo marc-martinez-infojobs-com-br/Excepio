@@ -3,6 +3,8 @@ import type {
   CreateExceptionDto,
   ExceptionFilterDto,
   ExceptionListResponseDto,
+  OccurrenceDto,
+  OccurrenceByDayDto,
 } from '@excepio/shared';
 
 /**
@@ -38,6 +40,29 @@ export interface ExceptionRepository {
    * @returns Número de userId distintos (excluye null)
    */
   countAffectedUsers(message: string): Promise<number>;
+
+  /**
+   * Obtiene las últimas N ocurrencias de excepciones con el mismo mensaje.
+   * @param message - Mensaje de la excepción (match exacto)
+   * @param limit - Número máximo de ocurrencias a retornar
+   * @returns Lista de ocurrencias ordenadas por fecha descendente
+   */
+  findOccurrencesByMessage(message: string, limit: number): Promise<OccurrenceDto[]>;
+
+  /**
+   * Agrupa las ocurrencias por día para los últimos N días.
+   * @param message - Mensaje de la excepción (match exacto)
+   * @param days - Número de días hacia atrás
+   * @returns Lista de ocurrencias agrupadas por día
+   */
+  countOccurrencesByDay(message: string, days: number): Promise<OccurrenceByDayDto[]>;
+
+  /**
+   * Cuenta el total de ocurrencias de un mensaje.
+   * @param message - Mensaje de la excepción (match exacto)
+   * @returns Total de excepciones con ese mensaje
+   */
+  countTotalOccurrences(message: string): Promise<number>;
 }
 
 /**

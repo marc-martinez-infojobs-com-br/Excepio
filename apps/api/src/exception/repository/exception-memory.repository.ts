@@ -4,6 +4,8 @@ import {
   CreateExceptionDto,
   ExceptionFilterDto,
   ExceptionListResponseDto,
+  OccurrenceDto,
+  OccurrenceByDayDto,
 } from '@excepio/shared';
 import { ExceptionRepository } from './exception.repository.interface';
 import { randomUUID } from 'crypto';
@@ -162,5 +164,58 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
     }
     
     return userIds.size;
+  }
+
+  async findOccurrencesByMessage(message: string, limit: number): Promise<OccurrenceDto[]> {
+    const exceptions = Array.from(this.exceptions.values())
+      .filter((e) => e.message === message)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, limit);
+
+    return exceptions.map((e) => ({
+      id: e.id,
+      createdAt: e.createdAt,
+      userId: e.userId,
+      platformName: `Platform ${e.platformId}`,
+      platformIcon: null,
+      appVersion: e.appVersion,
+      url: e.url,
+    }));
+  }
+
+  async countOccurrencesByDay(message: string, days: number): Promise<OccurrenceByDayDto[]> {
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - days + 1);
+    startDate.setHours(0, 0, 0, 0);
+
+    const exceptions = Array.from(this.exceptions.values())
+      .filter((e) => e.message === message && new Date(e.createdAt) >= startDate);
+
+    // Crear mapa con todos los días
+    const occurrenceMap = new Map<string, number>();
+    for (let i = 0; i < days; i++) {
+      const date = new Date(startDate);
+      date.setDate(date.getDate() + i);
+      const dateStr = date.toISOString().split('T')[0];
+      occurrenceMap.set(dateStr, 0);
+    }
+
+    // Contar ocurrencias por día
+    for (const exception of exceptions) {
+      const dateStr = exception.createdAt.split('T')[0];
+      if (occurrenceMap.has(dateStr)) {
+        occurrenceMap.set(dateStr, occurrenceMap.get(dateStr)! + 1);
+      }
+    }
+
+    return Array.from(occurrenceMap.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([date, count]) => ({ date, count }));
+  }
+
+  async countTotalOccurrences(message: string): Promise<number> {
+    return Array.from(this.exceptions.values())
+      .filter((e) => e.message === message)
+      .length;
   }
 }

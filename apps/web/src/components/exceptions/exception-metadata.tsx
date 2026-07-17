@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { useTheme } from 'next-themes';
 import { CopyButton } from '@components/ui/copy-button';
 
 interface ExceptionMetadataProps {
@@ -9,9 +10,14 @@ interface ExceptionMetadataProps {
 
 export function ExceptionMetadata({ metadata }: ExceptionMetadataProps) {
   const t = useTranslations('exceptions.detail');
+  const { resolvedTheme } = useTheme();
 
   const hasMetadata = metadata && Object.keys(metadata).length > 0;
   const metadataJson = hasMetadata ? JSON.stringify(metadata, null, 2) : '';
+
+  const preClass = resolvedTheme === 'dark'
+    ? 'bg-zinc-800 text-zinc-100 border-input'
+    : 'bg-zinc-100 text-zinc-800 border-input';
 
   return (
     <div className="space-y-3">
@@ -21,7 +27,7 @@ export function ExceptionMetadata({ metadata }: ExceptionMetadataProps) {
 
       {hasMetadata ? (
         <div className="relative">
-          <pre className="bg-zinc-900 dark:bg-zinc-800 text-zinc-100 font-mono text-sm p-4 rounded-lg overflow-x-auto border border-transparent dark:border-input">
+          <pre className={`${preClass} font-mono text-sm p-4 rounded-lg overflow-x-auto border`}>
             <code role="code">{metadataJson}</code>
           </pre>
           <CopyButton 

@@ -137,6 +137,21 @@
       },
       "actions": {
         "copy": "Copy"
+      },
+      "occurrences": {
+        "title": "Last 10 occurrences",
+        "totalInTitle": "({count} total)",
+        "chartTitle": "Occurrences (last 7 days)",
+        "total": "{count} total occurrences",
+        "viewMore": "View more",
+        "empty": "No occurrences recorded",
+        "table": {
+          "date": "Date",
+          "user": "User",
+          "platform": "Platform",
+          "version": "Version",
+          "url": "URL"
+        }
       }
     }
   },

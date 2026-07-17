@@ -1,5 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ExceptionDetailHeader } from '@components/exceptions/exception-detail-header';
 import type { ExceptionDetailDto } from '@excepio/shared';
 
@@ -22,21 +23,27 @@ const mockException: ExceptionDetailDto = {
 };
 
 describe('ExceptionDetailHeader', () => {
+  const mockOnBack = vi.fn();
+
+  beforeEach(() => {
+    mockOnBack.mockClear();
+  });
+
   it('debería renderizar el mensaje de la excepción como título', () => {
-    render(<ExceptionDetailHeader exception={mockException} />);
+    render(<ExceptionDetailHeader exception={mockException} onBack={mockOnBack} />);
 
     const heading = screen.getByRole('heading', { level: 1 });
     expect(heading).toHaveTextContent('TypeError: Cannot read property of undefined');
   });
 
   it('debería renderizar el badge de severidad con el nombre del nivel', () => {
-    render(<ExceptionDetailHeader exception={mockException} />);
+    render(<ExceptionDetailHeader exception={mockException} onBack={mockOnBack} />);
 
     expect(screen.getByText('ERROR')).toBeInTheDocument();
   });
 
   it('debería aplicar estilos rojos para nivel ERROR', () => {
-    render(<ExceptionDetailHeader exception={mockException} />);
+    render(<ExceptionDetailHeader exception={mockException} onBack={mockOnBack} />);
 
     const badge = screen.getByText('ERROR');
     expect(badge).toHaveClass('bg-red-500/10');
@@ -50,7 +57,7 @@ describe('ExceptionDetailHeader', () => {
       levelName: 'FATAL',
     };
 
-    render(<ExceptionDetailHeader exception={fatalException} />);
+    render(<ExceptionDetailHeader exception={fatalException} onBack={mockOnBack} />);
 
     expect(screen.getByText('CRITICAL')).toBeInTheDocument();
   });
@@ -62,7 +69,7 @@ describe('ExceptionDetailHeader', () => {
       levelName: 'FATAL',
     };
 
-    render(<ExceptionDetailHeader exception={fatalException} />);
+    render(<ExceptionDetailHeader exception={fatalException} onBack={mockOnBack} />);
 
     const badge = screen.getByText('CRITICAL');
     expect(badge).toHaveClass('bg-rose-500/15');
@@ -70,7 +77,7 @@ describe('ExceptionDetailHeader', () => {
   });
 
   it('debería mostrar el tiempo relativo', () => {
-    render(<ExceptionDetailHeader exception={mockException} />);
+    render(<ExceptionDetailHeader exception={mockException} onBack={mockOnBack} />);
 
     // Buscamos que haya algún elemento con texto de tiempo (puede variar según la fecha)
     // Como la fecha es fija en el pasado, debería mostrar algo como "hace X días" o la fecha
@@ -84,10 +91,27 @@ describe('ExceptionDetailHeader', () => {
       levelName: undefined,
     };
 
-    render(<ExceptionDetailHeader exception={noLevelNameException} />);
+    render(<ExceptionDetailHeader exception={noLevelNameException} onBack={mockOnBack} />);
 
     // Debería mostrar el fallback del badge basado en levelId
     const badge = screen.getByText('ERROR');
     expect(badge).toBeInTheDocument();
+  });
+
+  it('debería renderizar el botón de volver', () => {
+    render(<ExceptionDetailHeader exception={mockException} onBack={mockOnBack} />);
+
+    const backButton = screen.getByRole('button', { name: /back|volver|tornar/i });
+    expect(backButton).toBeInTheDocument();
+  });
+
+  it('debería llamar onBack al hacer clic en el botón', async () => {
+    const user = userEvent.setup();
+    render(<ExceptionDetailHeader exception={mockException} onBack={mockOnBack} />);
+
+    const backButton = screen.getByRole('button', { name: /back|volver|tornar/i });
+    await user.click(backButton);
+
+    expect(mockOnBack).toHaveBeenCalledTimes(1);
   });
 });

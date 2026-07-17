@@ -133,7 +133,8 @@ export class ExceptionService {
 
   /**
    * Busca una excepción por su ID con información adicional.
-   * Incluye el número de usuarios distintos afectados por el mismo error.
+   * Incluye el número de usuarios distintos afectados por el mismo error,
+   * historial de ocurrencias y estadísticas por día.
    * @param id - ID de la excepción (UUID)
    * @returns La excepción con detalles enriquecidos
    * @throws NotFoundException si la excepción no existe
@@ -145,10 +146,20 @@ export class ExceptionService {
     }
 
     // Obtener datos enriquecidos en paralelo
-    const [affectedUsersCount, level, platform] = await Promise.all([
+    const [
+      affectedUsersCount,
+      level,
+      platform,
+      occurrences,
+      occurrencesByDay,
+      totalOccurrences,
+    ] = await Promise.all([
       this.exceptionRepository.countAffectedUsers(exception.message),
       this.levelRepository.findById(exception.levelId),
       this.platformRepository.findById(exception.platformId),
+      this.exceptionRepository.findOccurrencesByMessage(exception.message, 10),
+      this.exceptionRepository.countOccurrencesByDay(exception.message, 7),
+      this.exceptionRepository.countTotalOccurrences(exception.message),
     ]);
 
     return {
@@ -157,6 +168,9 @@ export class ExceptionService {
       levelName: level?.name,
       platformName: platform?.name,
       platformIcon: platform?.icon,
+      occurrences,
+      occurrencesByDay,
+      totalOccurrences,
     };
   }
 }

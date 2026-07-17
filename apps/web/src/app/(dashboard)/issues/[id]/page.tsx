@@ -11,7 +11,9 @@ import { ExceptionDetailHeader } from '@components/exceptions/exception-detail-h
 import { ExceptionStackTrace } from '@components/exceptions/exception-stack-trace';
 import { ExceptionMetadata } from '@components/exceptions/exception-metadata';
 import { ExceptionContext } from '@components/exceptions/exception-context';
-import { ExceptionUserAgent } from '@components/exceptions/exception-user-agent';
+import { ExceptionUserAgent, isTypicalWebUserAgent } from '@components/exceptions/exception-user-agent';
+import { ExceptionOccurrencesTable } from '@components/exceptions/exception-occurrences-table';
+import { ExceptionOccurrencesChart } from '@components/exceptions/exception-occurrences-chart';
 
 interface ExceptionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -72,32 +74,38 @@ export default function ExceptionDetailPage({ params }: ExceptionDetailPageProps
   }
 
   // Success
+  const showUserAgentComponent = isTypicalWebUserAgent(exception.userAgent);
+  
   return (
     <div className="p-4 md:p-6 space-y-6">
-      {/* Back button */}
-      <button
-        onClick={handleBack}
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        {tDetail('backToList')}
-      </button>
-
-      {/* Header */}
-      <ExceptionDetailHeader exception={exception} />
+      {/* Header with back button */}
+      <ExceptionDetailHeader exception={exception} onBack={handleBack} />
 
       {/* Two column layout */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left column - Stack Trace & Metadata */}
+        {/* Left column - Stack Trace, Metadata & Occurrences Table */}
         <div className="lg:col-span-2 space-y-6">
           <ExceptionStackTrace stackTrace={exception.stackTrace} />
           <ExceptionMetadata metadata={exception.metadata} />
+          <ExceptionOccurrencesTable
+            occurrences={exception.occurrences}
+            totalOccurrences={exception.totalOccurrences}
+          />
         </div>
 
-        {/* Right column - Context & User Agent */}
+        {/* Right column - Context, User Agent & Chart */}
         <div className="lg:col-span-1 space-y-6">
-          <ExceptionContext exception={exception} />
-          <ExceptionUserAgent userAgent={exception.userAgent} />
+          <ExceptionContext 
+            exception={exception} 
+            rawUserAgent={showUserAgentComponent ? undefined : exception.userAgent}
+          />
+          {showUserAgentComponent && (
+            <ExceptionUserAgent userAgent={exception.userAgent} />
+          )}
+          <ExceptionOccurrencesChart
+            occurrencesByDay={exception.occurrencesByDay}
+            totalOccurrences={exception.totalOccurrences}
+          />
         </div>
       </div>
     </div>

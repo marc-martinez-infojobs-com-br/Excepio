@@ -8,9 +8,15 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       'sections.metadata': 'Metadata',
       'fields.noMetadata': 'No metadata',
+      'actions.copy': 'Copy',
     };
     return translations[key] || key;
   }),
+}));
+
+// Mock next-themes
+vi.mock('next-themes', () => ({
+  useTheme: vi.fn(() => ({ resolvedTheme: 'light' })),
 }));
 
 describe('ExceptionMetadata', () => {
@@ -36,11 +42,11 @@ describe('ExceptionMetadata', () => {
     expect(codeBlock).toHaveTextContent('"os": "macOS"');
   });
 
-  it('debería aplicar estilos de editor de código (fondo oscuro, fuente mono)', () => {
+  it('debería aplicar estilos de editor de código (fondo claro en light, fuente mono)', () => {
     render(<ExceptionMetadata metadata={mockMetadata} />);
 
     const preBlock = screen.getByRole('code').closest('pre');
-    expect(preBlock).toHaveClass('bg-zinc-900');
+    expect(preBlock).toHaveClass('bg-zinc-100');
     expect(preBlock).toHaveClass('font-mono');
   });
 

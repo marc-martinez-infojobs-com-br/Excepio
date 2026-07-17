@@ -137,6 +137,21 @@
       },
       "actions": {
         "copy": "Copiar"
+      },
+      "occurrences": {
+        "title": "Últimes 10 ocurrències",
+        "totalInTitle": "({count} en total)",
+        "chartTitle": "Ocurrències (últims 7 dies)",
+        "total": "{count} ocurrències totals",
+        "viewMore": "Veure més",
+        "empty": "No hi ha ocurrències registrades",
+        "table": {
+          "date": "Data",
+          "user": "Usuari",
+          "platform": "Plataforma",
+          "version": "Versió",
+          "url": "URL"
+        }
       }
     }
   },

@@ -16,6 +16,28 @@ interface ParsedUserAgent {
   device: string | null;
 }
 
+/**
+ * Detecta si el userAgent tiene un patrón típico de navegador web.
+ * Patrones típicos incluyen: Mozilla/, Chrome/, Safari/, Firefox/, Edge/, Opera/
+ */
+export function isTypicalWebUserAgent(userAgent: string | null | undefined): boolean {
+  if (!userAgent || userAgent.trim().length === 0) return false;
+  
+  const webPatterns = [
+    /Mozilla\//i,
+    /Chrome\//i,
+    /Safari\//i,
+    /Firefox\//i,
+    /Edg\//i,
+    /Opera\//i,
+    /OPR\//i,
+    /MSIE/i,
+    /Trident\//i,
+  ];
+  
+  return webPatterns.some(pattern => pattern.test(userAgent));
+}
+
 function parseUserAgent(ua: string): ParsedUserAgent {
   const result: ParsedUserAgent = {
     browser: null,
@@ -139,26 +161,20 @@ export function ExceptionUserAgent({ userAgent }: ExceptionUserAgentProps) {
 
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-semibold text-foreground">
-        {t('sections.userAgent')}
-      </h2>
+      <div className="flex items-center justify-between">
+        <h2 className="text-lg font-semibold text-foreground">
+          {t('sections.userAgent')}
+        </h2>
+        {hasUserAgent && (
+          <CopyButton text={userAgent} label={t('actions.copy')} />
+        )}
+      </div>
 
       {hasUserAgent ? (
         <div className={containerClass}>
           <InfoRow label={t('userAgent.browser')} value={browserDisplay} notAvailableText={notAvailable} />
           <InfoRow label={t('userAgent.os')} value={osDisplay} notAvailableText={notAvailable} />
           <InfoRow label={t('userAgent.device')} value={parsed?.device || null} notAvailableText={notAvailable} />
-          
-          {/* Raw user agent with copy button */}
-          <div className="flex flex-col pt-2 border-t border-input mt-2">
-            <div className="flex justify-between items-center mb-1">
-              <span className="text-sm font-medium text-muted-foreground">{t('userAgent.raw')}</span>
-              <CopyButton text={userAgent} label={t('actions.copy')} />
-            </div>
-            <span className="text-xs text-muted-foreground break-all font-mono">
-              {userAgent}
-            </span>
-          </div>
         </div>
       ) : (
         <p className="text-sm text-muted-foreground italic">

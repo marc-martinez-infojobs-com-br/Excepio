@@ -7,6 +7,8 @@ import type { ExceptionDetailDto } from '@excepio/shared';
 
 interface ExceptionContextProps {
   exception: ExceptionDetailDto;
+  /** Si se pasa, se muestra el userAgent como texto plano al final del contexto */
+  rawUserAgent?: string | null;
 }
 
 interface ContextRowProps {
@@ -44,7 +46,7 @@ function formatDateTime(isoDate: string): string {
   });
 }
 
-export function ExceptionContext({ exception }: ExceptionContextProps) {
+export function ExceptionContext({ exception, rawUserAgent }: ExceptionContextProps) {
   const t = useTranslations('exceptions.detail');
   const { resolvedTheme } = useTheme();
   const notAvailable = t('fields.notAvailable');
@@ -103,6 +105,15 @@ export function ExceptionContext({ exception }: ExceptionContextProps) {
           value={exception.affectedUsersCount} 
           notAvailableText={notAvailable} 
         />
+
+        {/* Raw User Agent (solo si se pasa y no es típico de web) */}
+        {rawUserAgent && (
+          <ContextRow 
+            label={t('fields.userAgent')} 
+            value={rawUserAgent} 
+            notAvailableText={notAvailable} 
+          />
+        )}
       </div>
     </div>
   );
