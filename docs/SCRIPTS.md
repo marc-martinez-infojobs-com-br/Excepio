@@ -48,6 +48,25 @@ pnpm --filter @excepio/web test:e2e:ui      # Tests E2E con interfaz visual
 pnpm --filter @excepio/web test:e2e:headed  # Tests E2E con navegador visible
 ```
 
+## Playwright (Tests E2E)
+
+```bash
+# Ejecutar tests E2E (requiere API y Web corriendo en localhost)
+pnpm --filter @excepio/web test:e2e
+
+# Interfaz visual interactiva
+pnpm --filter @excepio/web test:e2e:ui
+
+# Ver navegador durante ejecución
+pnpm --filter @excepio/web test:e2e:headed
+
+# Ver reporte HTML de la última ejecución
+pnpm --filter @excepio/web exec playwright show-report
+
+# Instalar navegadores de Playwright
+pnpm --filter @excepio/web exec playwright install chromium
+```
+
 ## Prisma (Base de datos)
 
 ```bash

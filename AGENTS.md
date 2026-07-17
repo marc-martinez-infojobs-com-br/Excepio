@@ -106,6 +106,41 @@ Todos los tipos de request/response viven en `packages/shared/` e importados por
 | Esquema de BD | `apps/api/prisma/schema.prisma` |
 | Config monorepo | `pnpm-workspace.yaml` |
 
+## Tests
+
+### Tests Unitarios e Integración (Vitest)
+
+- **API:** `pnpm --filter @excepio/api test`
+- **Web:** `pnpm --filter @excepio/web test`
+
+### Tests E2E (Playwright)
+
+Los tests E2E requieren que API y Web estén corriendo:
+
+```bash
+# Levantar servicios (en terminales separadas)
+pnpm --filter @excepio/api dev
+pnpm --filter @excepio/web dev
+
+# Ejecutar tests E2E
+pnpm --filter @excepio/web test:e2e
+
+# Otros comandos útiles
+pnpm --filter @excepio/web test:e2e:ui      # Interfaz visual
+pnpm --filter @excepio/web test:e2e:headed  # Ver navegador
+pnpm --filter @excepio/web exec playwright show-report  # Ver reporte HTML
+```
+
+**Archivos E2E:**
+| Archivo | Cobertura |
+|---------|-----------|
+| `test/e2e/auth.spec.ts` | Login, logout, protección de rutas |
+| `test/e2e/dashboard.spec.ts` | Cards de stats, navegación |
+| `test/e2e/issues.spec.ts` | Lista de excepciones, filtros, paginación |
+| `test/e2e/issue-detail.spec.ts` | Detalle: header, stacktrace, metadata, occurrences |
+
+**Credenciales de test (seed):** `admin@excepio.com` / `Admin123!`
+
 ## Internacionalización (i18n)
 
 El frontend usa `next-intl` para internacionalización.
