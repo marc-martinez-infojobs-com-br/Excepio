@@ -104,7 +104,56 @@
     },
     "empty": "No s'han trobat excepcions",
     "unknownLevel": "DESCONEGUT",
-    "unknownPlatform": "Desconeguda"
+    "unknownPlatform": "Desconeguda",
+    "detail": {
+      "backToList": "Tornar a incidències",
+      "loading": "Carregant detall...",
+      "notFound": "Excepció no trobada",
+      "notFoundDescription": "L'excepció que busques no existeix o ha estat eliminada.",
+      "errorLoading": "Error en carregar el detall",
+      "sections": {
+        "stackTrace": "Stack Trace",
+        "metadata": "Metadata",
+        "context": "Informació Contextual",
+        "userAgent": "User Agent"
+      },
+      "fields": {
+        "platform": "Plataforma",
+        "appVersion": "Versió",
+        "url": "URL",
+        "userId": "Usuari",
+        "userAgent": "User Agent",
+        "timestamp": "Data i hora",
+        "affectedUsers": "Usuaris afectats",
+        "noMetadata": "Sense metadata",
+        "noStackTrace": "Sense stack trace",
+        "notAvailable": "No disponible"
+      },
+      "userAgent": {
+        "browser": "Navegador",
+        "os": "Sistema Operatiu",
+        "device": "Dispositiu",
+        "raw": "Original"
+      },
+      "actions": {
+        "copy": "Copiar"
+      },
+      "occurrences": {
+        "title": "Últimes 10 ocurrències",
+        "totalInTitle": "({count} en total)",
+        "chartTitle": "Ocurrències (últims 7 dies)",
+        "total": "{count} ocurrències totals",
+        "viewMore": "Veure més",
+        "empty": "No hi ha ocurrències registrades",
+        "table": {
+          "date": "Data",
+          "user": "Usuari",
+          "platform": "Plataforma",
+          "version": "Versió",
+          "url": "URL"
+        }
+      }
+    }
   },
   "dashboard": {
     "title": "Benvingut a Excepio",

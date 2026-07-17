@@ -3,6 +3,7 @@ import { ExceptionController } from '@exception/exception.controller';
 import { ExceptionService } from '@exception/exception.service';
 import {
   ExceptionDto,
+  ExceptionDetailDto,
   CreateExceptionDto,
   ExceptionFilterDto,
   PlatformDto,
@@ -38,6 +39,7 @@ describe('ExceptionController', () => {
     service = {
       create: vi.fn(),
       findById: vi.fn(),
+      findByIdWithDetails: vi.fn(),
       findAll: vi.fn(),
     } as any;
 
@@ -162,16 +164,21 @@ describe('ExceptionController', () => {
   });
 
   describe('findById', () => {
-    it('Given_ExistingId_When_FindById_Then_ReturnsException', async () => {
+    it('Given_ExistingId_When_FindById_Then_ReturnsExceptionWithDetails', async () => {
       // Arrange
-      vi.mocked(service.findById).mockResolvedValue(mockException);
+      const mockExceptionDetail: ExceptionDetailDto = {
+        ...mockException,
+        affectedUsersCount: 5,
+      };
+      vi.mocked(service.findByIdWithDetails).mockResolvedValue(mockExceptionDetail);
 
       // Act
       const result = await controller.findById(mockException.id);
 
       // Assert
-      expect(service.findById).toHaveBeenCalledWith(mockException.id);
-      expect(result).toEqual(mockException);
+      expect(service.findByIdWithDetails).toHaveBeenCalledWith(mockException.id);
+      expect(result).toEqual(mockExceptionDetail);
+      expect(result.affectedUsersCount).toBe(5);
     });
   });
 });

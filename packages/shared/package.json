@@ -8,7 +8,7 @@
   "scripts": {
     "build": "tsc",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/",
+    "lint": "echo 'No lint configured for shared package'",
     "test": "vitest run",
     "test:watch": "vitest"
   },

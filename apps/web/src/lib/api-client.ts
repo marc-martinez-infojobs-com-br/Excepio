@@ -31,7 +31,8 @@ apiClient.interceptors.response.use(
       authStorage.clear();
       // Redirigir a login si estamos en el cliente y no estamos ya en login
       if (typeof window !== 'undefined' && !window.location.pathname.includes('/login')) {
-        window.location.href = '/login';
+        const returnUrl = window.location.pathname;
+        window.location.href = `/login?returnUrl=${encodeURIComponent(returnUrl)}`;
       }
     }
     

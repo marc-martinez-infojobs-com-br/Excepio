@@ -12,6 +12,6 @@ import { LevelPrismaRepository, LEVEL_REPOSITORY } from './repository';
       useClass: LevelPrismaRepository,
     },
   ],
-  exports: [LevelService],
+  exports: [LevelService, LEVEL_REPOSITORY],
 })
 export class LevelModule {}

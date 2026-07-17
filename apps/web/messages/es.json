@@ -104,7 +104,56 @@
     },
     "empty": "No se encontraron excepciones",
     "unknownLevel": "DESCONOCIDO",
-    "unknownPlatform": "Desconocida"
+    "unknownPlatform": "Desconocida",
+    "detail": {
+      "backToList": "Volver a incidencias",
+      "loading": "Cargando detalle...",
+      "notFound": "Excepción no encontrada",
+      "notFoundDescription": "La excepción que buscas no existe o ha sido eliminada.",
+      "errorLoading": "Error al cargar el detalle",
+      "sections": {
+        "stackTrace": "Stack Trace",
+        "metadata": "Metadata",
+        "context": "Información Contextual",
+        "userAgent": "User Agent"
+      },
+      "fields": {
+        "platform": "Plataforma",
+        "appVersion": "Versión",
+        "url": "URL",
+        "userId": "Usuario",
+        "userAgent": "User Agent",
+        "timestamp": "Fecha y hora",
+        "affectedUsers": "Usuarios afectados",
+        "noMetadata": "Sin metadata",
+        "noStackTrace": "Sin stack trace",
+        "notAvailable": "No disponible"
+      },
+      "userAgent": {
+        "browser": "Navegador",
+        "os": "Sistema Operativo",
+        "device": "Dispositivo",
+        "raw": "Original"
+      },
+      "actions": {
+        "copy": "Copiar"
+      },
+      "occurrences": {
+        "title": "Últimas 10 ocurrencias",
+        "totalInTitle": "({count} en total)",
+        "chartTitle": "Ocurrencias (últimos 7 días)",
+        "total": "{count} ocurrencias totales",
+        "viewMore": "Ver más",
+        "empty": "No hay ocurrencias registradas",
+        "table": {
+          "date": "Fecha",
+          "user": "Usuario",
+          "platform": "Plataforma",
+          "version": "Versión",
+          "url": "URL"
+        }
+      }
+    }
   },
   "dashboard": {
     "title": "Bienvenido a Excepio",

@@ -104,7 +104,56 @@
     },
     "empty": "No exceptions found",
     "unknownLevel": "UNKNOWN",
-    "unknownPlatform": "Unknown"
+    "unknownPlatform": "Unknown",
+    "detail": {
+      "backToList": "Back to issues",
+      "loading": "Loading detail...",
+      "notFound": "Exception not found",
+      "notFoundDescription": "The exception you're looking for doesn't exist or has been deleted.",
+      "errorLoading": "Error loading detail",
+      "sections": {
+        "stackTrace": "Stack Trace",
+        "metadata": "Metadata",
+        "context": "Contextual Information",
+        "userAgent": "User Agent"
+      },
+      "fields": {
+        "platform": "Platform",
+        "appVersion": "Version",
+        "url": "URL",
+        "userId": "User",
+        "userAgent": "User Agent",
+        "timestamp": "Date and time",
+        "affectedUsers": "Affected users",
+        "noMetadata": "No metadata",
+        "noStackTrace": "No stack trace",
+        "notAvailable": "Not available"
+      },
+      "userAgent": {
+        "browser": "Browser",
+        "os": "Operating System",
+        "device": "Device",
+        "raw": "Raw"
+      },
+      "actions": {
+        "copy": "Copy"
+      },
+      "occurrences": {
+        "title": "Last 10 occurrences",
+        "totalInTitle": "({count} total)",
+        "chartTitle": "Occurrences (last 7 days)",
+        "total": "{count} total occurrences",
+        "viewMore": "View more",
+        "empty": "No occurrences recorded",
+        "table": {
+          "date": "Date",
+          "user": "User",
+          "platform": "Platform",
+          "version": "Version",
+          "url": "URL"
+        }
+      }
+    }
   },
   "dashboard": {
     "title": "Welcome to Excepio",

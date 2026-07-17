@@ -31,6 +31,9 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
+  useSearchParams: () => ({
+    get: vi.fn(() => null),
+  }),
 }));
 
 // Componente de prueba

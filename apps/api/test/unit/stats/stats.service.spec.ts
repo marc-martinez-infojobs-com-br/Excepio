@@ -29,6 +29,10 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(100) // current period
         .mockResolvedValueOnce(80); // previous period
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([
+        { levelId: 4, _count: { id: 80 } },
+        { levelId: 3, _count: { id: 20 } },
+      ]);
 
       const result = await service.getTotal({});
 
@@ -44,6 +48,7 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(120) // current
         .mockResolvedValueOnce(100); // previous
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([]);
 
       const result = await service.getTotal({});
 
@@ -55,6 +60,7 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(80) // current
         .mockResolvedValueOnce(100); // previous
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([]);
 
       const result = await service.getTotal({});
 
@@ -66,6 +72,7 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(50) // current
         .mockResolvedValueOnce(0); // previous
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([]);
 
       const result = await service.getTotal({});
 
@@ -81,6 +88,7 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(50)
         .mockResolvedValueOnce(40);
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([]);
 
       const result = await service.getTotal({ startDate, endDate });
 
@@ -103,6 +111,7 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(30)
         .mockResolvedValueOnce(25);
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([]);
 
       await service.getTotal({ platformId: 1 });
 
@@ -122,6 +131,7 @@ describe('StatsService - getTotal', () => {
       mockPrisma.exception.count
         .mockResolvedValueOnce(133) // current
         .mockResolvedValueOnce(100); // previous
+      mockPrisma.exception.groupBy.mockResolvedValueOnce([]);
 
       const result = await service.getTotal({});
 
