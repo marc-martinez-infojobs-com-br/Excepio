@@ -149,4 +149,18 @@ export class ExceptionMemoryRepository implements ExceptionRepository {
       limit,
     };
   }
+
+  async countAffectedUsers(message: string): Promise<number> {
+    const exceptions = Array.from(this.exceptions.values());
+    
+    // Filtrar por mensaje exacto y userId no nulo
+    const userIds = new Set<string>();
+    for (const exception of exceptions) {
+      if (exception.message === message && exception.userId) {
+        userIds.add(exception.userId);
+      }
+    }
+    
+    return userIds.size;
+  }
 }

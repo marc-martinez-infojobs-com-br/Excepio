@@ -250,4 +250,15 @@ export class ExceptionPrismaRepository implements ExceptionRepository {
       limit,
     };
   }
+
+  async countAffectedUsers(message: string): Promise<number> {
+    const result = await this.prisma.$queryRaw<[{ count: number }]>`
+      SELECT COUNT(DISTINCT "userId")::int as count
+      FROM "Exception"
+      WHERE message = ${message}
+        AND "userId" IS NOT NULL
+    `;
+    
+    return result[0].count;
+  }
 }

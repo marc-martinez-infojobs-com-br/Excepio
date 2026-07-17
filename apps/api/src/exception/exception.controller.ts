@@ -18,6 +18,7 @@ import {
 } from '@nestjs/swagger';
 import {
   ExceptionDto,
+  ExceptionDetailDto,
   ExceptionListResponseDto,
   UserRole,
 } from '@excepio/shared';
@@ -83,17 +84,17 @@ export class ExceptionController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.USUARIO, UserRole.ADMINISTRADOR)
   @ApiBearerAuth('JWT-auth')
-  @ApiOperation({ summary: 'Obtener una excepción por ID (requiere JWT)' })
+  @ApiOperation({ summary: 'Obtener detalle de una excepción por ID (requiere JWT)' })
   @ApiParam({
     name: 'id',
     type: 'string',
     description: 'ID de la excepción (UUID)',
   })
-  @ApiResponse({ status: 200, description: 'Excepción encontrada' })
+  @ApiResponse({ status: 200, description: 'Excepción con detalles enriquecidos' })
   @ApiResponse({ status: 401, description: 'No autenticado' })
   @ApiResponse({ status: 403, description: 'Acceso denegado' })
   @ApiResponse({ status: 404, description: 'Excepción no encontrada' })
-  async findById(@Param('id') id: string): Promise<ExceptionDto> {
-    return this.exceptionService.findById(id);
+  async findById(@Param('id') id: string): Promise<ExceptionDetailDto> {
+    return this.exceptionService.findByIdWithDetails(id);
   }
 }

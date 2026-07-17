@@ -31,6 +31,13 @@ export interface ExceptionRepository {
    * @returns Lista paginada de excepciones
    */
   findAll(filters: ExceptionFilterDto): Promise<ExceptionListResponseDto>;
+
+  /**
+   * Cuenta el número de usuarios distintos afectados por un error específico.
+   * @param message - Mensaje de la excepción (match exacto)
+   * @returns Número de userId distintos (excluye null)
+   */
+  countAffectedUsers(message: string): Promise<number>;
 }
 
 /**

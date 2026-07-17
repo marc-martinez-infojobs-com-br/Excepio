@@ -16,6 +16,12 @@ export const ExceptionSchema = z.object({
 
 export type ExceptionDto = z.infer<typeof ExceptionSchema>;
 
+export const ExceptionDetailSchema = ExceptionSchema.extend({
+  affectedUsersCount: z.number().int().min(0),
+});
+
+export type ExceptionDetailDto = z.infer<typeof ExceptionDetailSchema>;
+
 export const CreateExceptionSchema = z.object({
   levelId: z.number().int().min(1).max(5),
   message: z.string().min(1),

@@ -315,4 +315,86 @@ describe('ExceptionService', () => {
       expect(result.data[2].id).toBe(exception1.id);
     });
   });
+
+  describe('findByIdWithDetails', () => {
+    it('Given_ExistingId_When_FindByIdWithDetails_Then_ReturnsExceptionWithAffectedUsersCount', async () => {
+      // Arrange: 3 excepciones con el mismo mensaje, 2 usuarios distintos
+      const exceptions: ExceptionDto[] = [
+        { ...mockException, id: 'id-1', userId: 'user-1', message: 'Error X' },
+        { ...mockException, id: 'id-2', userId: 'user-2', message: 'Error X' },
+        { ...mockException, id: 'id-3', userId: 'user-1', message: 'Error X' }, // Repetido
+      ];
+      exceptionRepository.seed(exceptions);
+
+      // Act
+      const result = await service.findByIdWithDetails('id-1');
+
+      // Assert
+      expect(result).toEqual(
+        expect.objectContaining({
+          id: 'id-1',
+          message: 'Error X',
+          affectedUsersCount: 2, // user-1 y user-2
+        }),
+      );
+    });
+
+    it('Given_ExceptionWithUniqueMessage_When_FindByIdWithDetails_Then_ReturnsCorrectCount', async () => {
+      // Arrange: solo 1 excepción con ese mensaje
+      exceptionRepository.seed([mockException]);
+
+      // Act
+      const result = await service.findByIdWithDetails(mockException.id);
+
+      // Assert
+      expect(result.affectedUsersCount).toBe(1);
+    });
+
+    it('Given_ExceptionWithNullUserId_When_FindByIdWithDetails_Then_ReturnsZeroAffectedUsers', async () => {
+      // Arrange: excepción sin userId
+      const exceptionNoUser: ExceptionDto = {
+        ...mockException,
+        userId: null,
+      };
+      exceptionRepository.seed([exceptionNoUser]);
+
+      // Act
+      const result = await service.findByIdWithDetails(mockException.id);
+
+      // Assert
+      expect(result.affectedUsersCount).toBe(0);
+    });
+
+    it('Given_NonExistingId_When_FindByIdWithDetails_Then_ThrowsNotFoundException', async () => {
+      // Arrange
+      const nonExistingId = '999e4567-e89b-12d3-a456-426614174999';
+
+      // Act & Assert
+      await expect(service.findByIdWithDetails(nonExistingId)).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('Given_ExistingId_When_FindByIdWithDetails_Then_IncludesAllExceptionFields', async () => {
+      // Arrange
+      exceptionRepository.seed([mockException]);
+
+      // Act
+      const result = await service.findByIdWithDetails(mockException.id);
+
+      // Assert
+      expect(result.id).toBe(mockException.id);
+      expect(result.platformId).toBe(mockException.platformId);
+      expect(result.levelId).toBe(mockException.levelId);
+      expect(result.message).toBe(mockException.message);
+      expect(result.stackTrace).toBe(mockException.stackTrace);
+      expect(result.userId).toBe(mockException.userId);
+      expect(result.url).toBe(mockException.url);
+      expect(result.userAgent).toBe(mockException.userAgent);
+      expect(result.appVersion).toBe(mockException.appVersion);
+      expect(result.metadata).toEqual(mockException.metadata);
+      expect(result.createdAt).toBe(mockException.createdAt);
+      expect(typeof result.affectedUsersCount).toBe('number');
+    });
+  });
 });
