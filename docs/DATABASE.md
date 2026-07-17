@@ -141,10 +141,17 @@ Usuarios del sistema que acceden a la plataforma web para gestionar y visualizar
 | updatedAt | datetime | Fecha de última actualización |
 | statusId | int (FK) | Estado del usuario (activado/desactivado) |
 
-**Usuario inicial en seed:**
-- Email: `admin@excepio.com`
-- Password: `Admin123!`
-- Role: ADMINISTRADOR
+**Usuarios iniciales en seed:**
+
+1. **Administrador**:
+   - Email: `admin@excepio.com`
+   - Password: `Admin123!`
+   - Role: ADMINISTRADOR
+
+2. **Usuario básico**:
+   - Email: `user@excepio.com`
+   - Password: `User123!`
+   - Role: USUARIO
 
 ## Notas
 
