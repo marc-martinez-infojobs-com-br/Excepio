@@ -9,11 +9,11 @@ export const TEST_USER = {
 // Helper para hacer login
 export async function login(page: Page) {
   await page.goto('/login');
-  await page.getByLabel(/email/i).fill(TEST_USER.email);
-  await page.getByLabel(/password|contraseña/i).fill(TEST_USER.password);
+  await page.getByPlaceholder('admin@excepio.com').fill(TEST_USER.email);
+  await page.getByPlaceholder('••••••••').fill(TEST_USER.password);
   await page.getByRole('button', { name: /sign in|iniciar sesión|inicia sessió/i }).click();
   // Esperar redirección al dashboard
-  await expect(page).toHaveURL(/\/dashboard/);
+  await expect(page).toHaveURL(/\/dashboard/, { timeout: 10000 });
 }
 
 // Fixture personalizado con login automático
