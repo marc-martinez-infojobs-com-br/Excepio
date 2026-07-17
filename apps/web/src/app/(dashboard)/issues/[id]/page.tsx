@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useExceptionDetail } from '@hooks/use-exception-detail';
 import { Button } from '@components/ui/button';
 import { BugSearchingIllustration } from '@components/illustrations/bug-searching';
+import { ExceptionDetailHeader } from '@components/exceptions/exception-detail-header';
 
 interface ExceptionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -66,18 +67,20 @@ export default function ExceptionDetailPage({ params }: ExceptionDetailPageProps
     );
   }
 
-  // Success - show message only (no styling yet)
+  // Success
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 space-y-6">
+      {/* Back button */}
       <button
         onClick={handleBack}
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" />
         {tDetail('backToList')}
       </button>
 
-      <p>{exception.message}</p>
+      {/* Header */}
+      <ExceptionDetailHeader exception={exception} />
     </div>
   );
 }
