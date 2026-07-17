@@ -1,0 +1,80 @@
+# ==========================================
+# .dockerignore - Excluir archivos innecesarios del build
+# ==========================================
+
+# Dependencias (se instalan en el contenedor)
+node_modules
+**/node_modules
+
+# Archivos de build/output
+dist
+**/dist
+.next
+**/.next
+coverage
+**/coverage
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Archivos de entorno locales
+.env
+.env.local
+.env.*.local
+apps/api/.env
+apps/web/.env.local
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Tests
+**/*.spec.ts
+**/*.test.ts
+**/*.spec.tsx
+**/*.test.tsx
+**/test
+**/tests
+**/e2e
+**/__tests__
+
+# Documentación y archivos no necesarios para producción
+*.md
+!README.md
+docs
+.DS_Store
+Thumbs.db
+
+# Playwright
+playwright-report
+test-results
+
+# Prisma (mantenemos schema y migraciones, pero no studio ni client cache)
+**/.prisma
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.docker
+
+# CI/CD
+.github
+.gitlab-ci.yml
+.travis.yml
+
+# Misc
+.editorconfig
+.prettierrc
+.eslintrc*
+eslint.config.*
+vitest.config.*
+playwright.config.*
+tsconfig.tsbuildinfo

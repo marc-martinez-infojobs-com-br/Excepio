@@ -1,0 +1,138 @@
+# ==========================================
+# Excepio - Docker Compose para Producción/Demo
+# ==========================================
+# 
+# Este archivo permite ejecutar Excepio sin clonar el repositorio.
+# Solo necesitas este archivo y Docker instalado.
+#
+# INICIO RÁPIDO:
+#   docker compose -f docker-compose.prod.yml up -d
+#
+# ACCESO:
+#   - Web:     http://localhost:3001
+#   - API:     http://localhost:3000/api
+#   - Swagger: http://localhost:3000/api/swagger
+#
+# CREDENCIALES:
+#   - Admin:   admin@excepio.com / Admin123!
+#   - Usuario: user@excepio.com  / User123!
+#
+# DATOS DE PRUEBA:
+#   - 500 excepciones con stack traces
+#   - 5 plataformas (Web, iOS, Android, API, Desktop)
+#   - Distribución realista en 60 días
+#
+# PARAR:
+#   docker compose -f docker-compose.prod.yml down
+#
+# ELIMINAR TODO (incluido datos):
+#   docker compose -f docker-compose.prod.yml down -v
+#
+# ==========================================
+
+services:
+  # ----------------------------------------
+  # Base de datos PostgreSQL
+  # ----------------------------------------
+  postgres:
+    image: postgres:15-alpine
+    container_name: excepio-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: excepio_secret_2024
+      POSTGRES_DB: excepio
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d excepio"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - excepio-network
+    restart: unless-stopped
+
+  # ----------------------------------------
+  # Migración y Seed (se ejecuta una vez)
+  # ----------------------------------------
+  migrate:
+    image: marcmartinezij/excepio-api:latest
+    container_name: excepio-migrate
+    environment:
+      DATABASE_URL: postgresql://postgres:excepio_secret_2024@postgres:5432/excepio?schema=public
+      NODE_ENV: production
+    command: >
+      sh -c "
+        echo '⏳ Esperando a que PostgreSQL esté listo...' &&
+        sleep 5 &&
+        echo '🔄 Ejecutando migraciones...' &&
+        npx prisma migrate deploy &&
+        echo '🌱 Ejecutando seed (500 excepciones de prueba)...' &&
+        ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts &&
+        echo '✅ Base de datos lista!'
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - excepio-network
+    restart: "no"
+
+  # ----------------------------------------
+  # Backend API (NestJS)
+  # ----------------------------------------
+  api:
+    image: marcmartinezij/excepio-api:latest
+    container_name: excepio-api
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:excepio_secret_2024@postgres:5432/excepio?schema=public
+      CORS_ORIGIN: http://localhost:3001
+      JWT_SECRET: excepio_jwt_secret_tfm_2024
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
+    networks:
+      - excepio-network
+    restart: unless-stopped
+
+  # ----------------------------------------
+  # Frontend Web (Next.js)
+  # ----------------------------------------
+  web:
+    image: marcmartinezij/excepio-web:latest
+    container_name: excepio-web
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      NEXT_PUBLIC_API_URL: http://localhost:3000/api
+    ports:
+      - "3001:3001"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001"]
+      interval: 30s
+      timeout: 10s
+      start_period: 20s
+      retries: 3
+    networks:
+      - excepio-network
+    restart: unless-stopped
+
+networks:
+  excepio-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

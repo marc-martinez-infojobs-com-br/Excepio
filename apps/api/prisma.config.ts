@@ -4,11 +4,7 @@ import { defineConfig } from 'prisma/config';
 
 dotenv.config();
 
-const databaseUrl = process.env.DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error('DATABASE_URL environment variable is not set');
-}
+const databaseUrl = process.env.DATABASE_URL || 'postgresql://localhost:5432/excepio';
 
 export default defineConfig({
   schema: path.join(__dirname, 'prisma', 'schema.prisma'),
