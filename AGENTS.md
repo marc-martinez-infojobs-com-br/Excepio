@@ -139,7 +139,9 @@ pnpm --filter @excepio/web exec playwright show-report  # Ver reporte HTML
 | `test/e2e/issues.spec.ts` | Lista de excepciones, filtros, paginación |
 | `test/e2e/issue-detail.spec.ts` | Detalle: header, stacktrace, metadata, occurrences |
 
-**Credenciales de test (seed):** `admin@excepio.com` / `Admin123!`
+**Credenciales de test (seed):**
+- **Admin**: `admin@excepio.com` / `Admin123!` (Rol: ADMINISTRADOR)
+- **Usuario**: `user@excepio.com` / `User123!` (Rol: USUARIO)
 
 ## Internacionalización (i18n)
 
