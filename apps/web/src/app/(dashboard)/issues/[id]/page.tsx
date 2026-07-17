@@ -8,6 +8,7 @@ import { useExceptionDetail } from '@hooks/use-exception-detail';
 import { Button } from '@components/ui/button';
 import { BugSearchingIllustration } from '@components/illustrations/bug-searching';
 import { ExceptionDetailHeader } from '@components/exceptions/exception-detail-header';
+import { ExceptionStackTrace } from '@components/exceptions/exception-stack-trace';
 
 interface ExceptionDetailPageProps {
   params: Promise<{ id: string }>;
@@ -81,6 +82,9 @@ export default function ExceptionDetailPage({ params }: ExceptionDetailPageProps
 
       {/* Header */}
       <ExceptionDetailHeader exception={exception} />
+
+      {/* Stack Trace */}
+      <ExceptionStackTrace stackTrace={exception.stackTrace} />
     </div>
   );
 }
