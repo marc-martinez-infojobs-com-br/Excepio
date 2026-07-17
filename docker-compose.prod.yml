@@ -53,33 +53,8 @@ services:
     restart: unless-stopped
 
   # ----------------------------------------
-  # Migración y Seed (se ejecuta una vez)
-  # ----------------------------------------
-  migrate:
-    image: marcmartinezij/excepio-api:latest
-    container_name: excepio-migrate
-    environment:
-      DATABASE_URL: postgresql://postgres:excepio_secret_2024@postgres:5432/excepio?schema=public
-      NODE_ENV: production
-    command: >
-      sh -c "
-        echo '⏳ Esperando a que PostgreSQL esté listo...' &&
-        sleep 5 &&
-        echo '🔄 Ejecutando migraciones...' &&
-        npx prisma migrate deploy &&
-        echo '🌱 Ejecutando seed (500 excepciones de prueba)...' &&
-        ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts &&
-        echo '✅ Base de datos lista!'
-      "
-    depends_on:
-      postgres:
-        condition: service_healthy
-    networks:
-      - excepio-network
-    restart: "no"
-
-  # ----------------------------------------
   # Backend API (NestJS)
+  # Incluye migración y seed automático
   # ----------------------------------------
   api:
     image: marcmartinezij/excepio-api:latest
@@ -99,7 +74,7 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
-      start_period: 40s
+      start_period: 60s
       retries: 3
     networks:
       - excepio-network

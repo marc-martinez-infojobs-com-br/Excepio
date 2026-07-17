@@ -3,7 +3,7 @@
 # ==========================================
 
 # Stage 1: Base con dependencias
-FROM node:20-alpine AS base
+FROM node:22-alpine AS base
 RUN corepack enable && corepack prepare pnpm@9.15.0 --activate
 WORKDIR /app
 
@@ -67,6 +67,11 @@ COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
 # Copiar config de Prisma para producción (usa process.cwd() en vez de __dirname)
 COPY apps/api/prisma.config.prod.js ./apps/api/prisma.config.js
 
+# Copiar script de entrypoint y check-users
+COPY apps/api/scripts/docker-entrypoint.sh ./apps/api/docker-entrypoint.sh
+COPY apps/api/scripts/check-users.js ./apps/api/scripts/
+RUN chmod +x ./apps/api/docker-entrypoint.sh
+
 # Cambiar propietario de los archivos
 RUN chown -R nestjs:nodejs /app
 
@@ -81,9 +86,9 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+# Health check (start-period más largo para permitir migraciones)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1
 
-# Comando de inicio
-CMD ["node", "dist/src/main.js"]
+# Usar entrypoint para verificar BD antes de iniciar
+ENTRYPOINT ["./docker-entrypoint.sh"]
