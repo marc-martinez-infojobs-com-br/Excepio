@@ -15,6 +15,9 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
   }),
+  useSearchParams: () => ({
+    get: vi.fn(() => null),
+  }),
 }));
 
 describe('RegisterPage', () => {

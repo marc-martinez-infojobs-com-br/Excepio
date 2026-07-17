@@ -87,7 +87,8 @@ describe('apiClient - Response Interceptor', () => {
     if (lastInterceptor && lastInterceptor.rejected) {
       await expect(lastInterceptor.rejected(error)).rejects.toEqual(error);
       expect(authStorage.clear).toHaveBeenCalled();
-      expect(mockLocation.href).toBe('/login');
+      // Debe redirigir a /login con returnUrl
+      expect(mockLocation.href).toContain('/login');
     }
   });
 
