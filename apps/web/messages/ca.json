@@ -104,7 +104,31 @@
     },
     "empty": "No s'han trobat excepcions",
     "unknownLevel": "DESCONEGUT",
-    "unknownPlatform": "Desconeguda"
+    "unknownPlatform": "Desconeguda",
+    "detail": {
+      "backToList": "Tornar a incidències",
+      "loading": "Carregant detall...",
+      "notFound": "Excepció no trobada",
+      "notFoundDescription": "L'excepció que busques no existeix o ha estat eliminada.",
+      "errorLoading": "Error en carregar el detall",
+      "sections": {
+        "stackTrace": "Stack Trace",
+        "metadata": "Metadata",
+        "context": "Informació Contextual"
+      },
+      "fields": {
+        "platform": "Plataforma",
+        "appVersion": "Versió",
+        "url": "URL",
+        "userId": "Usuari",
+        "userAgent": "User Agent",
+        "timestamp": "Data i hora",
+        "affectedUsers": "Usuaris afectats",
+        "noMetadata": "Sense metadata",
+        "noStackTrace": "Sense stack trace",
+        "notAvailable": "No disponible"
+      }
+    }
   },
   "dashboard": {
     "title": "Benvingut a Excepio",

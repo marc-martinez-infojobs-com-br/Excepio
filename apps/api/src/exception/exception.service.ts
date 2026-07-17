@@ -15,6 +15,8 @@ import type { ExceptionRepository } from './repository';
 import { EXCEPTION_REPOSITORY } from './repository';
 import type { PlatformRepository } from '../platform/repository';
 import { PLATFORM_REPOSITORY } from '../platform/repository';
+import type { LevelRepository } from '../level/repository';
+import { LEVEL_REPOSITORY } from '../level/repository';
 
 /**
  * Servicio para gestionar excepciones.
@@ -26,6 +28,8 @@ export class ExceptionService {
     private readonly exceptionRepository: ExceptionRepository,
     @Inject(PLATFORM_REPOSITORY)
     private readonly platformRepository: PlatformRepository,
+    @Inject(LEVEL_REPOSITORY)
+    private readonly levelRepository: LevelRepository,
   ) {}
 
   /**
@@ -140,13 +144,19 @@ export class ExceptionService {
       throw new NotFoundException(`Exception with id ${id} not found`);
     }
 
-    const affectedUsersCount = await this.exceptionRepository.countAffectedUsers(
-      exception.message,
-    );
+    // Obtener datos enriquecidos en paralelo
+    const [affectedUsersCount, level, platform] = await Promise.all([
+      this.exceptionRepository.countAffectedUsers(exception.message),
+      this.levelRepository.findById(exception.levelId),
+      this.platformRepository.findById(exception.platformId),
+    ]);
 
     return {
       ...exception,
       affectedUsersCount,
+      levelName: level?.name,
+      platformName: platform?.name,
+      platformIcon: platform?.icon,
     };
   }
 }

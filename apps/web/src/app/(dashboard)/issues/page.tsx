@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
 import { Table, TableBody, TableHead, TableHeader, TableRow } from '@components/ui/table';
 import { ExceptionRow } from '@components/exceptions/exception-row';
@@ -13,11 +14,64 @@ import { usePlatforms } from '@hooks/use-platforms';
 import type { ExceptionFilterDto } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 
+const ISSUES_STATE_KEY = 'excepio_issues_state';
+const STATE_TTL_MS = 5 * 60 * 1000; // 5 minutos
+
+interface IssuesState {
+  filters: ExceptionFilterDto;
+  page: number;
+  limit: number;
+  timestamp: number;
+}
+
+function saveIssuesState(state: Omit<IssuesState, 'timestamp'>) {
+  const stateWithTimestamp: IssuesState = {
+    ...state,
+    timestamp: Date.now(),
+  };
+  sessionStorage.setItem(ISSUES_STATE_KEY, JSON.stringify(stateWithTimestamp));
+}
+
+function loadIssuesState(): Omit<IssuesState, 'timestamp'> | null {
+  const saved = sessionStorage.getItem(ISSUES_STATE_KEY);
+  if (saved) {
+    try {
+      const state: IssuesState = JSON.parse(saved);
+      // Verificar si ha expirado
+      if (Date.now() - state.timestamp > STATE_TTL_MS) {
+        sessionStorage.removeItem(ISSUES_STATE_KEY);
+        return null;
+      }
+      return {
+        filters: state.filters,
+        page: state.page,
+        limit: state.limit,
+      };
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
 export default function ExceptionsPage() {
   const t = useTranslations('exceptions');
+  const router = useRouter();
   const [filters, setFilters] = useState<ExceptionFilterDto>({});
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Restaurar estado desde sessionStorage al montar
+  useEffect(() => {
+    const savedState = loadIssuesState();
+    if (savedState) {
+      setFilters(savedState.filters);
+      setPage(savedState.page);
+      setLimit(savedState.limit);
+    }
+    setIsInitialized(true);
+  }, []);
 
   const { data: levelsData } = useLevels();
   const { data: platformsData } = usePlatforms();
@@ -47,9 +101,21 @@ export default function ExceptionsPage() {
   };
 
   const handleRowClick = (id: string) => {
-    // TODO: Navegar al detalle de la excepción
-    console.log('Navigate to exception:', id);
+    // Guardar estado antes de navegar
+    saveIssuesState({ filters, page, limit });
+    router.push(`/issues/${id}`);
   };
+
+  // No renderizar hasta que se haya inicializado el estado
+  if (!isInitialized) {
+    return (
+      <div className="p-4 md:p-6">
+        <div className="flex justify-center py-12">
+          <Loader2 className="h-10 w-10 animate-spin text-primary" />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">

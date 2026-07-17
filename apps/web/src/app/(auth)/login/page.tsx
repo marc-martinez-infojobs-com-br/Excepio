@@ -1,3 +1,6 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
 import { LoginForm } from '@components/auth/login-form';
 import {
   Card,
@@ -11,6 +14,9 @@ import { useTranslations } from 'next-intl';
 
 export default function LoginPage() {
   const t = useTranslations('auth.login');
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('returnUrl');
+  const registerHref = returnUrl ? `/register?returnUrl=${encodeURIComponent(returnUrl)}` : '/register';
   
   return (
     <Card className="w-full border border-border/50 shadow-sm">
@@ -27,7 +33,7 @@ export default function LoginPage() {
         <div className="mt-8 pt-6 border-t border-border text-center">
           <p className="text-sm text-muted-foreground">
             {t('noAccount')}{' '}
-            <Link href="/register" className="text-primary font-semibold hover:underline">
+            <Link href={registerHref} className="text-primary font-semibold hover:underline">
               {t('createAccount')}
             </Link>
           </p>

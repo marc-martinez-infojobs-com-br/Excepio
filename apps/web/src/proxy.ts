@@ -52,6 +52,7 @@ export function proxy(request: NextRequest) {
   // Si no hay token y está intentando acceder a una ruta protegida
   if (isProtectedRoute && !token) {
     const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('returnUrl', pathname);
     return NextResponse.redirect(loginUrl);
   }
   

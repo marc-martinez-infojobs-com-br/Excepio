@@ -18,6 +18,9 @@ export type ExceptionDto = z.infer<typeof ExceptionSchema>;
 
 export const ExceptionDetailSchema = ExceptionSchema.extend({
   affectedUsersCount: z.number().int().min(0),
+  levelName: z.string().optional(),
+  platformName: z.string().optional(),
+  platformIcon: z.string().nullable().optional(),
 });
 
 export type ExceptionDetailDto = z.infer<typeof ExceptionDetailSchema>;

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import { apiClient } from '@lib/api-client';
 import { authStorage } from '@lib/auth-storage';
@@ -22,6 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserResponseDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   // Cargar usuario desde storage al montar
   useEffect(() => {
@@ -41,7 +42,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       authStorage.setUser(userData);
       setUser(userData);
       
-      router.push('/dashboard');
+      // Redirigir a returnUrl si existe, sino a dashboard
+      const returnUrl = searchParams.get('returnUrl');
+      router.push(returnUrl || '/dashboard');
     } catch (error) {
       // Mensaje genérico para no revelar si el email existe o no
       if (isAxiosError(error) && error.response?.status === 401) {

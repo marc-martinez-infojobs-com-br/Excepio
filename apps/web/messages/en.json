@@ -104,7 +104,31 @@
     },
     "empty": "No exceptions found",
     "unknownLevel": "UNKNOWN",
-    "unknownPlatform": "Unknown"
+    "unknownPlatform": "Unknown",
+    "detail": {
+      "backToList": "Back to issues",
+      "loading": "Loading detail...",
+      "notFound": "Exception not found",
+      "notFoundDescription": "The exception you're looking for doesn't exist or has been deleted.",
+      "errorLoading": "Error loading detail",
+      "sections": {
+        "stackTrace": "Stack Trace",
+        "metadata": "Metadata",
+        "context": "Contextual Information"
+      },
+      "fields": {
+        "platform": "Platform",
+        "appVersion": "Version",
+        "url": "URL",
+        "userId": "User",
+        "userAgent": "User Agent",
+        "timestamp": "Date and time",
+        "affectedUsers": "Affected users",
+        "noMetadata": "No metadata",
+        "noStackTrace": "No stack trace",
+        "notAvailable": "Not available"
+      }
+    }
   },
   "dashboard": {
     "title": "Welcome to Excepio",

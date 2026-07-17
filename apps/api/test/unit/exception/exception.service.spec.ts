@@ -3,6 +3,7 @@ import { NotFoundException } from '@nestjs/common';
 import { ExceptionService } from '@exception/exception.service';
 import { ExceptionMemoryRepository } from '@exception/repository';
 import { PlatformMemoryRepository } from '@platform/repository';
+import { LevelMemoryRepository } from '@level/repository';
 import {
   ExceptionDto,
   CreateExceptionDto,
@@ -12,7 +13,8 @@ import {
 describe('ExceptionService', () => {
   let service: ExceptionService;
   let exceptionRepository: ExceptionMemoryRepository;
-  let projectRepository: PlatformMemoryRepository;
+  let platformRepository: PlatformMemoryRepository;
+  let levelRepository: LevelMemoryRepository;
 
   const mockException: ExceptionDto = {
     id: '123e4567-e89b-12d3-a456-426614174000',
@@ -30,8 +32,24 @@ describe('ExceptionService', () => {
 
   beforeEach(() => {
     exceptionRepository = new ExceptionMemoryRepository();
-    projectRepository = new PlatformMemoryRepository();
-    service = new ExceptionService(exceptionRepository, projectRepository);
+    platformRepository = new PlatformMemoryRepository();
+    levelRepository = new LevelMemoryRepository();
+    
+    // Seed level data for tests
+    levelRepository.seed([
+      { id: 1, name: 'DEBUG', statusId: 2 },
+      { id: 2, name: 'INFO', statusId: 2 },
+      { id: 3, name: 'WARNING', statusId: 2 },
+      { id: 4, name: 'ERROR', statusId: 2 },
+      { id: 5, name: 'FATAL', statusId: 2 },
+    ]);
+    
+    // Seed platform data for tests
+    platformRepository.seed([
+      { id: 1, name: 'Web App', apiKey: 'test-key', statusId: 2, icon: 'LuGlobe', createdAt: new Date().toISOString() },
+    ]);
+    
+    service = new ExceptionService(exceptionRepository, platformRepository, levelRepository);
   });
 
   describe('create', () => {

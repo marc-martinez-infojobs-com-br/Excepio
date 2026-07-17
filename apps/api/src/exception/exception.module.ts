@@ -3,9 +3,10 @@ import { ExceptionController } from './exception.controller';
 import { ExceptionService } from './exception.service';
 import { ExceptionPrismaRepository, EXCEPTION_REPOSITORY } from './repository';
 import { PlatformModule } from '../platform/platform.module';
+import { LevelModule } from '../level/level.module';
 
 @Module({
-  imports: [PlatformModule], // Importamos PlatformModule para usar PLATFORM_REPOSITORY
+  imports: [PlatformModule, LevelModule],
   controllers: [ExceptionController],
   providers: [
     ExceptionService,
