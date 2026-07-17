@@ -43,6 +43,9 @@ pnpm --filter @excepio/web test             # Todos los tests
 pnpm --filter @excepio/web test:unit        # Tests unitarios
 pnpm --filter @excepio/web test:integration # Tests de integración
 pnpm --filter @excepio/web test:coverage    # Tests con cobertura
+pnpm --filter @excepio/web test:e2e         # Tests E2E (requiere API y Web corriendo)
+pnpm --filter @excepio/web test:e2e:ui      # Tests E2E con interfaz visual
+pnpm --filter @excepio/web test:e2e:headed  # Tests E2E con navegador visible
 ```
 
 ## Prisma (Base de datos)
