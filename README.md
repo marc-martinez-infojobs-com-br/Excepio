@@ -19,6 +19,7 @@ Sistema de monitorización y gestión de excepciones para aplicaciones multiplat
 - [🛠️ Stack Tecnológico](#️-stack-tecnológico)
 - [📋 Requisitos Previos](#-requisitos-previos)
 - [🚀 Instalación y Configuración](#-instalación-y-configuración)
+- [🐳 Despliegue con Docker](#-despliegue-con-docker-producción)
 - [🔑 Credenciales de Prueba](#-credenciales-de-prueba)
 - [📁 Estructura del Proyecto](#-estructura-del-proyecto)
 - [🧪 Testing](#-testing)
@@ -393,9 +394,79 @@ Una vez iniciados los servicios:
 
 ---
 
+## 🐳 Despliegue con Docker (Producción)
+
+Para una instalación rápida sin necesidad de configurar el entorno de desarrollo, puedes usar las imágenes Docker precompiladas disponibles en DockerHub.
+
+### Requisitos
+
+- **Docker** >= 20.10
+- **Docker Compose** >= 2.0
+
+### Inicio Rápido
+
+Un único comando levanta toda la aplicación (PostgreSQL + API + Web) con migraciones y datos de prueba automáticos:
+
+```bash
+docker compose -f docker-compose.prod.yml up -d
+```
+
+La primera ejecución:
+1. Descarga las imágenes de DockerHub (`marcmartinezij/excepio-api`, `marcmartinezij/excepio-web`)
+2. Crea la base de datos PostgreSQL
+3. Ejecuta las migraciones automáticamente
+4. Carga los datos de prueba (seed)
+5. Inicia la API y el frontend
+
+**Tiempo estimado**: 2-3 minutos en la primera ejecución.
+
+### Acceso a la Aplicación
+
+| Servicio | URL | Descripción |
+|----------|-----|-------------|
+| **Frontend** | http://localhost:3001 | Aplicación web |
+| **API** | http://localhost:3000/api | API REST |
+| **Swagger** | http://localhost:3000/api/swagger | Documentación de la API |
+
+### Imágenes Docker
+
+| Imagen | Descripción |
+|--------|-------------|
+| `marcmartinezij/excepio-api:latest` | Backend NestJS con migraciones automáticas |
+| `marcmartinezij/excepio-web:latest` | Frontend Next.js optimizado |
+
+### Comandos Útiles
+
+```bash
+# Ver logs de todos los servicios
+docker compose -f docker-compose.prod.yml logs -f
+
+# Ver logs solo de la API
+docker compose -f docker-compose.prod.yml logs -f api
+
+# Detener todos los servicios
+docker compose -f docker-compose.prod.yml down
+
+# Detener y eliminar datos (reset completo)
+docker compose -f docker-compose.prod.yml down -v
+
+# Reiniciar un servicio específico
+docker compose -f docker-compose.prod.yml restart api
+```
+
+### Comportamiento Idempotente
+
+El sistema detecta automáticamente si la base de datos ya está inicializada:
+- **Primera ejecución**: Ejecuta migraciones + seed
+- **Ejecuciones posteriores**: Omite migraciones y seed, inicia directamente
+
+Esto permite reiniciar los contenedores sin duplicar datos.
+
+---
+
 ## 🔑 Credenciales de Prueba
 
-Después de ejecutar las migraciones y el seed de la base de datos, puedes acceder a la aplicación con los siguientes usuarios:
+Después de ejecutar las migraciones y el seed de la base de datos (ya sea en modo desarrollo o Docker), puedes acceder a la aplicación con los siguientes usuarios:
 
 ### Usuario Administrador
 

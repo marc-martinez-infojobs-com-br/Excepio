@@ -82,3 +82,62 @@ pnpm --filter @excepio/api exec prisma db seed        # Ejecutar seed
 pnpm --filter @excepio/api exec prisma migrate reset --force  # Borrar BD + migraciones + seed
 pnpm --filter @excepio/api exec prisma db push --force-reset  # Solo borrar BD (sin seed)
 ```
+
+## Docker (Producción)
+
+### Inicio Rápido
+
+```bash
+# Levantar toda la aplicación (PostgreSQL + API + Web)
+docker compose -f docker-compose.prod.yml up -d
+
+# Primera ejecución: descarga imágenes, ejecuta migraciones y seed automáticamente
+# Ejecuciones posteriores: inicia directamente (idempotente)
+```
+
+### Gestión de Contenedores
+
+```bash
+# Ver estado de los servicios
+docker compose -f docker-compose.prod.yml ps
+
+# Ver logs de todos los servicios
+docker compose -f docker-compose.prod.yml logs -f
+
+# Ver logs de un servicio específico
+docker compose -f docker-compose.prod.yml logs -f api
+docker compose -f docker-compose.prod.yml logs -f web
+docker compose -f docker-compose.prod.yml logs -f postgres
+
+# Detener todos los servicios
+docker compose -f docker-compose.prod.yml down
+
+# Detener y eliminar datos (reset completo)
+docker compose -f docker-compose.prod.yml down -v
+
+# Reiniciar un servicio específico
+docker compose -f docker-compose.prod.yml restart api
+docker compose -f docker-compose.prod.yml restart web
+```
+
+### Construcción de Imágenes (Desarrollo)
+
+```bash
+# Construir imagen de la API
+docker build -t marcmartinezij/excepio-api:latest -f apps/api/Dockerfile .
+
+# Construir imagen del Web
+docker build -t marcmartinezij/excepio-web:latest -f apps/web/Dockerfile .
+
+# Subir imágenes a DockerHub
+docker push marcmartinezij/excepio-api:latest
+docker push marcmartinezij/excepio-web:latest
+```
+
+### URLs de Acceso (Docker)
+
+| Servicio | URL |
+|----------|-----|
+| Frontend | http://localhost:3001 |
+| API | http://localhost:3000/api |
+| Swagger | http://localhost:3000/api/swagger |
