@@ -1,13 +1,21 @@
 # Excepio
 
-![Node.js](https://img.shields.io/badge/Node.js-20+-339933?style=flat&logo=node.js&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white)
-![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=next.js&logoColor=white)
-![NestJS](https://img.shields.io/badge/NestJS-11-E0234E?style=flat&logo=nestjs&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-336791?style=flat&logo=postgresql&logoColor=white)
-![pnpm](https://img.shields.io/badge/pnpm-9+-F69220?style=flat&logo=pnpm&logoColor=white)
+<p align="center">
+  <img src="logo.svg" alt="Excepio Logo" width="120" height="120" />
+</p>
 
-Sistema de monitorización y gestión de excepciones para aplicaciones multiplataforma.
+<p align="center">
+  <strong>Sistema de monitorización y gestión de excepciones para aplicaciones multiplataforma</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat&logo=node.js&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Next.js-16-000000?style=flat&logo=next.js&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/NestJS-11-E0234E?style=flat&logo=nestjs&logoColor=white" alt="NestJS" />
+  <img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/pnpm-9+-F69220?style=flat&logo=pnpm&logoColor=white" alt="pnpm" />
+</p>
 
 ---
 
@@ -24,6 +32,8 @@ Sistema de monitorización y gestión de excepciones para aplicaciones multiplat
 - [📁 Estructura del Proyecto](#-estructura-del-proyecto)
 - [🧪 Testing](#-testing)
 - [🌍 Idiomas Soportados](#-idiomas-soportados)
+- [☁️ Despliegue en la Nube](#️-despliegue-en-la-nube-demo)
+- [🔌 API de Reporte de Excepciones](#-api-de-reporte-de-excepciones)
 - [📚 Documentación Adicional](#-documentación-adicional)
 
 ---
@@ -675,6 +685,140 @@ El selector de idioma está disponible en la cabecera de la aplicación y persis
 - `apps/web/messages/en.json` - Traducciones en inglés
 
 > **Nota para desarrolladores**: Al agregar nuevos textos visibles, asegúrate de añadir las traducciones en los 3 archivos. Los tests de integración verifican la consistencia entre idiomas.
+
+---
+
+## ☁️ Despliegue en la Nube (Demo)
+
+El proyecto está desplegado en servicios gratuitos para demostración:
+
+| Servicio | URL |
+|----------|-----|
+| **Frontend** | https://excepio-web.vercel.app |
+| **API** | https://excepio-api.onrender.com/api |
+| **Swagger** | https://excepio-api.onrender.com/api/swagger |
+
+### Credenciales de Acceso
+
+| Usuario | Email | Contraseña | Rol |
+|---------|-------|------------|-----|
+| Admin | `admin@excepio.com` | `Admin123!` | Administrador |
+| User | `user@excepio.com` | `User123!` | Usuario |
+
+### Notas sobre el Plan Gratuito
+
+- **Render (API)**: El servicio se "duerme" tras 15 minutos de inactividad. El primer request puede tardar ~30 segundos mientras despierta.
+- **Supabase (BD)**: Se pausa tras 1 semana de inactividad total.
+
+---
+
+## 🔌 API de Reporte de Excepciones
+
+Las aplicaciones pueden reportar excepciones a Excepio usando la API REST con autenticación por API Key.
+
+### Obtener API Key
+
+1. Inicia sesión como administrador en https://excepio-web.vercel.app
+2. Ve a **Plataformas** en el menú lateral
+3. Copia la **API Key** de la plataforma deseada (ej: Web, Android, iOS)
+
+### Endpoint
+
+```
+POST https://excepio-api.onrender.com/api/exceptions
+```
+
+### Headers
+
+| Header | Valor | Descripción |
+|--------|-------|-------------|
+| `Content-Type` | `application/json` | Tipo de contenido |
+| `X-API-Key` | `<tu-api-key>` | API Key de la plataforma |
+
+### Body (JSON)
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `levelId` | number | ✅ | Nivel de severidad (1-5) |
+| `message` | string | ✅ | Mensaje de la excepción |
+| `stackTrace` | string | ❌ | Stack trace completo |
+| `userId` | string | ❌ | ID del usuario afectado |
+| `url` | string | ❌ | URL donde ocurrió el error |
+| `userAgent` | string | ❌ | Navegador/dispositivo |
+| `appVersion` | string | ❌ | Versión de la aplicación |
+| `metadata` | object | ❌ | Datos adicionales (JSON) |
+
+### Niveles de Severidad
+
+| levelId | Nombre | Uso |
+|---------|--------|-----|
+| 1 | DEBUG | Información de depuración |
+| 2 | INFO | Información general |
+| 3 | WARNING | Advertencias |
+| 4 | ERROR | Errores recuperables |
+| 5 | FATAL | Errores críticos |
+
+### Ejemplos de Uso
+
+#### Ejemplo Mínimo (curl)
+
+```bash
+curl -X POST https://excepio-api.onrender.com/api/exceptions \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: TU_API_KEY_AQUI" \
+  -d '{
+    "levelId": 4,
+    "message": "Error de conexión a la base de datos"
+  }'
+```
+
+#### Ejemplo Completo (curl)
+
+```bash
+curl -X POST https://excepio-api.onrender.com/api/exceptions \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: TU_API_KEY_AQUI" \
+  -d '{
+    "levelId": 4,
+    "message": "TypeError: Cannot read property 'id' of undefined",
+    "stackTrace": "TypeError: Cannot read property 'id' of undefined\n    at UserService.getUser (/app/services/user.js:45:23)\n    at async UserController.profile (/app/controllers/user.js:12:18)",
+    "userId": "user_12345",
+    "url": "/api/users/profile",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0",
+    "appVersion": "2.1.0",
+    "metadata": {
+      "environment": "production",
+      "requestId": "req_abc123",
+      "sessionId": "sess_xyz789"
+    }
+  }'
+```
+
+### Respuesta Exitosa
+
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "platformId": 1,
+  "levelId": 4,
+  "message": "Error de conexión a la base de datos",
+  "stackTrace": null,
+  "userId": null,
+  "url": null,
+  "userAgent": null,
+  "appVersion": null,
+  "metadata": null,
+  "createdAt": "2024-01-15T10:30:00.000Z"
+}
+```
+
+### Códigos de Error
+
+| Código | Descripción |
+|--------|-------------|
+| 201 | Excepción creada correctamente |
+| 400 | Body inválido (campos requeridos faltantes) |
+| 401 | API Key inválida o no proporcionada |
 
 ---
 
