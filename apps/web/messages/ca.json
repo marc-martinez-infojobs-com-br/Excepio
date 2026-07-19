@@ -185,7 +185,9 @@
     "connecting": "Connectant amb l'API...",
     "connectionError": "Error de connexió:",
     "connected": "API connectada - Estat:",
-    "lastCheck": "Última verificació:"
+    "lastCheck": "Última verificació:",
+    "awakening": "Despertant l'API...",
+    "ready": "API Llesta"
   },
   "layout": {
     "appName": "Excepio",

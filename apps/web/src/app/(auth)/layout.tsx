@@ -1,7 +1,10 @@
+'use client';
+
 import type { ReactNode } from 'react';
 import { ThemeToggle } from '@components/theme/theme-toggle';
 import { ThemeLogo } from '@components/theme/theme-logo';
 import { LanguageSelector } from '@components/language-selector';
+import { HealthStatus } from '@components/health-status';
 import { useTranslations } from 'next-intl';
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
@@ -29,17 +32,9 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
         {children}
 
-        {/* Footer Help */}
-        <footer className="mt-8 mb-6 flex justify-center gap-6">
-          <a href="#" className="text-[11px] uppercase text-muted-foreground hover:text-primary transition-colors tracking-wider font-semibold">
-            {t('footer.status')}
-          </a>
-          <a href="#" className="text-[11px] uppercase text-muted-foreground hover:text-primary transition-colors tracking-wider font-semibold">
-            {t('footer.support')}
-          </a>
-          <a href="#" className="text-[11px] uppercase text-muted-foreground hover:text-primary transition-colors tracking-wider font-semibold">
-            {t('footer.docs')}
-          </a>
+        {/* Footer - API Status */}
+        <footer className="mt-8 mb-6 flex justify-center">
+          <HealthStatus compact />
         </footer>
       </main>
     </div>
