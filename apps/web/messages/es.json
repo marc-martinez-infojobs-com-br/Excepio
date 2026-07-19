@@ -185,7 +185,9 @@
     "connecting": "Conectando con la API...",
     "connectionError": "Error de conexión:",
     "connected": "API conectada - Estado:",
-    "lastCheck": "Última verificación:"
+    "lastCheck": "Última verificación:",
+    "awakening": "Despertando API...",
+    "ready": "API Lista"
   },
   "layout": {
     "appName": "Excepio",

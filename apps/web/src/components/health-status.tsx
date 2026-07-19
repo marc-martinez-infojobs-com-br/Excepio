@@ -5,19 +5,54 @@ import { apiClient } from '@lib/api-client';
 import type { HealthCheckResponse } from '@excepio/shared';
 import { useTranslations } from 'next-intl';
 
-export function HealthStatus() {
+interface HealthStatusProps {
+  compact?: boolean;
+}
+
+export function HealthStatus({ compact = false }: HealthStatusProps) {
   const t = useTranslations('health');
   const tCommon = useTranslations('common');
-  
+
   const { data, isLoading, isError, error } = useQuery<HealthCheckResponse>({
     queryKey: ['health'],
     queryFn: async () => {
       const response = await apiClient.get<HealthCheckResponse>('/health');
       return response.data;
     },
-    refetchInterval: 30000, // Refrescar cada 30 segundos
+    retry: true,
+    retryDelay: (attemptIndex) => Math.min(2000 * (attemptIndex + 1), 10000),
+    refetchInterval: (query) => {
+      // Si está conectado, refrescar cada 30s
+      if (query.state.data?.status === 'ok') {
+        return 30000;
+      }
+      // Si está en error o cargando, intentar cada 3s para despertar Render
+      return 3000;
+    },
   });
 
+  const isConnected = data?.status === 'ok';
+
+  // Modo compacto para el footer de auth
+  if (compact) {
+    if (isLoading || isError || !isConnected) {
+      return (
+        <span className="inline-flex items-center gap-1.5 text-[11px] uppercase text-muted-foreground tracking-wider font-semibold">
+          <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse" />
+          {t('awakening')}
+        </span>
+      );
+    }
+
+    return (
+      <span className="inline-flex items-center gap-1.5 text-[11px] uppercase text-green-600 dark:text-green-400 tracking-wider font-semibold">
+        <span className="w-2 h-2 bg-green-500 rounded-full" />
+        {t('ready')}
+      </span>
+    );
+  }
+
+  // Modo normal (card)
   if (isLoading) {
     return (
       <div className="flex items-center gap-2 p-4 bg-gray-100 rounded-lg">
